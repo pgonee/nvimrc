@@ -13,6 +13,7 @@ Plug 'tpope/vim-fugitive'
 Plug 'junegunn/gv.vim'
 Plug 'fatih/vim-go'
 Plug 'ervandew/supertab'
+Plug 'StanAngeloff/php.vim'
 
 call plug#end()
 
@@ -56,7 +57,3 @@ vnoremap <leader>V "+P
 syntax enable
 set background=dark
 colorscheme solarized
-
-let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_autoclose_preview_window_after_insertion = 1
-let g:ycm_complete_in_comments = 1
