@@ -39,15 +39,24 @@ tnoremap <a-j> <c-\><c-n><c-w>j
 tnoremap <a-k> <c-\><c-n><c-w>k
 tnoremap <a-l> <c-\><c-n><c-w>l
 
-nnoremap <a-h> <c-w><c-h>
-nnoremap <a-j> <c-w><c-j>
-nnoremap <a-k> <c-w><c-k>
-nnoremap <a-l> <c-w><c-l>
+tnoremap <c-\>tn <c-\><c-n>:tabnext<cr>
+tnoremap <c-\>tw <c-\><c-n>:tabnext<cr>
+tnoremap <c-\>tp <c-\><c-n>:tabprev<cr>
 
-vnoremap  <leader>c  "+y
-nnoremap  <leader>C  "+yg_
-nnoremap  <leader>c  "+y
-nnoremap  <leader>cc  "+yy
+tnoremap <c-h> <c-\><c-n><c-w>h
+tnoremap <c-j> <c-\><c-n><c-w>j
+tnoremap <c-k> <c-\><c-n><c-w>k
+tnoremap <c-l> <c-\><c-n><c-w>l
+
+nnoremap <c-h> <c-w><c-h>
+nnoremap <c-j> <c-w><c-j>
+nnoremap <c-k> <c-w><c-k>
+nnoremap <c-l> <c-w><c-l>
+
+vnoremap <leader>c  "+y
+nnoremap <leader>C  "+yg_
+nnoremap <leader>c  "+y
+nnoremap <leader>cc  "+yy
 
 nnoremap <leader>v "+p
 nnoremap <leader>V "+P
