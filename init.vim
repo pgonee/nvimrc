@@ -1,9 +1,8 @@
 call plug#begin('~/.config/nvim/plugged')
 
+Plug 'kien/ctrlp.vim'
 Plug 'junegunn/vim-easy-align'
 Plug 'scrooloose/nerdtree'
-Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-sensible'
 Plug 'scrooloose/nerdcommenter'
 Plug 'vim-airline/vim-airline'
@@ -14,6 +13,9 @@ Plug 'junegunn/gv.vim'
 Plug 'fatih/vim-go'
 Plug 'ervandew/supertab'
 Plug 'StanAngeloff/php.vim'
+Plug 'chase/vim-ansible-yaml'
+Plug 'hdima/python-syntax'
+Plug 'nanotech/jellybeans.vim'
 
 call plug#end()
 
@@ -22,6 +24,7 @@ set ruler
 set ts=4 sw=4 sts=4
 set expandtab
 set smarttab
+set autoindent
 
 set splitbelow
 set splitright
@@ -63,6 +66,20 @@ nnoremap <leader>V "+P
 vnoremap <leader>v "+p
 vnoremap <leader>V "+P
 
+nnoremap <MiddleMouse> <Nop>
+nnoremap <2-MiddleMouse> <Nop>
+nnoremap <3-MiddleMouse> <Nop>
+nnoremap <4-MiddleMouse> <Nop>
+inoremap <MiddleMouse> <Nop>
+inoremap <2-MiddleMouse> <Nop>
+inoremap <3-MiddleMouse> <Nop>
+inoremap <4-MiddleMouse> <Nop>
+vnoremap <MiddleMouse> <Nop>
+vnoremap <2-MiddleMouse> <Nop>
+vnoremap <3-MiddleMouse> <Nop>
+vnoremap <4-MiddleMouse> <Nop>
+
 syntax enable
-set background=dark
-colorscheme solarized
+colorscheme jellybeans
+
+let NERDTreeIgnore = ['\.pyc$', '\.class$', '\.so$', '\.swp$', '__pycache__$', '\.beam$']
