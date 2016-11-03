@@ -81,5 +81,7 @@ vnoremap <4-MiddleMouse> <Nop>
 
 syntax enable
 colorscheme jellybeans
+highlight colorcolumn guibg=red ctermbg=red
+set colorcolumn=120
 
 let NERDTreeIgnore = ['\.pyc$', '\.class$', '\.so$', '\.swp$', '__pycache__$', '\.beam$']
