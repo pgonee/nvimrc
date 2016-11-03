@@ -16,6 +16,8 @@ Plug 'StanAngeloff/php.vim'
 Plug 'chase/vim-ansible-yaml'
 Plug 'hdima/python-syntax'
 Plug 'nanotech/jellybeans.vim'
+Plug 'plasticboy/vim-markdown'
+Plug 'rhysd/committia.vim'
 
 call plug#end()
 
