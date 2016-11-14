@@ -6,7 +6,6 @@ Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-sensible'
 Plug 'scrooloose/nerdcommenter'
 Plug 'vim-airline/vim-airline'
-Plug 'altercation/vim-colors-solarized'
 Plug 'junegunn/goyo.vim' 
 Plug 'tpope/vim-fugitive'
 Plug 'junegunn/gv.vim'
@@ -18,6 +17,10 @@ Plug 'hdima/python-syntax'
 Plug 'nanotech/jellybeans.vim'
 Plug 'plasticboy/vim-markdown'
 Plug 'rhysd/committia.vim'
+Plug 'vim-syntastic/syntastic'
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
+Plug 'hynek/vim-python-pep8-indent'
 
 call plug#end()
 
@@ -27,9 +30,21 @@ set ts=4 sw=4 sts=4
 set expandtab
 set smarttab
 set autoindent
+set smartindent
 
 set splitbelow
 set splitright
+set encoding=utf-8
+filetype plugin indent on
+
+let python_highlight_all=1
+syntax on
+colorscheme jellybeans
+highlight colorcolumn guibg=darkred ctermbg=darkred
+highlight BadWhitespace ctermbg=darkred guibg=darkred
+set colorcolumn=120
+
+au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 
 nnoremap <localleader>q :q<cr>
 nnoremap <localleader>dd :NERDTreeToggle<cr>
@@ -81,9 +96,20 @@ vnoremap <2-MiddleMouse> <Nop>
 vnoremap <3-MiddleMouse> <Nop>
 vnoremap <4-MiddleMouse> <Nop>
 
-syntax enable
-colorscheme jellybeans
-highlight colorcolumn guibg=red ctermbg=red
-set colorcolumn=120
-
 let NERDTreeIgnore = ['\.pyc$', '\.class$', '\.so$', '\.swp$', '__pycache__$', '\.beam$']
+let g:ctrlp_custom_ignore = {
+            \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+            \ 'file': '\v\.(exe|so|dll|pyc)$',
+            \ 'link': 'some_bad_symbolic_links',
+            \ }
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+let g:syntastic_python_checkers = ['flake8']
