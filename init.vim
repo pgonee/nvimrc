@@ -21,6 +21,8 @@ Plug 'vim-syntastic/syntastic'
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
 Plug 'hynek/vim-python-pep8-indent'
+Plug 'JulesWang/css.vim'
+Plug 'cakebaker/scss-syntax.vim'
 
 call plug#end()
 
@@ -96,9 +98,18 @@ vnoremap <2-MiddleMouse> <Nop>
 vnoremap <3-MiddleMouse> <Nop>
 vnoremap <4-MiddleMouse> <Nop>
 
-let NERDTreeIgnore = ['\.pyc$', '\.class$', '\.so$', '\.swp$', '__pycache__$', '\.beam$']
+let NERDTreeIgnore = [
+            \ '\.pyc$',
+            \ '\.class$',
+            \ '\.so$',
+            \ '\.swp$',
+            \ '__pycache__$',
+            \ '\.beam$',
+            \ 'node_modules$',
+            \ 'bower_components$'
+            \]
 let g:ctrlp_custom_ignore = {
-            \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+            \ 'dir':  '\v[\/]\.?(git|hg|svn|node_modules|bower_components)$',
             \ 'file': '\v\.(exe|so|dll|pyc)$',
             \ 'link': 'some_bad_symbolic_links',
             \ }
@@ -113,3 +124,5 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
 let g:syntastic_python_checkers = ['flake8']
+
+let g:jsx_ext_required = 0
