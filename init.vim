@@ -23,6 +23,7 @@ Plug 'mxw/vim-jsx'
 Plug 'hynek/vim-python-pep8-indent'
 Plug 'JulesWang/css.vim'
 Plug 'cakebaker/scss-syntax.vim'
+Plug 'keith/swift.vim'
 
 call plug#end()
 
@@ -124,5 +125,6 @@ let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 
 let g:syntastic_python_checkers = ['flake8']
+let g:syntastic_html_checkers = ['']
 
 let g:jsx_ext_required = 0
