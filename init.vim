@@ -20,7 +20,7 @@ Plug 'rhysd/committia.vim'
 Plug 'vim-syntastic/syntastic'
 Plug 'pangloss/vim-javascript'
 Plug 'mxw/vim-jsx'
-Plug 'hynek/vim-python-pep8-indent'
+Plug 'Vimjas/vim-python-pep8-indent'
 Plug 'JulesWang/css.vim'
 Plug 'cakebaker/scss-syntax.vim'
 Plug 'keith/swift.vim'
@@ -37,6 +37,7 @@ set smartindent
 
 set splitbelow
 set splitright
+set hlsearch
 set encoding=utf-8
 filetype plugin indent on
 
@@ -45,6 +46,7 @@ syntax on
 colorscheme jellybeans
 highlight colorcolumn guibg=darkred ctermbg=darkred
 highlight BadWhitespace ctermbg=darkred guibg=darkred
+highlight Search guibg=darkgray ctermbg=darkgray
 set colorcolumn=120
 
 au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
@@ -76,15 +78,18 @@ nnoremap <c-j> <c-w><c-j>
 nnoremap <c-k> <c-w><c-k>
 nnoremap <c-l> <c-w><c-l>
 
-vnoremap <leader>c  "+y
-nnoremap <leader>C  "+yg_
-nnoremap <leader>c  "+y
-nnoremap <leader>cc  "+yy
+vnoremap <localleader>c  "+y
+nnoremap <localleader>C  "+yg_
+nnoremap <localleader>c  "+y
+nnoremap <localleader>cc  "+yy
 
-nnoremap <leader>v "+p
-nnoremap <leader>V "+P
-vnoremap <leader>v "+p
-vnoremap <leader>V "+P
+nnoremap <localleader>v "+p
+nnoremap <localleader>V "+P
+vnoremap <localleader>v "+p
+vnoremap <localleader>V "+P
+
+nnoremap <localleader>sr :SyntasticReset<cr>
+nnoremap <localleader>s :SyntasticCheck<cr>
 
 nnoremap <MiddleMouse> <Nop>
 nnoremap <2-MiddleMouse> <Nop>
@@ -119,12 +124,20 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 
+let g:syntastic_mode_map = {
+            \ "mode": "passive"
+            \ }
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
+let g:syntastic_enable_balloons = 0
 
 let g:syntastic_python_checkers = ['flake8']
 let g:syntastic_html_checkers = ['']
 
 let g:jsx_ext_required = 0
+
+let g:SuperTabMappingForward = '<c-space>'
+let g:SuperTabMappingBackward = '<s-c-space>'
+
