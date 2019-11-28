@@ -1,49 +1,43 @@
+let g:python_host_prog = '/Users/pgonee/.pyenv/versions/neovim2/bin/python'
+let g:python3_host_prog = '/Users/pgonee/.pyenv/versions/neovim3/bin/python'
+let g:deoplete#enable_at_startup = 1
+
 call plug#begin('~/.config/nvim/plugged')
 
+Plug 'ncm2/ncm2'
+Plug 'roxma/nvim-yarp'
+Plug 'ncm2/ncm2-bufword'
+Plug 'ncm2/ncm2-path'
+Plug 'ncm2/ncm2-jedi'
+
 Plug 'kien/ctrlp.vim'
-Plug 'junegunn/vim-easy-align'
 Plug 'scrooloose/nerdtree'
-Plug 'tpope/vim-sensible'
-Plug 'scrooloose/nerdcommenter'
+
+Plug 'Yggdroot/indentLine'
 Plug 'vim-airline/vim-airline'
-Plug 'junegunn/goyo.vim' 
-Plug 'tpope/vim-fugitive'
-Plug 'junegunn/gv.vim'
-Plug 'fatih/vim-go'
-Plug 'ervandew/supertab'
-Plug 'StanAngeloff/php.vim'
-Plug 'chase/vim-ansible-yaml'
-Plug 'hdima/python-syntax'
+Plug 'vim-airline/vim-airline-themes'
+
+Plug 'dense-analysis/ale'
 Plug 'nanotech/jellybeans.vim'
-Plug 'plasticboy/vim-markdown'
-Plug 'rhysd/committia.vim'
-Plug 'vim-syntastic/syntastic'
-Plug 'pangloss/vim-javascript'
-Plug 'mxw/vim-jsx'
-Plug 'Vimjas/vim-python-pep8-indent'
-Plug 'JulesWang/css.vim'
-Plug 'cakebaker/scss-syntax.vim'
-Plug 'keith/swift.vim'
 
 call plug#end()
+
+filetype plugin indent on
 
 set number
 set ruler
 set ts=4 sw=4 sts=4
 set expandtab
 set smarttab
-set autoindent
-set smartindent
 
 set splitbelow
 set splitright
 set hlsearch
 set encoding=utf-8
-filetype plugin indent on
 
-let python_highlight_all=1
 syntax on
 colorscheme jellybeans
+
 highlight colorcolumn guibg=darkred ctermbg=darkred
 highlight BadWhitespace ctermbg=darkred guibg=darkred
 highlight Search guibg=darkgray ctermbg=darkgray
@@ -88,9 +82,6 @@ nnoremap <localleader>V "+P
 vnoremap <localleader>v "+p
 vnoremap <localleader>V "+P
 
-nnoremap <localleader>sr :SyntasticReset<cr>
-nnoremap <localleader>s :SyntasticCheck<cr>
-
 nnoremap <MiddleMouse> <Nop>
 nnoremap <2-MiddleMouse> <Nop>
 nnoremap <3-MiddleMouse> <Nop>
@@ -119,25 +110,3 @@ let g:ctrlp_custom_ignore = {
             \ 'file': '\v\.(exe|so|dll|pyc)$',
             \ 'link': 'some_bad_symbolic_links',
             \ }
-
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
-let g:syntastic_mode_map = {
-            \ "mode": "passive"
-            \ }
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 1
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-let g:syntastic_enable_balloons = 0
-
-let g:syntastic_python_checkers = ['flake8']
-let g:syntastic_html_checkers = ['']
-
-let g:jsx_ext_required = 0
-
-let g:SuperTabMappingForward = '<c-space>'
-let g:SuperTabMappingBackward = '<s-c-space>'
-
