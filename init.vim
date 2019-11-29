@@ -4,21 +4,29 @@ let g:deoplete#enable_at_startup = 1
 
 call plug#begin('~/.config/nvim/plugged')
 
-Plug 'ncm2/ncm2'
-Plug 'roxma/nvim-yarp'
-Plug 'ncm2/ncm2-bufword'
-Plug 'ncm2/ncm2-path'
-Plug 'ncm2/ncm2-jedi'
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'deoplete-plugins/deoplete-jedi'
 
 Plug 'kien/ctrlp.vim'
 Plug 'scrooloose/nerdtree'
 
 Plug 'Yggdroot/indentLine'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
+Plug 'itchyny/lightline.vim'
 
 Plug 'dense-analysis/ale'
 Plug 'nanotech/jellybeans.vim'
+
+Plug 'Chiel92/vim-autoformat'
+Plug 'tpope/vim-commentary'
+
+Plug 'airblade/vim-gitgutter'
+
+Plug 'tpope/vim-fugitive'
+
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
+
+Plug 'Vimjas/vim-python-pep8-indent'
 
 call plug#end()
 
@@ -29,13 +37,18 @@ set ruler
 set ts=4 sw=4 sts=4
 set expandtab
 set smarttab
+set autoindent
+set smartindent
 
 set splitbelow
 set splitright
 set hlsearch
 set encoding=utf-8
 
+set updatetime=100
+
 syntax on
+syntax enable
 colorscheme jellybeans
 
 highlight colorcolumn guibg=darkred ctermbg=darkred
@@ -50,6 +63,7 @@ nnoremap <localleader>dd :NERDTreeToggle<cr>
 nnoremap <localleader>tt :tabnew<cr>
 nnoremap <localleader>tw :tabnext<cr>
 nnoremap <localleader>tp :tabprev<cr>
+nnoremap <localleader>af :Autoformat<cr>
 
 nnoremap <c-p> :Files<cr>
 
@@ -110,3 +124,5 @@ let g:ctrlp_custom_ignore = {
             \ 'file': '\v\.(exe|so|dll|pyc)$',
             \ 'link': 'some_bad_symbolic_links',
             \ }
+
+let g:deoplete#enable_at_startup = 1
