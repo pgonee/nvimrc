@@ -28,6 +28,8 @@ Plug 'peitalin/vim-jsx-typescript'
 
 Plug 'Vimjas/vim-python-pep8-indent'
 
+Plug 'davidhalter/jedi-vim'
+
 call plug#end()
 
 filetype plugin indent on
@@ -60,6 +62,7 @@ au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
 
 nnoremap <localleader>q :q<cr>
 nnoremap <localleader>dd :NERDTreeToggle<cr>
+nnoremap <localleader>df :NERDTreeFind<cr>
 nnoremap <localleader>tt :tabnew<cr>
 nnoremap <localleader>tw :tabnext<cr>
 nnoremap <localleader>tp :tabprev<cr>
@@ -126,3 +129,15 @@ let g:ctrlp_custom_ignore = {
             \ }
 
 let g:deoplete#enable_at_startup = 1
+
+let g:jedi#auto_vim_configuration = 0
+let g:jedi#goto_assignments_command = ''
+let g:jedi#goto_definitions_command = ''
+let g:jedi#use_tabs_not_buffers = 0
+let g:jedi#completions_enabled = 0
+let g:jedi#smart_auto_mappings = 1
+let g:jedi#auto_close_doc = 1
+let g:jedi#rename_command = ''
+let g:jedi#usages_command = ''
+let g:jedi#documentation_command = ''
+let g:jedi#show_call_signatures = "2"
