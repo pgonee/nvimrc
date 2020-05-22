@@ -1,7 +1,3 @@
-let g:python_host_prog = '/Users/pgonee/.pyenv/versions/neovim2/bin/python'
-let g:python3_host_prog = '/Users/pgonee/.pyenv/versions/neovim3/bin/python'
-let g:deoplete#enable_at_startup = 1
-
 call plug#begin('~/.config/nvim/plugged')
 
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
@@ -17,7 +13,7 @@ Plug 'dense-analysis/ale'
 Plug 'nanotech/jellybeans.vim'
 
 Plug 'Chiel92/vim-autoformat'
-Plug 'tpope/vim-commentary'
+Plug 'preservim/nerdcommenter'
 
 Plug 'airblade/vim-gitgutter'
 
@@ -58,7 +54,8 @@ highlight BadWhitespace ctermbg=darkred guibg=darkred
 highlight Search guibg=darkgray ctermbg=darkgray
 set colorcolumn=120
 
-au BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+autocmd BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescript.tsx
 
 nnoremap <localleader>q :q<cr>
 nnoremap <localleader>dd :NERDTreeToggle<cr>
@@ -128,6 +125,8 @@ let g:ctrlp_custom_ignore = {
             \ 'link': 'some_bad_symbolic_links',
             \ }
 
+let g:python_host_prog = '/Users/pgonee/.pyenv/versions/neovim2/bin/python'
+let g:python3_host_prog = '/Users/pgonee/.pyenv/versions/neovim3/bin/python'
 let g:deoplete#enable_at_startup = 1
 
 let g:jedi#auto_vim_configuration = 0
