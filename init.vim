@@ -26,6 +26,13 @@ Plug 'Vimjas/vim-python-pep8-indent'
 
 Plug 'davidhalter/jedi-vim'
 
+Plug 'prettier/vim-prettier', {
+            \ 'do': 'yarn install',
+            \ 'for': [
+            \ 'javascript', 'typescript', 'typescript.tsx', 'css', 'less', 'scss', 'json',
+            \ 'graphql', 'markdown', 'vue', 'yaml', 'html'
+            \] }
+
 call plug#end()
 
 filetype plugin indent on
