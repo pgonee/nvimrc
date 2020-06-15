@@ -1,7 +1,7 @@
 call plug#begin('~/.config/nvim/plugged')
 
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'deoplete-plugins/deoplete-jedi'
+Plug 'nanotech/jellybeans.vim'
+Plug 'junegunn/goyo.vim'
 
 Plug 'kien/ctrlp.vim'
 Plug 'scrooloose/nerdtree'
@@ -10,7 +10,6 @@ Plug 'Yggdroot/indentLine'
 Plug 'itchyny/lightline.vim'
 
 Plug 'dense-analysis/ale'
-Plug 'nanotech/jellybeans.vim'
 
 Plug 'Chiel92/vim-autoformat'
 Plug 'preservim/nerdcommenter'
@@ -24,14 +23,17 @@ Plug 'peitalin/vim-jsx-typescript'
 
 Plug 'Vimjas/vim-python-pep8-indent'
 
-Plug 'davidhalter/jedi-vim'
-
 Plug 'prettier/vim-prettier', {
             \ 'do': 'yarn install',
             \ 'for': [
             \ 'javascript', 'typescript', 'typescript.tsx', 'css', 'less', 'scss', 'json',
             \ 'graphql', 'markdown', 'vue', 'yaml', 'html'
             \] }
+
+Plug 'godlygeek/tabular'
+Plug 'plasticboy/vim-markdown'
+
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 call plug#end()
 
@@ -56,13 +58,12 @@ syntax on
 syntax enable
 colorscheme jellybeans
 
+set scrolloff=3
+
 highlight colorcolumn guibg=darkred ctermbg=darkred
 highlight BadWhitespace ctermbg=darkred guibg=darkred
 highlight Search guibg=darkgray ctermbg=darkgray
 set colorcolumn=120
-
-autocmd BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
-autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescript.tsx
 
 nnoremap <localleader>q :q<cr>
 nnoremap <localleader>dd :NERDTreeToggle<cr>
@@ -70,6 +71,7 @@ nnoremap <localleader>df :NERDTreeFind<cr>
 nnoremap <localleader>tt :tabnew<cr>
 nnoremap <localleader>tw :tabnext<cr>
 nnoremap <localleader>tp :tabprev<cr>
+nnoremap <localleader>tq :tabclose<cr>
 nnoremap <localleader>af :Autoformat<cr>
 
 nnoremap <c-p> :Files<cr>
@@ -134,16 +136,42 @@ let g:ctrlp_custom_ignore = {
 
 let g:python_host_prog = '/Users/pgonee/.pyenv/versions/neovim2/bin/python'
 let g:python3_host_prog = '/Users/pgonee/.pyenv/versions/neovim3/bin/python'
-let g:deoplete#enable_at_startup = 1
 
-let g:jedi#auto_vim_configuration = 0
-let g:jedi#goto_assignments_command = ''
-let g:jedi#goto_definitions_command = ''
-let g:jedi#use_tabs_not_buffers = 0
-let g:jedi#completions_enabled = 0
-let g:jedi#smart_auto_mappings = 1
-let g:jedi#auto_close_doc = 1
-let g:jedi#rename_command = ''
-let g:jedi#usages_command = ''
-let g:jedi#documentation_command = ''
-let g:jedi#show_call_signatures = "2"
+let g:goyo_width=100
+let g:goyo_height='100%'
+
+function! s:goyo_enter()
+    set nu
+endfunction
+
+function! s:goyo_leave()
+    highlight colorcolumn guibg=darkred ctermbg=darkred
+    highlight BadWhitespace ctermbg=darkred guibg=darkred
+    highlight Search guibg=darkgray ctermbg=darkgray
+endfunction
+
+autocmd BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
+autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescript.tsx
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
+autocmd! User GoyoLeave nested call <SID>goyo_leave()
+
+let g:lightline = {
+\ 'colorscheme': 'wombat',
+\ 'active': {
+\   'left': [ [ 'mode', 'paste' ],
+\             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
+\ },
+\ 'component_function': {
+\   'cocstatus': 'coc#status'
+\ },
+\ }
+autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
+
+inoremap <C-Space> <C-n>
+nmap <localleader>gd <Plug>(coc-definition)
+nmap <localleader>gt <Plug>(coc-type-definition)
+nmap <localleader>gi <Plug>(coc-implementation)
+nmap <localleader>gr <Plug>(coc-references)
+nmap <localleader>hh <Plug>(coc-float-hide)
+nmap <localleader>p :call CocActionAsync('showSignatureHelp')<cr>
+nmap <esc> <c-c>

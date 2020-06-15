@@ -1,0 +1,9 @@
+{
+    "list.normalMappings": {
+        "<C-c>": "call coc#util#float_hide()"
+    },
+    "list.insertMappings": {
+        "<C-c>": "call coc#util#float_hide()"
+    },
+    "tsserver.npm": "/Users/pgonee/.nvm/versions/node/v13.6.0/bin/npm"
+}
