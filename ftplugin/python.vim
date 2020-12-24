@@ -1,5 +1,5 @@
 setlocal ts=4 sw=4 sts=4
-setlocal colorcolumn=80
+setlocal colorcolumn=120
 
 let b:ale_linters = ['flake8', 'pylint']
 let b:ale_fixers = ['autopep8', 'yapf']

@@ -34,6 +34,11 @@ Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+
+Plug 'StanAngeloff/php.vim'
+
+Plug 'embear/vim-localvimrc'
 
 call plug#end()
 
@@ -173,5 +178,8 @@ nmap <localleader>gt <Plug>(coc-type-definition)
 nmap <localleader>gi <Plug>(coc-implementation)
 nmap <localleader>gr <Plug>(coc-references)
 nmap <localleader>hh <Plug>(coc-float-hide)
-nmap <localleader>p :call CocActionAsync('showSignatureHelp')<cr>
+imap <C-p> <c-c>a <c-c>:call CocActionAsync('showSignatureHelp')<cr>i
 nmap <esc> <c-c>
+
+let g:localvimrc_enable = 1
+let g:localvimrc_ask = 0
