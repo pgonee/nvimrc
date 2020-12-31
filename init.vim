@@ -41,6 +41,8 @@ Plug 'embear/vim-localvimrc'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
+Plug 'Vimjas/vim-python-pep8-indent'
+
 call plug#end()
 
 filetype plugin indent on
@@ -182,5 +184,9 @@ nmap <localleader>hh <Plug>(coc-float-hide)
 imap <C-p> <c-c>a <c-c>:call CocActionAsync('showSignatureHelp')<cr>i
 nmap <esc> <c-c>
 
+xmap <localleader>f  <Plug>(coc-format-selected)
+nmap <localleader>f  <Plug>(coc-format-selected)
+
 let g:localvimrc_enable = 1
 let g:localvimrc_ask = 0
+
