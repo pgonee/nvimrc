@@ -38,6 +38,9 @@ Plug 'StanAngeloff/php.vim'
 
 Plug 'embear/vim-localvimrc'
 
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+
 call plug#end()
 
 filetype plugin indent on
