@@ -21,8 +21,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
 
-Plug 'Vimjas/vim-python-pep8-indent'
-
 Plug 'prettier/vim-prettier', {
             \ 'do': 'yarn install',
             \ 'for': [
