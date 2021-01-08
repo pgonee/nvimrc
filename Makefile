@@ -4,4 +4,11 @@ install:
 	sh -c 'curl -fLo "$(VIM_PLUG_PATH)"/nvim/site/autoload/plug.vim --create-dirs \
 	   https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 	nvim +PlugInstall +qall
-	nvim +"CocInstall coc-pyright" +"CocInstall coc-json" +"CocInstall coc-tsserver" +"CocInstall coc-prettier"
+	nvim \
+		+"CocInstall coc-pyright" \
+		+"CocInstall coc-go" \
+		+"CocInstall coc-json" \
+		+"CocInstall coc-tsserver" \
+		+"CocInstall coc-prettier" \
+		+"CocInstall coc-styled-components" \
+		+"CocInstall coc-eslint"

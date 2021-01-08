@@ -18,16 +18,6 @@ Plug 'airblade/vim-gitgutter'
 
 Plug 'tpope/vim-fugitive'
 
-Plug 'leafgarland/typescript-vim'
-Plug 'peitalin/vim-jsx-typescript'
-
-Plug 'prettier/vim-prettier', {
-            \ 'do': 'yarn install',
-            \ 'for': [
-            \ 'javascript', 'typescript', 'typescript.tsx', 'css', 'less', 'scss', 'json',
-            \ 'graphql', 'markdown', 'vue', 'yaml', 'html'
-            \] }
-
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 
@@ -42,6 +32,11 @@ Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 
 Plug 'Vimjas/vim-python-pep8-indent'
+
+Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
+
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
 
 call plug#end()
 
@@ -159,7 +154,7 @@ function! s:goyo_leave()
 endfunction
 
 autocmd BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
-autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescript.tsx
+autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
@@ -176,16 +171,21 @@ let g:lightline = {
 autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
 
 inoremap <C-Space> <C-n>
+
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+
 nmap <localleader>gd <Plug>(coc-definition)
 nmap <localleader>gt <Plug>(coc-type-definition)
 nmap <localleader>gi <Plug>(coc-implementation)
 nmap <localleader>gr <Plug>(coc-references)
 nmap <localleader>hh <Plug>(coc-float-hide)
-imap <C-p> <c-c>a <c-c>:call CocActionAsync('showSignatureHelp')<cr>i
-nmap <esc> <c-c>
 
 xmap <localleader>f  <Plug>(coc-format-selected)
 nmap <localleader>f  <Plug>(coc-format-selected)
+
+imap <C-p> <c-c>a <c-c>:call CocActionAsync('showSignatureHelp')<cr>i
+nmap <esc> <c-c>
+
 
 let g:localvimrc_enable = 1
 let g:localvimrc_ask = 0

@@ -12,10 +12,14 @@
     "python.analysis.typeCheckingMode": "off",
     "coc.preferences.formatOnSaveFiletypes": [
         "python",
-        "tsx",
-        "javascript",
         "markdown",
+        "javascript",
+        "javascriptreact",
+        "javascript.jsx",
         "typescript",
-        "typescript.jsx"
+        "typescript.tsx",
+        "typescriptreact",
+        "css",
+        "markdown"
     ]
 }
