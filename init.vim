@@ -3,7 +3,6 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'nanotech/jellybeans.vim'
 Plug 'junegunn/goyo.vim'
 
-Plug 'kien/ctrlp.vim'
 Plug 'scrooloose/nerdtree'
 
 Plug 'Yggdroot/indentLine'
@@ -17,6 +16,7 @@ Plug 'preservim/nerdcommenter'
 Plug 'airblade/vim-gitgutter'
 
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb' " append to shrc `export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'`
 
 Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
@@ -37,6 +37,7 @@ Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
 
 Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
+Plug 'chemzqm/vim-jsx-improve'
 
 call plug#end()
 
@@ -131,11 +132,6 @@ let NERDTreeIgnore = [
             \ 'node_modules$',
             \ 'bower_components$'
             \]
-let g:ctrlp_custom_ignore = {
-            \ 'dir':  '\v[\/]\.?(git|hg|svn|node_modules|bower_components)$',
-            \ 'file': '\v\.(exe|so|dll|pyc)$',
-            \ 'link': 'some_bad_symbolic_links',
-            \ }
 
 let g:python_host_prog = '/Users/pgonee/.pyenv/versions/neovim2/bin/python'
 let g:python3_host_prog = '/Users/pgonee/.pyenv/versions/neovim3/bin/python'
@@ -154,7 +150,8 @@ function! s:goyo_leave()
 endfunction
 
 autocmd BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
-autocmd BufNewFile,BufRead *.tsx,*.jsx set filetype=typescriptreact
+autocmd BufNewFile,BufRead *.tsx set filetype=typescriptreact
+autocmd BufNewFile,BufRead *.jsx set filetype=javascriptreact
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
@@ -186,7 +183,5 @@ nmap <localleader>f  <Plug>(coc-format-selected)
 imap <C-p> <c-c>a <c-c>:call CocActionAsync('showSignatureHelp')<cr>i
 nmap <esc> <c-c>
 
-
 let g:localvimrc_enable = 1
 let g:localvimrc_ask = 0
-
