@@ -2,42 +2,15 @@ call plug#begin('~/.config/nvim/plugged')
 
 Plug 'nanotech/jellybeans.vim'
 Plug 'junegunn/goyo.vim'
-
 Plug 'scrooloose/nerdtree'
-
-Plug 'Yggdroot/indentLine'
-Plug 'itchyny/lightline.vim'
-
 Plug 'dense-analysis/ale'
-
-Plug 'Chiel92/vim-autoformat'
 Plug 'preservim/nerdcommenter'
-
 Plug 'airblade/vim-gitgutter'
-
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-rhubarb' " append to shrc `export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'`
-
-Plug 'godlygeek/tabular'
-Plug 'plasticboy/vim-markdown'
-
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-
-Plug 'StanAngeloff/php.vim'
-
-Plug 'embear/vim-localvimrc'
-
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-
-Plug 'Vimjas/vim-python-pep8-indent'
-
-Plug 'numirias/semshi', {'do': ':UpdateRemotePlugins'}
-
-Plug 'leafgarland/typescript-vim'
-Plug 'peitalin/vim-jsx-typescript'
-Plug 'chemzqm/vim-jsx-improve'
+Plug 'tpope/vim-surround'
+Plug 'itchyny/lightline.vim'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'ycm-core/YouCompleteMe'
 
 call plug#end()
 
@@ -155,33 +128,9 @@ autocmd BufNewFile,BufRead *.jsx set filetype=javascriptreact
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
-let g:lightline = {
-\ 'colorscheme': 'wombat',
-\ 'active': {
-\   'left': [ [ 'mode', 'paste' ],
-\             [ 'cocstatus', 'readonly', 'filename', 'modified' ] ]
-\ },
-\ 'component_function': {
-\   'cocstatus': 'coc#status'
-\ },
-\ }
-autocmd User CocStatusChange,CocDiagnosticChange call lightline#update()
-
 inoremap <C-Space> <C-n>
 
-command! -nargs=0 Prettier :CocCommand prettier.formatFile
-
-nmap <localleader>gd <Plug>(coc-definition)
-nmap <localleader>gt <Plug>(coc-type-definition)
-nmap <localleader>gi <Plug>(coc-implementation)
-nmap <localleader>gr <Plug>(coc-references)
-nmap <localleader>hh <Plug>(coc-float-hide)
-
-xmap <localleader>f  <Plug>(coc-format-selected)
-nmap <localleader>f  <Plug>(coc-format-selected)
-
-imap <C-p> <c-c>a <c-c>:call CocActionAsync('showSignatureHelp')<cr>i
 nmap <esc> <c-c>
 
-let g:localvimrc_enable = 1
-let g:localvimrc_ask = 0
+let g:ycm_min_num_of_chars_for_completion = 1
+let g:ycm_confirm_extra_conf = 0
