@@ -3,14 +3,12 @@ call plug#begin('~/.config/nvim/plugged')
 Plug 'nanotech/jellybeans.vim'
 Plug 'junegunn/goyo.vim'
 Plug 'scrooloose/nerdtree'
-Plug 'dense-analysis/ale'
 Plug 'preservim/nerdcommenter'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'itchyny/lightline.vim'
 Plug 'ctrlpvim/ctrlp.vim'
-Plug 'ycm-core/YouCompleteMe'
 
 call plug#end()
 
@@ -131,6 +129,3 @@ autocmd! User GoyoLeave nested call <SID>goyo_leave()
 inoremap <C-Space> <C-n>
 
 nmap <esc> <c-c>
-
-let g:ycm_min_num_of_chars_for_completion = 1
-let g:ycm_confirm_extra_conf = 0
