@@ -8,7 +8,8 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'itchyny/lightline.vim'
-Plug 'ctrlpvim/ctrlp.vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 
 call plug#end()
 
@@ -25,9 +26,14 @@ set smartindent
 set splitbelow
 set splitright
 set hlsearch
-set encoding=utf-8
 
-set updatetime=100
+set encoding=utf-8
+set nobackup
+set nowritebackup
+set cmdheight=2
+set updatetime=300
+set shortmess+=c
+set signcolumn=yes
 
 syntax on
 syntax enable
