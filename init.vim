@@ -1,3 +1,5 @@
+lang ko_KR
+
 call plug#begin('~/.config/nvim/plugged')
 
 Plug 'nanotech/jellybeans.vim'
@@ -34,6 +36,7 @@ set cmdheight=2
 set updatetime=300
 set shortmess+=c
 set signcolumn=yes
+set clipboard+=unnamed
 
 syntax on
 syntax enable
@@ -53,9 +56,22 @@ nnoremap <localleader>tt :tabnew<cr>
 nnoremap <localleader>tw :tabnext<cr>
 nnoremap <localleader>tp :tabprev<cr>
 nnoremap <localleader>tq :tabclose<cr>
-nnoremap <localleader>af :Autoformat<cr>
 
-nnoremap <c-p> :Files<cr>
+command! -nargs=0 Prettier :CocCommand prettier.forceFormatDocument
+nnoremap <localleader>pre :Prettier<cr>
+
+nnoremap <Plug>(ShowCurrentFile) :echo @%<cr>
+
+nmap sf <Plug>(ShowCurrentFile)
+nmap gd <Plug>(coc-definition)
+nmap gy <Plug>(coc-type-definition)
+nmap gi <Plug>(coc-implementation)
+nmap gr <Plug>(coc-references)
+
+vmap ff <Plug>(coc-format-selected)
+
+
+nnoremap <c-p> :FZF<cr>
 
 tnoremap <a-h> <c-\><c-n><c-w>h
 tnoremap <a-j> <c-\><c-n><c-w>j
@@ -77,9 +93,6 @@ nnoremap <c-k> <c-w><c-k>
 nnoremap <c-l> <c-w><c-l>
 
 vnoremap <localleader>c  "+y
-nnoremap <localleader>C  "+yg_
-nnoremap <localleader>c  "+y
-nnoremap <localleader>cc  "+yy
 
 nnoremap <localleader>v "+p
 nnoremap <localleader>V "+P
@@ -131,7 +144,5 @@ autocmd BufNewFile,BufRead *.tsx set filetype=typescriptreact
 autocmd BufNewFile,BufRead *.jsx set filetype=javascriptreact
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
-
-inoremap <C-Space> <C-n>
 
 nmap <esc> <c-c>
