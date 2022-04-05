@@ -12,6 +12,7 @@ Plug 'tpope/vim-surround'
 Plug 'itchyny/lightline.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'lukas-reineke/indent-blankline.nvim'
 
 call plug#end()
 
@@ -146,3 +147,4 @@ autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
 nmap <esc> <c-c>
+set diffopt+=vertical
