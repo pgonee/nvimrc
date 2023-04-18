@@ -10,7 +10,6 @@ Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'itchyny/lightline.vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'lukas-reineke/indent-blankline.nvim'
 
@@ -64,13 +63,6 @@ nnoremap <localleader>pre :Prettier<cr>
 nnoremap <Plug>(ShowCurrentFile) :echo @%<cr>
 
 nmap sf <Plug>(ShowCurrentFile)
-nmap gd <Plug>(coc-definition)
-nmap gy <Plug>(coc-type-definition)
-nmap gi <Plug>(coc-implementation)
-nmap gr <Plug>(coc-references)
-
-vmap ff <Plug>(coc-format-selected)
-
 
 nnoremap <c-p> :FZF<cr>
 
