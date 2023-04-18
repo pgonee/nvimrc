@@ -24,6 +24,18 @@ require("packer").startup(function(use)
     use 'hrsh7th/cmp-path'
     use 'hrsh7th/cmp-cmdline'
     use 'hrsh7th/cmp-vsnip'
+    use({
+        'jose-elias-alvarez/null-ls.nvim',
+        requires = { "nvim-lua/plenary.nvim" }
+    })
+    use({
+        "glepnir/lspsaga.nvim",
+        branch = "main",
+        requires = {
+            {"nvim-tree/nvim-web-devicons"},
+            {"nvim-treesitter/nvim-treesitter"}
+        }
+    })
 
     vim.api.nvim_set_keymap('n', '<localleader>q', ':q<cr>', {noremap = true})
     vim.api.nvim_set_keymap('n', '<localleader>dd', ':NERDTreeToggle<cr>', {noremap = true})
@@ -184,4 +196,27 @@ require("packer").startup(function(use)
         },
         capabilities = capabilities
     }
+
+    local null_ls = require("null-ls")
+    local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+
+    null_ls.setup({
+        sources = {
+            null_ls.builtins.formatting.prettierd,
+        },
+
+        on_attach = function(client, bufnr)
+            if client.supports_method("textDocument/formatting") then
+                vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+                vim.api.nvim_create_autocmd("BufWritePre", {
+                    group = augroup,
+                    buffer = bufnr,
+                    callback = function()
+                        -- on 0.8, you should use  instead
+                        vim.lsp.buf.format({ bufnr = bufnr })
+                    end,
+                })
+            end
+        end,
+    })
 end)
