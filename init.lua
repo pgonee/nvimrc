@@ -5,7 +5,6 @@ require("packer").startup(function(use)
 
     use "wbthomason/packer.nvim"
     use "neovim/nvim-lspconfig"
-    use "nanotech/jellybeans.vim"
     use "scrooloose/nerdtree"
     use 'junegunn/goyo.vim'
     use 'preservim/nerdcommenter'
@@ -17,6 +16,7 @@ require("packer").startup(function(use)
     use {
         'junegunn/fzf', run = function() vim.fn['fzf#install'](0) end
     }
+    use 'lifepillar/vim-solarized8'
 
     vim.api.nvim_set_keymap('n', '<localleader>q', ':q<cr>', {noremap = true})
     vim.api.nvim_set_keymap('n', '<localleader>dd', ':NERDTreeToggle<cr>', {noremap = true})
@@ -90,11 +90,8 @@ require("packer").startup(function(use)
     vim.api.nvim_command('set shortmess+=c')
     vim.api.nvim_command('syntax on')
     vim.api.nvim_command('syntax enable')
-    vim.api.nvim_command('colorscheme jellybeans')
-
-    vim.api.nvim_command('highlight colorcolumn guibg=darkred ctermbg=darkred')
-    vim.api.nvim_command('highlight BadWhitespace ctermbg=darkred guibg=darkred')
-    vim.api.nvim_command('highlight Search guibg=darkgray ctermbg=darkgray')
+    vim.o.background = 'light'
+    vim.api.nvim_command('colorscheme solarized8')
     vim.o.colorcolumn = '120'
 
     vim.cmd([[
@@ -117,10 +114,8 @@ require("packer").startup(function(use)
     endfunction
 
     function! s:goyo_leave()
-    highlight colorcolumn guibg=darkred ctermbg=darkred
-    highlight BadWhitespace ctermbg=darkred guibg=darkred
-    highlight Search guibg=darkgray ctermbg=darkgray
     endfunction
+
     autocmd! User GoyoEnter nested call <SID>goyo_enter()
     autocmd! User GoyoLeave nested call <SID>goyo_leave()
     ]])
