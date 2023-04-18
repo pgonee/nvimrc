@@ -17,13 +17,14 @@ require("packer").startup(function(use)
         'junegunn/fzf', run = function() vim.fn['fzf#install'](0) end
     }
     use 'nanotech/jellybeans.vim'
-    use 'hrsh7th/nvim-cmp'
     use 'hrsh7th/vim-vsnip'
+    use 'hrsh7th/nvim-cmp'
     use 'hrsh7th/cmp-nvim-lsp'
     use 'hrsh7th/cmp-buffer'
     use 'hrsh7th/cmp-path'
     use 'hrsh7th/cmp-cmdline'
     use 'hrsh7th/cmp-vsnip'
+    use 'hrsh7th/cmp-nvim-lsp-signature-help'
     use({
         'jose-elias-alvarez/null-ls.nvim',
         requires = { "nvim-lua/plenary.nvim" }
@@ -32,50 +33,50 @@ require("packer").startup(function(use)
         "glepnir/lspsaga.nvim",
         branch = "main",
         requires = {
-            {"nvim-tree/nvim-web-devicons"},
+            { "nvim-tree/nvim-web-devicons" },
         }
     })
 
-    vim.api.nvim_set_keymap('n', '<localleader>q', ':q<cr>', {noremap = true})
-    vim.api.nvim_set_keymap('n', '<localleader>dd', ':NERDTreeToggle<cr>', {noremap = true})
-    vim.api.nvim_set_keymap('n', '<localleader>df', ':NERDTreeFind<cr>', {noremap = true})
-    vim.api.nvim_set_keymap('n', '<localleader>tt', ':tabnew<cr>', {noremap = true})
-    vim.api.nvim_set_keymap('n', '<localleader>tw', ':tabnext<cr>', {noremap = true})
-    vim.api.nvim_set_keymap('n', '<localleader>tp', ':tabprev<cr>', {noremap = true})
-    vim.api.nvim_set_keymap('n', '<localleader>tq', ':tabclose<cr>', {noremap = true})
-    vim.api.nvim_set_keymap('n', '<c-p>', ':FZF<cr>', {noremap = true})
+    vim.api.nvim_set_keymap('n', '<localleader>q', ':q<cr>', { noremap = true })
+    vim.api.nvim_set_keymap('n', '<localleader>dd', ':NERDTreeToggle<cr>', { noremap = true })
+    vim.api.nvim_set_keymap('n', '<localleader>df', ':NERDTreeFind<cr>', { noremap = true })
+    vim.api.nvim_set_keymap('n', '<localleader>tt', ':tabnew<cr>', { noremap = true })
+    vim.api.nvim_set_keymap('n', '<localleader>tw', ':tabnext<cr>', { noremap = true })
+    vim.api.nvim_set_keymap('n', '<localleader>tp', ':tabprev<cr>', { noremap = true })
+    vim.api.nvim_set_keymap('n', '<localleader>tq', ':tabclose<cr>', { noremap = true })
+    vim.api.nvim_set_keymap('n', '<c-p>', ':FZF<cr>', { noremap = true })
 
-    vim.api.nvim_set_keymap('t', '<a-h>', '<c-\\><c-n><c-w>h', {noremap = true})
-    vim.api.nvim_set_keymap('t', '<a-j>', '<c-\\><c-n><c-w>j', {noremap = true})
-    vim.api.nvim_set_keymap('t', '<a-k>', '<c-\\><c-n><c-w>k', {noremap = true})
-    vim.api.nvim_set_keymap('t', '<a-l>', '<c-\\><c-n><c-w>l', {noremap = true})
+    vim.api.nvim_set_keymap('t', '<a-h>', '<c-\\><c-n><c-w>h', { noremap = true })
+    vim.api.nvim_set_keymap('t', '<a-j>', '<c-\\><c-n><c-w>j', { noremap = true })
+    vim.api.nvim_set_keymap('t', '<a-k>', '<c-\\><c-n><c-w>k', { noremap = true })
+    vim.api.nvim_set_keymap('t', '<a-l>', '<c-\\><c-n><c-w>l', { noremap = true })
 
-    vim.api.nvim_set_keymap('t', '<c-\\>tn', '<c-\\><c-n>:tabnext<cr>', {noremap = true})
-    vim.api.nvim_set_keymap('t', '<c-\\>tw', '<c-\\><c-n>:tabnext<cr>', {noremap = true})
-    vim.api.nvim_set_keymap('t', '<c-\\>tp', '<c-\\><c-n>:tabprev<cr>', {noremap = true})
+    vim.api.nvim_set_keymap('t', '<c-\\>tn', '<c-\\><c-n>:tabnext<cr>', { noremap = true })
+    vim.api.nvim_set_keymap('t', '<c-\\>tw', '<c-\\><c-n>:tabnext<cr>', { noremap = true })
+    vim.api.nvim_set_keymap('t', '<c-\\>tp', '<c-\\><c-n>:tabprev<cr>', { noremap = true })
 
-    vim.api.nvim_set_keymap('t', '<c-h>', '<c-\\><c-n><c-w>h', {noremap = true})
-    vim.api.nvim_set_keymap('t', '<c-j>', '<c-\\><c-n><c-w>j', {noremap = true})
-    vim.api.nvim_set_keymap('t', '<c-k>', '<c-\\><c-n><c-w>k', {noremap = true})
-    vim.api.nvim_set_keymap('t', '<c-l>', '<c-\\><c-n><c-w>l', {noremap = true})
+    vim.api.nvim_set_keymap('t', '<c-h>', '<c-\\><c-n><c-w>h', { noremap = true })
+    vim.api.nvim_set_keymap('t', '<c-j>', '<c-\\><c-n><c-w>j', { noremap = true })
+    vim.api.nvim_set_keymap('t', '<c-k>', '<c-\\><c-n><c-w>k', { noremap = true })
+    vim.api.nvim_set_keymap('t', '<c-l>', '<c-\\><c-n><c-w>l', { noremap = true })
 
-    vim.api.nvim_set_keymap('n', '<c-h>', '<c-w><c-h>', {noremap = true})
-    vim.api.nvim_set_keymap('n', '<c-j>', '<c-w><c-j>', {noremap = true})
-    vim.api.nvim_set_keymap('n', '<c-k>', '<c-w><c-k>', {noremap = true})
-    vim.api.nvim_set_keymap('n', '<c-l>', '<c-w><c-l>', {noremap = true})
+    vim.api.nvim_set_keymap('n', '<c-h>', '<c-w><c-h>', { noremap = true })
+    vim.api.nvim_set_keymap('n', '<c-j>', '<c-w><c-j>', { noremap = true })
+    vim.api.nvim_set_keymap('n', '<c-k>', '<c-w><c-k>', { noremap = true })
+    vim.api.nvim_set_keymap('n', '<c-l>', '<c-w><c-l>', { noremap = true })
 
-    vim.api.nvim_set_keymap('n', '<MiddleMouse>', '<Nop>', {noremap = true})
-    vim.api.nvim_set_keymap('n', '<2-MiddleMouse>', '<Nop>', {noremap = true})
-    vim.api.nvim_set_keymap('n', '<3-MiddleMouse>', '<Nop>', {noremap = true})
-    vim.api.nvim_set_keymap('n', '<4-MiddleMouse>', '<Nop>', {noremap = true})
-    vim.api.nvim_set_keymap('i', '<MiddleMouse>', '<Nop>', {noremap = true})
-    vim.api.nvim_set_keymap('i', '<2-MiddleMouse>', '<Nop>', {noremap = true})
-    vim.api.nvim_set_keymap('i', '<3-MiddleMouse>', '<Nop>', {noremap = true})
-    vim.api.nvim_set_keymap('i', '<4-MiddleMouse>', '<Nop>', {noremap = true})
-    vim.api.nvim_set_keymap('v', '<MiddleMouse>', '<Nop>', {noremap = true})
-    vim.api.nvim_set_keymap('v', '<2-MiddleMouse>', '<Nop>', {noremap = true})
-    vim.api.nvim_set_keymap('v', '<3-MiddleMouse>', '<Nop>', {noremap = true})
-    vim.api.nvim_set_keymap('v', '<4-MiddleMouse>', '<Nop>', {noremap = true})
+    vim.api.nvim_set_keymap('n', '<MiddleMouse>', '<Nop>', { noremap = true })
+    vim.api.nvim_set_keymap('n', '<2-MiddleMouse>', '<Nop>', { noremap = true })
+    vim.api.nvim_set_keymap('n', '<3-MiddleMouse>', '<Nop>', { noremap = true })
+    vim.api.nvim_set_keymap('n', '<4-MiddleMouse>', '<Nop>', { noremap = true })
+    vim.api.nvim_set_keymap('i', '<MiddleMouse>', '<Nop>', { noremap = true })
+    vim.api.nvim_set_keymap('i', '<2-MiddleMouse>', '<Nop>', { noremap = true })
+    vim.api.nvim_set_keymap('i', '<3-MiddleMouse>', '<Nop>', { noremap = true })
+    vim.api.nvim_set_keymap('i', '<4-MiddleMouse>', '<Nop>', { noremap = true })
+    vim.api.nvim_set_keymap('v', '<MiddleMouse>', '<Nop>', { noremap = true })
+    vim.api.nvim_set_keymap('v', '<2-MiddleMouse>', '<Nop>', { noremap = true })
+    vim.api.nvim_set_keymap('v', '<3-MiddleMouse>', '<Nop>', { noremap = true })
+    vim.api.nvim_set_keymap('v', '<4-MiddleMouse>', '<Nop>', { noremap = true })
 
     vim.api.nvim_set_keymap('n', '<esc>', '<c-c>', {})
 
@@ -159,12 +160,14 @@ require("packer").startup(function(use)
             { name = 'nvim_lsp' },
         }, {
             { name = 'buffer' },
-        },{
+        }, {
             { name = 'path' },
-        },{
+        }, {
             { name = 'cmdline' },
         }, {
             { name = 'vsnip' }
+        }, {
+            { name = "nvim_lsp_signature_help" }
         })
     })
 
@@ -184,7 +187,7 @@ require("packer").startup(function(use)
         settings = {
             Lua = {
                 diagnostics = {
-                    globals = {'vim'}
+                    globals = { 'vim' }
                 },
                 workspace = {
                     library = vim.api.nvim_get_runtime_file("", true),
@@ -201,8 +204,8 @@ require("packer").startup(function(use)
     null_ls.setup({
         sources = {
             null_ls.builtins.formatting.prettierd,
+            null_ls.builtins.formatting.lua_format,
         },
-
         on_attach = function(client, bufnr)
             if client.supports_method("textDocument/formatting") then
                 vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
