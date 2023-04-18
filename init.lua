@@ -91,7 +91,7 @@ require("packer").startup(function(use)
     vim.api.nvim_command('syntax on')
     vim.api.nvim_command('syntax enable')
     vim.o.background = 'light'
-    vim.api.nvim_command('colorscheme solarized8')
+    vim.api.nvim_command('colorscheme solarized8_flat')
     vim.o.colorcolumn = '120'
 
     vim.cmd([[
@@ -120,6 +120,11 @@ require("packer").startup(function(use)
     autocmd! User GoyoLeave nested call <SID>goyo_leave()
     ]])
 
+
+    local lspconfig = require('lspconfig')
+    lspconfig.pyright.setup {}
+    lspconfig.tsserver.setup {}
+    lspconfig.lua_ls.setup {}
 end)
 
 --autocmd BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
