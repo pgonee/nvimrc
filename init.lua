@@ -16,6 +16,7 @@ require("packer").startup(function(use)
     use {
         'junegunn/fzf', run = function() vim.fn['fzf#install'](0) end
     }
+    use 'junegunn/fzf.vim'
     use 'nanotech/jellybeans.vim'
     use 'hrsh7th/vim-vsnip'
     use 'hrsh7th/nvim-cmp'
@@ -44,7 +45,7 @@ require("packer").startup(function(use)
     vim.api.nvim_set_keymap('n', '<localleader>tw', ':tabnext<cr>', { noremap = true })
     vim.api.nvim_set_keymap('n', '<localleader>tp', ':tabprev<cr>', { noremap = true })
     vim.api.nvim_set_keymap('n', '<localleader>tq', ':tabclose<cr>', { noremap = true })
-    vim.api.nvim_set_keymap('n', '<c-p>', ':FZF<cr>', { noremap = true })
+    vim.api.nvim_set_keymap('n', '<c-p>', ':Files<cr>', { noremap = true })
 
     vim.api.nvim_set_keymap('t', '<a-h>', '<c-\\><c-n><c-w>h', { noremap = true })
     vim.api.nvim_set_keymap('t', '<a-j>', '<c-\\><c-n><c-w>j', { noremap = true })
