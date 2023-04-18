@@ -16,7 +16,7 @@ require("packer").startup(function(use)
     use {
         'junegunn/fzf', run = function() vim.fn['fzf#install'](0) end
     }
-    use 'lifepillar/vim-solarized8'
+    use 'nanotech/jellybeans.vim'
     use 'hrsh7th/nvim-cmp'
     use 'hrsh7th/vim-vsnip'
     use 'hrsh7th/cmp-nvim-lsp'
@@ -33,7 +33,6 @@ require("packer").startup(function(use)
         branch = "main",
         requires = {
             {"nvim-tree/nvim-web-devicons"},
-            {"nvim-treesitter/nvim-treesitter"}
         }
     })
 
@@ -109,8 +108,8 @@ require("packer").startup(function(use)
     vim.api.nvim_command('set shortmess+=c')
     vim.api.nvim_command('syntax on')
     vim.api.nvim_command('syntax enable')
-    vim.o.background = 'light'
-    vim.api.nvim_command('colorscheme solarized8_flat')
+    vim.o.background = 'dark'
+    vim.api.nvim_command('colorscheme jellybeans')
     vim.o.colorcolumn = '120'
 
     vim.cmd([[
@@ -138,7 +137,6 @@ require("packer").startup(function(use)
     autocmd! User GoyoEnter nested call <SID>goyo_enter()
     autocmd! User GoyoLeave nested call <SID>goyo_leave()
     ]])
-
 
     local cmp = require('cmp')
     cmp.setup({
@@ -212,11 +210,12 @@ require("packer").startup(function(use)
                     group = augroup,
                     buffer = bufnr,
                     callback = function()
-                        -- on 0.8, you should use  instead
                         vim.lsp.buf.format({ bufnr = bufnr })
                     end,
                 })
             end
         end,
     })
+
+    require("lspsaga").setup({})
 end)
