@@ -17,6 +17,13 @@ require("packer").startup(function(use)
         'junegunn/fzf', run = function() vim.fn['fzf#install'](0) end
     }
     use 'lifepillar/vim-solarized8'
+    use 'hrsh7th/nvim-cmp'
+    use 'hrsh7th/vim-vsnip'
+    use 'hrsh7th/cmp-nvim-lsp'
+    use 'hrsh7th/cmp-buffer'
+    use 'hrsh7th/cmp-path'
+    use 'hrsh7th/cmp-cmdline'
+    use 'hrsh7th/cmp-vsnip'
 
     vim.api.nvim_set_keymap('n', '<localleader>q', ':q<cr>', {noremap = true})
     vim.api.nvim_set_keymap('n', '<localleader>dd', ':NERDTreeToggle<cr>', {noremap = true})
@@ -121,12 +128,60 @@ require("packer").startup(function(use)
     ]])
 
 
-    local lspconfig = require('lspconfig')
-    lspconfig.pyright.setup {}
-    lspconfig.tsserver.setup {}
-    lspconfig.lua_ls.setup {}
-end)
+    local cmp = require('cmp')
+    cmp.setup({
+        snippet = {
+            expand = function(args)
+                vim.fn["vsnip#anonymous"](args.body)
+            end,
+        },
+        mapping = cmp.mapping.preset.insert({
+            ['<c-u>'] = cmp.mapping.scroll_docs(-4),
+            ['<c-d>'] = cmp.mapping.scroll_docs(4),
+            ['<c-space>'] = cmp.mapping.complete(),
+            ['<c-e>'] = cmp.mapping.abort(),
+            ['<cr>'] = cmp.mapping.confirm({
+                behavior = cmp.ConfirmBehavior.Replace,
+                select = true
+            }),
+        }),
+        sources = cmp.config.sources({
+            { name = 'nvim_lsp' },
+        }, {
+            { name = 'buffer' },
+        },{
+            { name = 'path' },
+        },{
+            { name = 'cmdline' },
+        }, {
+            { name = 'vsnip' }
+        })
+    })
 
---autocmd BufRead,BufNewFile *.py,*.pyw,*.c,*.h match BadWhitespace /\s\+$/
---autocmd BufNewFile,BufRead *.tsx set filetype=typescriptreact
---autocmd BufNewFile,BufRead *.jsx set filetype=javascriptreact
+    local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+    local lspconfig = require('lspconfig')
+    lspconfig.pyright.setup {
+        capabilities = capabilities
+    }
+    lspconfig.tsserver.setup {
+        filetypes = {
+            "typescript", "typescriptreact", "typescript.tsx"
+        },
+        capabilities = capabilities
+    }
+    lspconfig.lua_ls.setup {
+        settings = {
+            Lua = {
+                diagnostics = {
+                    globals = {'vim'}
+                },
+                workspace = {
+                    library = vim.api.nvim_get_runtime_file("", true),
+                    checkThirdParty = false
+                }
+            }
+        },
+        capabilities = capabilities
+    }
+end)
