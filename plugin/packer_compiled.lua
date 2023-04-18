@@ -74,10 +74,40 @@ end
 time([[try_loadstring definition]], false)
 time([[Defining packer_plugins]], true)
 _G.packer_plugins = {
+  fzf = {
+    loaded = true,
+    path = "/Users/pgonee/.local/share/nvim/site/pack/packer/start/fzf",
+    url = "https://github.com/junegunn/fzf"
+  },
+  ["goyo.vim"] = {
+    loaded = true,
+    path = "/Users/pgonee/.local/share/nvim/site/pack/packer/start/goyo.vim",
+    url = "https://github.com/junegunn/goyo.vim"
+  },
+  ["indent-blankline.nvim"] = {
+    loaded = true,
+    path = "/Users/pgonee/.local/share/nvim/site/pack/packer/start/indent-blankline.nvim",
+    url = "https://github.com/lukas-reineke/indent-blankline.nvim"
+  },
   ["jellybeans.vim"] = {
     loaded = true,
     path = "/Users/pgonee/.local/share/nvim/site/pack/packer/start/jellybeans.vim",
     url = "https://github.com/nanotech/jellybeans.vim"
+  },
+  ["lightline.vim"] = {
+    loaded = true,
+    path = "/Users/pgonee/.local/share/nvim/site/pack/packer/start/lightline.vim",
+    url = "https://github.com/itchyny/lightline.vim"
+  },
+  nerdcommenter = {
+    loaded = true,
+    path = "/Users/pgonee/.local/share/nvim/site/pack/packer/start/nerdcommenter",
+    url = "https://github.com/preservim/nerdcommenter"
+  },
+  nerdtree = {
+    loaded = true,
+    path = "/Users/pgonee/.local/share/nvim/site/pack/packer/start/nerdtree",
+    url = "https://github.com/scrooloose/nerdtree"
   },
   ["nvim-lspconfig"] = {
     loaded = true,
@@ -88,6 +118,21 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/pgonee/.local/share/nvim/site/pack/packer/start/packer.nvim",
     url = "https://github.com/wbthomason/packer.nvim"
+  },
+  ["vim-fugitive"] = {
+    loaded = true,
+    path = "/Users/pgonee/.local/share/nvim/site/pack/packer/start/vim-fugitive",
+    url = "https://github.com/tpope/vim-fugitive"
+  },
+  ["vim-gitgutter"] = {
+    loaded = true,
+    path = "/Users/pgonee/.local/share/nvim/site/pack/packer/start/vim-gitgutter",
+    url = "https://github.com/airblade/vim-gitgutter"
+  },
+  ["vim-surround"] = {
+    loaded = true,
+    path = "/Users/pgonee/.local/share/nvim/site/pack/packer/start/vim-surround",
+    url = "https://github.com/tpope/vim-surround"
   }
 }
 
