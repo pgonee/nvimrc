@@ -1,8 +1,4 @@
 require("packer").startup(function(use)
-    vim.cmd([[
-    lang ko_KR
-    ]])
-
     use "wbthomason/packer.nvim"
     use "neovim/nvim-lspconfig"
     use "scrooloose/nerdtree"
@@ -17,7 +13,7 @@ require("packer").startup(function(use)
         'junegunn/fzf', run = function() vim.fn['fzf#install'](0) end
     }
     use 'junegunn/fzf.vim'
-    use 'nanotech/jellybeans.vim'
+    use 'lifepillar/vim-solarized8'
     use 'hrsh7th/vim-vsnip'
     use 'hrsh7th/nvim-cmp'
     use 'hrsh7th/cmp-nvim-lsp'
@@ -110,8 +106,9 @@ require("packer").startup(function(use)
     vim.api.nvim_command('set shortmess+=c')
     vim.api.nvim_command('syntax on')
     vim.api.nvim_command('syntax enable')
-    vim.o.background = 'dark'
-    vim.api.nvim_command('colorscheme jellybeans')
+    vim.o.termguicolors = true
+    vim.o.background = 'light'
+    vim.api.nvim_command('colorscheme solarized8')
     vim.o.colorcolumn = '120'
 
     vim.cmd([[
