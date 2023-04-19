@@ -13,7 +13,7 @@ require("packer").startup(function(use)
         'junegunn/fzf', run = function() vim.fn['fzf#install'](0) end
     }
     use 'junegunn/fzf.vim'
-    use 'lifepillar/vim-solarized8'
+    use 'nanotech/jellybeans.vim'
     use 'hrsh7th/vim-vsnip'
     use 'hrsh7th/nvim-cmp'
     use 'hrsh7th/cmp-nvim-lsp'
@@ -107,8 +107,8 @@ require("packer").startup(function(use)
     vim.api.nvim_command('syntax on')
     vim.api.nvim_command('syntax enable')
     vim.o.termguicolors = true
-    vim.o.background = 'light'
-    vim.api.nvim_command('colorscheme solarized8')
+    vim.o.background = 'dark'
+    vim.api.nvim_command('colorscheme jellybeans')
     vim.o.colorcolumn = '120'
 
     vim.cmd([[
@@ -135,6 +135,9 @@ require("packer").startup(function(use)
 
     autocmd! User GoyoEnter nested call <SID>goyo_enter()
     autocmd! User GoyoLeave nested call <SID>goyo_leave()
+
+    highlight! ColorColumn guibg=red ctermbg=red
+    highlight! BadWhitespace ctermbg=red guibg=red
     ]])
 
     local cmp = require('cmp')
