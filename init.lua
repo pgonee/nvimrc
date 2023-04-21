@@ -14,6 +14,7 @@ require("packer").startup(function(use)
     }
     use 'junegunn/fzf.vim'
     use 'nanotech/jellybeans.vim'
+    use 'lifepillar/vim-solarized8'
     use 'hrsh7th/vim-vsnip'
     use 'hrsh7th/nvim-cmp'
     use 'hrsh7th/cmp-nvim-lsp'
@@ -107,8 +108,8 @@ require("packer").startup(function(use)
     vim.api.nvim_command('syntax on')
     vim.api.nvim_command('syntax enable')
     vim.o.termguicolors = true
-    vim.o.background = 'dark'
-    vim.api.nvim_command('colorscheme jellybeans')
+    vim.o.background = 'light'
+    vim.api.nvim_command('colorscheme solarized8')
     vim.o.colorcolumn = '120'
 
     vim.cmd([[
@@ -138,6 +139,8 @@ require("packer").startup(function(use)
 
     highlight! ColorColumn guibg=red ctermbg=red
     highlight! BadWhitespace ctermbg=red guibg=red
+
+    let $FZF_DEFAULT_OPTS="--ansi --preview-window 'right:60%' --layout reverse --margin=1,4 --preview 'bat --color=always --style=header,grid --line-range :300 {}'"
     ]])
 
     local cmp = require('cmp')
@@ -158,13 +161,13 @@ require("packer").startup(function(use)
             }),
         }),
         sources = cmp.config.sources({
-            { name = 'nvim_lsp' },
+            { name = 'nvim_lsp', keyword_length = 3 },
         }, {
-            { name = 'buffer' },
+            { name = 'buffer', keyword_length = 3 },
         }, {
-            { name = 'path' },
+            --{ name = 'path' },
         }, {
-            { name = 'cmdline' },
+            --{ name = 'cmdline' },
         }, {
             { name = 'vsnip' }
         }, {
