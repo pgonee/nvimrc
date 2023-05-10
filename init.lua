@@ -105,6 +105,7 @@ require("packer").startup(function(use)
 
     vim.api.nvim_command('set clipboard+=unnamed')
     vim.api.nvim_command('set shortmess+=c')
+    vim.api.nvim_command('set mouse=')
     vim.api.nvim_command('syntax on')
     vim.api.nvim_command('syntax enable')
     vim.o.termguicolors = true
