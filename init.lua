@@ -186,7 +186,13 @@ require("packer").startup(function(use)
         filetypes = {
             "typescript", "typescriptreact", "typescript.tsx"
         },
-        capabilities = capabilities
+        capabilities = capabilities,
+        init_options = {
+            hostInfo = "neovim",
+            preferences = {
+                importModuleSpecifierPreference = "non-relative"
+            }
+        }
     }
     lspconfig.lua_ls.setup {
         settings = {
