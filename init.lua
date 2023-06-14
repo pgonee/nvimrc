@@ -34,6 +34,7 @@ require("packer").startup(function(use)
             { "nvim-tree/nvim-web-devicons" },
         }
     })
+    use 'github/copilot.vim'
 
     vim.api.nvim_set_keymap('n', '<localleader>q', ':q<cr>', { noremap = true })
     vim.api.nvim_set_keymap('n', '<localleader>dd', ':NERDTreeToggle<cr>', { noremap = true })
@@ -98,7 +99,7 @@ require("packer").startup(function(use)
     vim.o.encoding = 'utf-8'
     vim.o.nobackup = true
     vim.o.nowritebackup = true
-    vim.o.cmdheight = 2
+    vim.o.cmdheight = 1
     vim.o.updatetime = 300
     vim.o.signcolumn = 'yes'
     vim.o.scrolloff = 3
