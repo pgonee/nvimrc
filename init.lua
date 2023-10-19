@@ -13,7 +13,6 @@ require("packer").startup(function(use)
         'junegunn/fzf', run = function() vim.fn['fzf#install'](0) end
     }
     use 'junegunn/fzf.vim'
-    use 'nanotech/jellybeans.vim'
     use 'lifepillar/vim-solarized8'
     use 'hrsh7th/vim-vsnip'
     use 'hrsh7th/nvim-cmp'
