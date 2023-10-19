@@ -22,18 +22,14 @@ require("packer").startup(function(use)
     use 'hrsh7th/cmp-cmdline'
     use 'hrsh7th/cmp-vsnip'
     use 'hrsh7th/cmp-nvim-lsp-signature-help'
-    use({
-        'jose-elias-alvarez/null-ls.nvim',
-        requires = { "nvim-lua/plenary.nvim" }
-    })
-    use({
-        "glepnir/lspsaga.nvim",
-        branch = "main",
-        requires = {
-            { "nvim-tree/nvim-web-devicons" },
-        }
-    })
     use 'github/copilot.vim'
+    use ({
+        'nvimdev/lspsaga.nvim',
+        after = 'nvim-lspconfig',
+        config = function()
+            require('lspsaga').setup({})
+        end,
+    })
 
     vim.api.nvim_set_keymap('n', '<localleader>q', ':q<cr>', { noremap = true })
     vim.api.nvim_set_keymap('n', '<localleader>dd', ':NERDTreeToggle<cr>', { noremap = true })
@@ -208,28 +204,4 @@ require("packer").startup(function(use)
         },
         capabilities = capabilities
     }
-
-    local null_ls = require("null-ls")
-    local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
-
-    null_ls.setup({
-        sources = {
-            null_ls.builtins.formatting.prettierd,
-            null_ls.builtins.formatting.lua_format,
-        },
-        on_attach = function(client, bufnr)
-            if client.supports_method("textDocument/formatting") then
-                vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-                vim.api.nvim_create_autocmd("BufWritePre", {
-                    group = augroup,
-                    buffer = bufnr,
-                    callback = function()
-                        vim.lsp.buf.format({ bufnr = bufnr })
-                    end,
-                })
-            end
-        end,
-    })
-
-    require("lspsaga").setup({})
 end)
