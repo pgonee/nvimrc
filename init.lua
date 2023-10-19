@@ -34,6 +34,9 @@ require("packer").startup(function(use)
         'nvim-telescope/telescope.nvim', tag = '0.1.4',
         requires = { {'nvim-lua/plenary.nvim'} }
     }
+    use {
+        "folke/trouble.nvim",
+    }
 
     vim.keymap.set('n', '<localleader>q', ':q<cr>', { noremap = true })
     vim.keymap.set('n', '<localleader>dd', ':NERDTreeToggle<cr>', { noremap = true })
@@ -146,8 +149,6 @@ require("packer").startup(function(use)
 
     highlight! ColorColumn guibg=red ctermbg=red
     highlight! BadWhitespace ctermbg=red guibg=red
-
-    let $FZF_DEFAULT_OPTS="--ansi --preview-window 'right:60%' --layout reverse --margin=1,4 --preview 'bat --color=always --style=header,grid --line-range :300 {}'"
     ]])
 
     local cmp = require('cmp')
