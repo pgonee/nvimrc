@@ -42,6 +42,7 @@ require("packer").startup(function(use)
         "folke/trouble.nvim",
     }
     use 'dense-analysis/ale'
+    use 'jremmen/vim-ripgrep'
 
     vim.keymap.set('n', '<localleader>q', ':q<cr>', { noremap = true })
     vim.keymap.set('n', '<localleader>dd', ':NERDTreeToggle<cr>', { noremap = true })
@@ -103,6 +104,7 @@ require("packer").startup(function(use)
     vim.keymap.set('n', '<leader>fg', telescope_builtin.live_grep, {})
     vim.keymap.set('n', '<leader>fb', telescope_builtin.buffers, {})
     vim.keymap.set('n', '<leader>fh', telescope_builtin.help_tags, {})
+    vim.keymap.set('n', '<leader>fr', telescope_builtin.resume, {})
 
     vim.keymap.set('n', '<esc>', '<c-c>', {})
 
