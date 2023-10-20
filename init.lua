@@ -37,6 +37,7 @@ require("packer").startup(function(use)
     use {
         "folke/trouble.nvim",
     }
+    use 'dense-analysis/ale'
 
     vim.keymap.set('n', '<localleader>q', ':q<cr>', { noremap = true })
     vim.keymap.set('n', '<localleader>dd', ':NERDTreeToggle<cr>', { noremap = true })
