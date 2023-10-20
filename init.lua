@@ -35,6 +35,10 @@ require("packer").startup(function(use)
         requires = { {'nvim-lua/plenary.nvim'} }
     }
     use {
+        'nvim-telescope/telescope-fzf-native.nvim',
+        run = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build'
+    }
+    use {
         "folke/trouble.nvim",
     }
     use 'dense-analysis/ale'
@@ -80,8 +84,20 @@ require("packer").startup(function(use)
     vim.keymap.set('v', '<3-MiddleMouse>', '<Nop>', { noremap = true })
     vim.keymap.set('v', '<4-MiddleMouse>', '<Nop>', { noremap = true })
 
+    require('telescope').setup {
+        extensions = {
+            fzf = {
+                fuzzy = true,                    -- false will only do exact matching
+                override_generic_sorter = true,  -- override the generic sorter
+                override_file_sorter = true,     -- override the file sorter
+                case_mode = "smart_case",        -- or "ignore_case" or "respect_case"
+                -- the default case_mode is "smart_case"
+            }
+        }
+    }
+    require('telescope').load_extension('fzf')
     local telescope_builtin = require('telescope.builtin')
-    vim.keymap.set('n', '<leader>ff', telescope_builtin.find_files, {})
+    vim.keymap.set('n', '<leader>ff', '<cmd>lua require(\'telescope.builtin\').find_files({})<cr>', {})
     vim.keymap.set('n', '<leader>fg', telescope_builtin.live_grep, {})
     vim.keymap.set('n', '<leader>fb', telescope_builtin.buffers, {})
     vim.keymap.set('n', '<leader>fh', telescope_builtin.help_tags, {})
@@ -113,7 +129,7 @@ require("packer").startup(function(use)
     vim.o.signcolumn = 'yes'
     vim.o.scrolloff = 3
 
-    vim.api.nvim_command('set clipboard+=unnamed')
+    vim.api.nvim_set_option("clipboard","unnamed")
     vim.api.nvim_command('set shortmess+=c')
     vim.api.nvim_command('set mouse=')
     vim.api.nvim_command('syntax on')
@@ -134,6 +150,7 @@ require("packer").startup(function(use)
     \ 'node_modules$',
     \ 'bower_components$'
     \]
+    let NERDTreeShowHidden = 1
 
     let g:goyo_width = 120
     let g:goyo_height = '94%'
@@ -220,7 +237,6 @@ require("packer").startup(function(use)
     require("mason").setup()
 
     vim.g.ale_fix_on_save = 1
-    vim.g.ale_linters_explicit = 1
     vim.g.ale_fixers = {
         javascript = {
             'prettier',
@@ -234,5 +250,10 @@ require("packer").startup(function(use)
             'prettier',
             'eslint',
         }
+    }
+    vim.g.ale_linters = {
+        javascript = {'eslint'},
+        typescript = {'eslint'},
+        typescriptreact = {'eslint'},
     }
 end)
