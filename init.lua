@@ -84,7 +84,8 @@ require("packer").startup(function(use)
     vim.keymap.set('v', '<3-MiddleMouse>', '<Nop>', { noremap = true })
     vim.keymap.set('v', '<4-MiddleMouse>', '<Nop>', { noremap = true })
 
-    require('telescope').setup {
+    local telescope = require('telescope')
+    telescope.setup {
         extensions = {
             fzf = {
                 fuzzy = true,                    -- false will only do exact matching
@@ -95,7 +96,8 @@ require("packer").startup(function(use)
             }
         }
     }
-    require('telescope').load_extension('fzf')
+    telescope.load_extension('fzf')
+
     local telescope_builtin = require('telescope.builtin')
     vim.keymap.set('n', '<leader>ff', '<cmd>lua require(\'telescope.builtin\').find_files({})<cr>', {})
     vim.keymap.set('n', '<leader>fg', telescope_builtin.live_grep, {})
