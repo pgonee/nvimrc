@@ -45,6 +45,8 @@ require("packer").startup(function(use)
     use("dense-analysis/ale")
     use("jremmen/vim-ripgrep")
     use("mhartington/formatter.nvim")
+    use("ryanoasis/vim-devicons")
+    use("nvim-tree/nvim-web-devicons")
 
     vim.keymap.set("n", "<localleader>q", ":q<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>dd", ":NERDTreeToggle<cr>", { noremap = true })
