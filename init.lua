@@ -9,15 +9,16 @@ require("packer").startup(function(use)
     use("itchyny/lightline.vim")
     use("lukas-reineke/indent-blankline.nvim")
     use("lifepillar/vim-solarized8")
-    use("hrsh7th/vim-vsnip")
     use("hrsh7th/nvim-cmp")
     use("hrsh7th/cmp-nvim-lsp")
     use("hrsh7th/cmp-buffer")
     use("hrsh7th/cmp-path")
     use("hrsh7th/cmp-cmdline")
-    use("hrsh7th/cmp-vsnip")
     use("hrsh7th/cmp-nvim-lsp-signature-help")
     use("github/copilot.vim")
+    use("L3MON4D3/LuaSnip")
+    use("saadparwaiz1/cmp_luasnip")
+    use("rafamadriz/friendly-snippets")
     use({
         "nvimdev/lspsaga.nvim",
         after = "nvim-lspconfig",
@@ -55,7 +56,7 @@ require("packer").startup(function(use)
 
     vim.keymap.set("n", "<localleader>q", ":q<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>dd", ":NvimTreeToggle<cr>", { noremap = true })
-    vim.keymap.set("n", "<localleader>df", ":NvimTreeFocus<cr>", { noremap = true })
+    vim.keymap.set("n", "<localleader>df", ":NvimTreeFindFile<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>tt", ":tabnew<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>tw", ":tabnext<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>tp", ":tabprev<cr>", { noremap = true })
@@ -184,7 +185,7 @@ require("packer").startup(function(use)
     cmp.setup({
         snippet = {
             expand = function(args)
-                vim.fn["vsnip#anonymous"](args.body)
+                require("luasnip").lsp_expand(args.body)
             end,
         },
         mapping = cmp.mapping.preset.insert({
@@ -206,11 +207,13 @@ require("packer").startup(function(use)
         }, {
             --{ name = "cmdline" },
         }, {
-            { name = "vsnip" },
+            { name = "luasnip" },
         }, {
             { name = "nvim_lsp_signature_help" },
         }),
     })
+    --require("luasnip.loaders.from_vscode").lazy_load()
+    require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./snippets" } })
 
     require("mason").setup()
     require("mason-lspconfig").setup()

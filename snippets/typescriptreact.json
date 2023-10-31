@@ -1,0 +1,47 @@
+{
+  "[pgonee] new react component": {
+    "prefix": "pg-rc",
+    "body": [
+      "import { HTMLAttributes } from \"react\"",
+      "import { twMerge } from \"tailwind-merge\"\n",
+      "interface $1Props extends HTMLAttributes<HTMLDivElement> {",
+      "}\n",
+      "export default function $1({ className, ...props }: $1Props) {",
+      "  return (<div className={twMerge(\"\", className)} {...props}></div>)",
+      "}"
+    ],
+    "description": ""
+  },
+  "[pgonee] new storybook story": {
+    "prefix": "pg-story",
+    "body": [
+      "import { Meta, StoryObj } from \"@storybook/react\"\n",
+      "type Story = StoryObj<typeof $1>\n",
+      "const meta: Meta<typeof $1> = {",
+      "  component: $1,",
+      "  args: {},",
+      "}\n",
+      "export default meta\n",
+      "export const Default: Story = {",
+      "  args: {},",
+      "}"
+    ],
+    "description": ""
+  },
+  "[pgonee] new next pages": {
+    "prefix": "pg-nextpages",
+    "body": [
+      "import { GetServerSideProps, NextPage } from \"next\"\n",
+      "export const getServerSideProps: GetServerSideProps = async (context) => {",
+      "  return {",
+      "    props: {},",
+      "  }",
+      "}\n",
+      "const $1Page: NextPage = () => {",
+      "  return <div></div>",
+      "}\n",
+      "export default $1Page"
+    ],
+    "description": ""
+  }
+}
