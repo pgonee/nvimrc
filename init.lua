@@ -161,7 +161,15 @@ require("packer").startup(function(use)
     vim.g.loaded_netrw = 1
     vim.g.loaded_netrwPlugin = 1
     vim.opt.termguicolors = true
-    require("nvim-tree").setup()
+    require("nvim-tree").setup({
+        filters = {
+            git_ignored = false,
+            dotfiles = false,
+        },
+    })
+    vim.keymap.set("n", "<leader>xx", function()
+        require("trouble").toggle()
+    end)
 
     vim.cmd([[
     let g:goyo_width = 120
@@ -182,6 +190,25 @@ require("packer").startup(function(use)
     ]])
 
     local cmp = require("cmp")
+    cmp.setup.cmdline("/", {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = {
+            { name = "buffer" },
+        },
+    })
+    cmp.setup.cmdline(":", {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = cmp.config.sources({
+            { name = "path" },
+        }, {
+            {
+                name = "cmdline",
+                option = {
+                    ignore_cmds = { "Man", "!" },
+                },
+            },
+        }),
+    })
     cmp.setup({
         snippet = {
             expand = function(args)
@@ -205,15 +232,30 @@ require("packer").startup(function(use)
         }, {
             { name = "path" },
         }, {
-            --{ name = "cmdline" },
-        }, {
             { name = "luasnip" },
         }, {
             { name = "nvim_lsp_signature_help" },
         }),
     })
-    --require("luasnip.loaders.from_vscode").lazy_load()
+    local ls = require("luasnip")
+    require("luasnip.loaders.from_vscode").lazy_load()
     require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./snippets" } })
+
+    vim.keymap.set({ "i" }, "<c-k>", function()
+        ls.expand()
+    end, { silent = true })
+    vim.keymap.set({ "i", "s" }, "<c-l>", function()
+        ls.jump(1)
+    end, { silent = true })
+    vim.keymap.set({ "i", "s" }, "<c-j>", function()
+        ls.jump(-1)
+    end, { silent = true })
+
+    vim.keymap.set({ "i", "s" }, "<c-e>", function()
+        if ls.choice_active() then
+            ls.change_choice(1)
+        end
+    end, { silent = true })
 
     require("mason").setup()
     require("mason-lspconfig").setup()
@@ -224,19 +266,30 @@ require("packer").startup(function(use)
     lspconfig.pyright.setup({
         capabilities = capabilities,
     })
+    local get_root_dir = function(fname)
+        local util = require("lspconfig.util")
+        return util.root_pattern(".git")(fname)
+            or util.root_pattern("pnpm-workspace.yaml", "pnpm-lock.yaml")(fname)
+            or util.root_pattern("package.json", "tsconfig.json")(fname)
+    end
+
     lspconfig.tsserver.setup({
-        --filetypes = {
-        --"typescript",
-        --"typescriptreact",
-        --"typescript.tsx",
-        --},
+        filetypes = {
+            "javascript",
+            "javascriptreact",
+            "javascript.jsx",
+            "typescript",
+            "typescriptreact",
+            "typescript.tsx",
+        },
         capabilities = capabilities,
-        --init_options = {
-        --hostInfo = "neovim",
-        --preferences = {
-        --importModuleSpecifierPreference = "non-relative",
-        --},
-        --},
+        root_dir = get_root_dir,
+        init_options = {
+            hostInfo = "neovim",
+            --preferences = {
+            --importModuleSpecifierPreference = "non-relative",
+            --},
+        },
     })
     lspconfig.lua_ls.setup({
         settings = {
