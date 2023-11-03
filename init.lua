@@ -286,9 +286,9 @@ require("packer").startup(function(use)
         root_dir = get_root_dir,
         init_options = {
             hostInfo = "neovim",
-            --preferences = {
-            --importModuleSpecifierPreference = "non-relative",
-            --},
+            preferences = {
+                importModuleSpecifierPreference = "non-relative",
+            },
         },
     })
     lspconfig.lua_ls.setup({
