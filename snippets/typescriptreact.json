@@ -4,9 +4,9 @@
     "body": [
       "import { HTMLAttributes } from \"react\"",
       "import { twMerge } from \"tailwind-merge\"\n",
-      "interface $1Props extends HTMLAttributes<HTMLDivElement> {",
+      "interface ${1:$TM_FILENAME_BASE}Props extends HTMLAttributes<HTMLDivElement> {",
       "}\n",
-      "export default function $1({ className, ...props }: $1Props) {",
+      "export default function ${1:$TM_FILENAME_BASE}({ className, ...props }: ${1:$TM_FILENAME_BASE}Props) {",
       "  return (<div className={twMerge(\"\", className)} {...props}></div>)",
       "}"
     ],
@@ -16,9 +16,9 @@
     "prefix": "pg-story",
     "body": [
       "import { Meta, StoryObj } from \"@storybook/react\"\n",
-      "type Story = StoryObj<typeof $1>\n",
-      "const meta: Meta<typeof $1> = {",
-      "  component: $1,",
+      "type Story = StoryObj<typeof ${1:$TM_FILENAME_BASE}>\n",
+      "const meta: Meta<typeof ${1:$TM_FILENAME_BASE}> = {",
+      "  component: ${1:$TM_FILENAME_BASE},",
       "  args: {},",
       "}\n",
       "export default meta\n",
@@ -56,7 +56,11 @@
       "      fill=\"none\"",
       "      xmlns=\"http://www.w3.org/2000/svg\"",
       "      {...props}",
-      "    >"
+      "    >",
+      "      $3",
+      "    </svg>",
+      "  )",
+      "}"
     ],
     "description": ""
   }

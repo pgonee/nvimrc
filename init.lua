@@ -97,6 +97,12 @@ require("packer").startup(function(use)
     local telescope = require("telescope")
     telescope.setup({
         defaults = {
+            mappings = {
+                i = {
+                    ["<C-Down>"] = require("telescope.actions").cycle_history_next,
+                    ["<C-Up>"] = require("telescope.actions").cycle_history_prev,
+                },
+            },
             file_ignore_patterns = {
                 "node_modules",
                 ".git",
