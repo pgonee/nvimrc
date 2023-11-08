@@ -1,3 +1,5 @@
+local cwd = vim.loop.cwd()
+
 require("packer").startup(function(use)
     use("wbthomason/packer.nvim")
     use("neovim/nvim-lspconfig")
@@ -274,6 +276,11 @@ require("packer").startup(function(use)
     })
     local get_root_dir = function(fname)
         local util = require("lspconfig.util")
+
+        if string.find(cwd, "storyplay") then
+            return util.root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git")(fname)
+        end
+
         return util.root_pattern(".git")(fname)
             or util.root_pattern("pnpm-workspace.yaml", "pnpm-lock.yaml")(fname)
             or util.root_pattern("package.json", "tsconfig.json")(fname)
@@ -329,6 +336,20 @@ require("packer").startup(function(use)
     })
 
     local util = require("formatter.util")
+
+    local prettierd = function(value)
+        local cwd = util.get_cwd()
+        if string.find(cwd, "storyplay") then
+            return function()
+                return {
+                    exe = "/Users/pgonee/.nvm/versions/node/v21.1.0/bin/prettierd",
+                    args = { util.escape_path(util.get_current_buffer_file_path()) },
+                    stdin = true,
+                }
+            end
+        end
+        return require(value).prettierd
+    end
     require("formatter").setup({
         logging = true,
         filetype = {
@@ -338,10 +359,10 @@ require("packer").startup(function(use)
             html = require("formatter.filetypes.html").prettierd,
             graphql = require("formatter.filetypes.graphql").prettierd,
             json = require("formatter.filetypes.typescript").prettierd,
-            javascript = require("formatter.filetypes.javascript").prettierd,
-            javascriptreact = require("formatter.filetypes.javascriptreact").prettierd,
-            typescript = require("formatter.filetypes.typescript").prettierd,
-            typescriptreact = require("formatter.filetypes.typescriptreact").prettierd,
+            javascript = prettierd("formatter.filetypes.javascript"),
+            javascriptreact = prettierd("formatter.filetypes.javascriptreact"),
+            typescript = prettierd("formatter.filetypes.typescript"),
+            typescriptreact = prettierd("formatter.filetypes.typescriptreact"),
             lua = {
                 function()
                     return {
