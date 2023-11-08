@@ -63,27 +63,14 @@ require("packer").startup(function(use)
             ts_update()
         end,
     })
+    use("nvim-treesitter/playground")
     use({
         "nvim-neorg/neorg",
-        config = function()
-            require("neorg").setup({
-                load = {
-                    ["core.defaults"] = {}, -- Loads default behaviour
-                    ["core.concealer"] = {}, -- Adds pretty icons to your documents
-                    ["core.dirman"] = { -- Manages Neorg workspaces
-                        config = {
-                            workspaces = {
-                                notes = "~/Documents/notes",
-                            },
-                        },
-                    },
-                },
-            })
-        end,
         run = ":Neorg sync-parsers",
-        requires = "nvim-lua/plenary.nvim",
+        requires = { "nvim-lua/plenary.nvim" },
         tag = "*",
     })
+    use("folke/zen-mode.nvim")
 
     vim.keymap.set("n", "<localleader>q", ":q<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>dd", ":NvimTreeToggle<cr>", { noremap = true })
@@ -184,6 +171,7 @@ require("packer").startup(function(use)
     vim.o.updatetime = 300
     vim.o.signcolumn = "yes"
     vim.o.scrolloff = 3
+    vim.o.conceallevel = 1
 
     vim.api.nvim_set_option("clipboard", "unnamed")
     vim.api.nvim_command("set shortmess+=c")
@@ -195,6 +183,10 @@ require("packer").startup(function(use)
     vim.api.nvim_command("colorscheme solarized8")
     vim.o.colorcolumn = "120"
 
+    vim.g.copilot_filetypes = {
+        ["*"] = true,
+        norg = false,
+    }
     vim.g.loaded_netrw = 1
     vim.g.loaded_netrwPlugin = 1
     vim.opt.termguicolors = true
@@ -225,6 +217,59 @@ require("packer").startup(function(use)
     highlight! ColorColumn guibg=red ctermbg=red
     highlight! BadWhitespace ctermbg=red guibg=red
     ]])
+
+    require("nvim-treesitter.configs").setup({
+        modules = { "norg" },
+        ensure_installed = { "norg" },
+        ignore_install = {},
+        sync_install = true,
+        auto_install = true,
+        highlight = {
+            enable = true,
+        },
+        incremental_selection = {
+            enable = true,
+        },
+        indent = {
+            enable = true,
+        },
+    })
+
+    require("neorg").setup({
+        load = {
+            ["core.defaults"] = {},
+            ["core.integrations.treesitter"] = {},
+            ["core.concealer"] = {
+                config = {
+                    folds = false,
+                },
+            },
+            ["core.dirman"] = {
+                config = {
+                    workspaces = {
+                        projects = "~/Documents/Notes/projects",
+                        areas = "~/Documents/Notes/areas",
+                        resources = "~/Documents/Notes/resources",
+                        archives = "~/Documents/Notes/archives",
+                    },
+                    default_workspace = "areas",
+                },
+            },
+            ["core.export"] = {},
+            ["core.ui"] = {},
+            ["core.export.markdown"] = {},
+            ["core.manoeuvre"] = {},
+            ["core.summary"] = {},
+            ["core.presenter"] = {
+                config = {
+                    zen_mode = "zen-mode",
+                },
+            },
+            ["core.journal"] = {
+                config = { journal_folder = "daily", workspace = "areas" },
+            },
+        },
+    })
 
     local cmp = require("cmp")
     cmp.setup.cmdline("/", {
