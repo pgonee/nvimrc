@@ -55,6 +55,35 @@ require("packer").startup(function(use)
         },
     })
     use("nvim-tree/nvim-web-devicons")
+    use("nvim-lua/plenary.nvim")
+    use({
+        "nvim-treesitter/nvim-treesitter",
+        run = function()
+            local ts_update = require("nvim-treesitter.install").update({ with_sync = true })
+            ts_update()
+        end,
+    })
+    use({
+        "nvim-neorg/neorg",
+        config = function()
+            require("neorg").setup({
+                load = {
+                    ["core.defaults"] = {}, -- Loads default behaviour
+                    ["core.concealer"] = {}, -- Adds pretty icons to your documents
+                    ["core.dirman"] = { -- Manages Neorg workspaces
+                        config = {
+                            workspaces = {
+                                notes = "~/Documents/notes",
+                            },
+                        },
+                    },
+                },
+            })
+        end,
+        run = ":Neorg sync-parsers",
+        requires = "nvim-lua/plenary.nvim",
+        tag = "*",
+    })
 
     vim.keymap.set("n", "<localleader>q", ":q<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>dd", ":NvimTreeToggle<cr>", { noremap = true })
