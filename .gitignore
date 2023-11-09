@@ -3,3 +3,4 @@ autoload/plug.vim
 /eclim
 /plugin/eclim.vim
 /.netrwhist
+/.luarc.json

@@ -129,11 +129,6 @@ _G.packer_plugins = {
     path = "/Users/pgonee/.local/share/nvim/site/pack/packer/start/friendly-snippets",
     url = "https://github.com/rafamadriz/friendly-snippets"
   },
-  ["goyo.vim"] = {
-    loaded = true,
-    path = "/Users/pgonee/.local/share/nvim/site/pack/packer/start/goyo.vim",
-    url = "https://github.com/junegunn/goyo.vim"
-  },
   ["indent-blankline.nvim"] = {
     loaded = true,
     path = "/Users/pgonee/.local/share/nvim/site/pack/packer/start/indent-blankline.nvim",
@@ -222,6 +217,11 @@ _G.packer_plugins = {
     path = "/Users/pgonee/.local/share/nvim/site/pack/packer/start/telescope.nvim",
     url = "https://github.com/nvim-telescope/telescope.nvim"
   },
+  ["tokyonight.nvim"] = {
+    loaded = true,
+    path = "/Users/pgonee/.local/share/nvim/site/pack/packer/start/tokyonight.nvim",
+    url = "https://github.com/folke/tokyonight.nvim"
+  },
   ["trouble.nvim"] = {
     loaded = true,
     path = "/Users/pgonee/.local/share/nvim/site/pack/packer/start/trouble.nvim",
@@ -246,11 +246,6 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/pgonee/.local/share/nvim/site/pack/packer/start/vim-ripgrep",
     url = "https://github.com/jremmen/vim-ripgrep"
-  },
-  ["vim-solarized8"] = {
-    loaded = true,
-    path = "/Users/pgonee/.local/share/nvim/site/pack/packer/start/vim-solarized8",
-    url = "https://github.com/lifepillar/vim-solarized8"
   },
   ["vim-surround"] = {
     loaded = true,

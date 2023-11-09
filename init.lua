@@ -3,14 +3,13 @@ local cwd = vim.loop.cwd()
 require("packer").startup(function(use)
     use("wbthomason/packer.nvim")
     use("neovim/nvim-lspconfig")
-    use("junegunn/goyo.vim")
     use("preservim/nerdcommenter")
     use("airblade/vim-gitgutter")
     use("tpope/vim-fugitive")
     use("tpope/vim-surround")
     use("itchyny/lightline.vim")
+    use("folke/tokyonight.nvim")
     use("lukas-reineke/indent-blankline.nvim")
-    use("lifepillar/vim-solarized8")
     use("hrsh7th/nvim-cmp")
     use("hrsh7th/cmp-nvim-lsp")
     use("hrsh7th/cmp-buffer")
@@ -57,19 +56,20 @@ require("packer").startup(function(use)
     use("nvim-tree/nvim-web-devicons")
     use("nvim-lua/plenary.nvim")
     use({
-        "nvim-treesitter/nvim-treesitter",
-        run = function()
-            local ts_update = require("nvim-treesitter.install").update({ with_sync = true })
-            ts_update()
-        end,
-    })
-    use("nvim-treesitter/playground")
-    use({
         "nvim-neorg/neorg",
-        run = ":Neorg sync-parsers",
         requires = { "nvim-lua/plenary.nvim" },
         tag = "*",
     })
+    use({
+        "nvim-treesitter/nvim-treesitter",
+        run = function()
+            local ts_update = require("nvim-treesitter.install").update({ with_sync = false })
+            ts_update()
+        end,
+        requires = { "nvim-neorg/neorg" },
+    })
+    use({ "nvim-treesitter/playground", requires = { "nvim-treesitter/nvim-treesitter" } })
+
     use("folke/zen-mode.nvim")
 
     vim.keymap.set("n", "<localleader>q", ":q<cr>", { noremap = true })
@@ -162,7 +162,6 @@ require("packer").startup(function(use)
 
     vim.o.splitbelow = true
     vim.o.splitright = true
-    vim.o.hlsearch = true
 
     vim.o.encoding = "utf-8"
     vim.o.nobackup = true
@@ -172,16 +171,18 @@ require("packer").startup(function(use)
     vim.o.signcolumn = "yes"
     vim.o.scrolloff = 3
     vim.o.conceallevel = 1
+    vim.o.foldenable = false
 
     vim.api.nvim_set_option("clipboard", "unnamed")
     vim.api.nvim_command("set shortmess+=c")
     vim.api.nvim_command("set mouse=")
     vim.api.nvim_command("syntax on")
     vim.api.nvim_command("syntax enable")
-    vim.o.termguicolors = true
-    vim.o.background = "light"
-    vim.api.nvim_command("colorscheme solarized8")
     vim.o.colorcolumn = "120"
+
+    require("tokyonight").setup()
+    vim.o.background = "dark"
+    vim.api.nvim_command("colorscheme tokyonight-storm")
 
     vim.g.copilot_filetypes = {
         ["*"] = true,
@@ -200,38 +201,15 @@ require("packer").startup(function(use)
         require("trouble").toggle()
     end)
 
-    vim.cmd([[
-    let g:goyo_width = 120
-    let g:goyo_height = '94%'
-
-    function! s:goyo_enter()
-    set nu
-    endfunction
-
-    function! s:goyo_leave()
-    endfunction
-
-    autocmd! User GoyoEnter nested call <SID>goyo_enter()
-    autocmd! User GoyoLeave nested call <SID>goyo_leave()
-
-    highlight! ColorColumn guibg=red ctermbg=red
-    highlight! BadWhitespace ctermbg=red guibg=red
-    ]])
-
+    require("nvim-treesitter").setup()
     require("nvim-treesitter.configs").setup({
-        modules = { "norg" },
-        ensure_installed = { "norg" },
+        ensure_installed = {},
         ignore_install = {},
-        sync_install = true,
-        auto_install = true,
+        sync_install = false,
+        auto_install = false,
         highlight = {
             enable = true,
-        },
-        incremental_selection = {
-            enable = true,
-        },
-        indent = {
-            enable = true,
+            additional_vim_regex_highlighting = false,
         },
     })
 
