@@ -58,7 +58,7 @@ require("packer").startup(function(use)
     use({
         "nvim-neorg/neorg",
         requires = { "nvim-lua/plenary.nvim" },
-        tag = "*",
+        tag = "v6.0.0",
     })
     use({
         "nvim-treesitter/nvim-treesitter",
@@ -79,6 +79,16 @@ require("packer").startup(function(use)
     vim.keymap.set("n", "<localleader>tw", ":tabnext<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>tp", ":tabprev<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>tq", ":tabclose<cr>", { noremap = true })
+
+    vim.keymap.set("n", "<localleader>ni", ":Neorg index<cr>", { noremap = true })
+    vim.keymap.set("n", "<localleader>nj", ":Neorg journal<cr>", { noremap = true })
+    vim.keymap.set("n", "<localleader>ng", ":Neorg generate-workspace-summary<cr>", { noremap = true })
+    vim.keymap.set("n", "<localleader>nm", ":Neorg inject-metadata<cr>", { noremap = true })
+    vim.keymap.set("n", "<localleader>ne", ":Neorg<cr>", { noremap = true })
+    vim.keymap.set("n", "<localleader>nwa", ":Neorg workspace areas<cr>", { noremap = true })
+    vim.keymap.set("n", "<localleader>nwp", ":Neorg workspace projects<cr>", { noremap = true })
+    vim.keymap.set("n", "<localleader>nwr", ":Neorg workspace resources<cr>", { noremap = true })
+    vim.keymap.set("n", "<localleader>nwn", ":Neorg workspace notes<cr>", { noremap = true })
 
     vim.keymap.set("t", "<a-h>", "<c-\\><c-n><c-w>h", { noremap = true })
     vim.keymap.set("t", "<a-j>", "<c-\\><c-n><c-w>j", { noremap = true })
@@ -203,6 +213,7 @@ require("packer").startup(function(use)
 
     require("nvim-treesitter").setup()
     require("nvim-treesitter.configs").setup({
+        modules = { "norg", "norg_meta" },
         ensure_installed = {},
         ignore_install = {},
         sync_install = false,
@@ -212,6 +223,7 @@ require("packer").startup(function(use)
             additional_vim_regex_highlighting = false,
         },
     })
+    vim.treesitter.language.register("norg", "norg")
 
     require("neorg").setup({
         load = {
@@ -220,6 +232,11 @@ require("packer").startup(function(use)
             ["core.concealer"] = {
                 config = {
                     folds = false,
+                    icons = {
+                        ordered = {
+                            icons = { "1", "A", "a", "⑴", "Ⓐ", "ⓐ" } or nil,
+                        },
+                    },
                 },
             },
             ["core.dirman"] = {
@@ -229,6 +246,7 @@ require("packer").startup(function(use)
                         areas = "~/Documents/Notes/areas",
                         resources = "~/Documents/Notes/resources",
                         archives = "~/Documents/Notes/archives",
+                        notes = "~/Documents/Notes/notes",
                     },
                     default_workspace = "areas",
                 },
