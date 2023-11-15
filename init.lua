@@ -16,6 +16,7 @@ require("packer").startup(function(use)
     use("hrsh7th/cmp-path")
     use("hrsh7th/cmp-cmdline")
     use("hrsh7th/cmp-nvim-lsp-signature-help")
+    use("github/copilot.vim")
     use("L3MON4D3/LuaSnip")
     use("saadparwaiz1/cmp_luasnip")
     use("rafamadriz/friendly-snippets")
@@ -180,7 +181,7 @@ require("packer").startup(function(use)
     vim.o.updatetime = 300
     vim.o.signcolumn = "yes"
     vim.o.scrolloff = 3
-    vim.o.conceallevel = 0
+    vim.o.conceallevel = 1
     vim.o.foldenable = false
 
     vim.api.nvim_set_option("clipboard", "unnamed")
@@ -194,6 +195,10 @@ require("packer").startup(function(use)
     vim.o.background = "dark"
     vim.api.nvim_command("colorscheme tokyonight-storm")
 
+    vim.g.copilot_filetypes = {
+        ["*"] = true,
+        norg = false,
+    }
     vim.g.loaded_netrw = 1
     vim.g.loaded_netrwPlugin = 1
     vim.opt.termguicolors = true
