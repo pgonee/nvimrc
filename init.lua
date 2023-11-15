@@ -352,6 +352,7 @@ require("packer").startup(function(use)
             or util.root_pattern("package.json", "tsconfig.json")(fname)
     end
 
+    lspconfig.prismals.setup({})
     lspconfig.tsserver.setup({
         filetypes = {
             "javascript",
