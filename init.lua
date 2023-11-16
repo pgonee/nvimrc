@@ -80,7 +80,7 @@ require("packer").startup(function(use)
     vim.keymap.set("n", "<localleader>tq", ":tabclose<cr>", { noremap = true })
 
     vim.keymap.set("n", "<localleader>ni", ":Neorg index<cr>", { noremap = true })
-    vim.keymap.set("n", "<localleader>nt", ":Neorg toc<cr>", { noremap = true })
+    vim.keymap.set("n", "<localleader>nt", ":Neorg toc qflist<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>nj", ":Neorg journal<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>ng", ":Neorg generate-workspace-summary<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>nm", ":Neorg inject-metadata<cr>", { noremap = true })
