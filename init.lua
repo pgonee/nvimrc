@@ -198,9 +198,29 @@ require("packer").startup(function(use)
     vim.g.loaded_netrwPlugin = 1
     vim.opt.termguicolors = true
     require("nvim-tree").setup({
+        view = {
+            float = {
+                enable = false,
+                quit_on_focus_loss = true,
+                open_win_config = {
+                    relative = "editor",
+                    border = "rounded",
+                    width = 30,
+                    height = 50,
+                    row = 0,
+                    col = 0,
+                },
+            },
+        },
+        git = {
+            enable = false,
+        },
         filters = {
             git_ignored = false,
             dotfiles = false,
+            custom = {
+                ".DS_Store",
+            },
         },
     })
     vim.keymap.set("n", "<leader>xx", function()
