@@ -220,6 +220,7 @@ require("packer").startup(function(use)
             dotfiles = false,
             custom = {
                 ".DS_Store",
+                ".git",
             },
         },
     })
