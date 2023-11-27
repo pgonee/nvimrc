@@ -1,5 +1,8 @@
 local cwd = vim.loop.cwd()
 
+package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?/init.lua;"
+package.path = package.path .. ";" .. vim.fn.expand("$HOME") .. "/.luarocks/share/lua/5.1/?.lua;"
+
 require("packer").startup(function(use)
     use("wbthomason/packer.nvim")
     use("neovim/nvim-lspconfig")
@@ -54,10 +57,11 @@ require("packer").startup(function(use)
     })
     use("nvim-tree/nvim-web-devicons")
     use("nvim-lua/plenary.nvim")
+    use("3rd/image.nvim")
     use({
         "nvim-neorg/neorg",
         requires = { "nvim-lua/plenary.nvim" },
-        tag = "v6.0.0",
+        tag = "v6.2.0",
     })
     use({
         "nvim-treesitter/nvim-treesitter",
@@ -72,6 +76,7 @@ require("packer").startup(function(use)
     use("folke/zen-mode.nvim")
 
     vim.keymap.set("n", "<localleader>q", ":q<cr>", { noremap = true })
+    vim.keymap.set("n", "<localleader>o", ':!open "%:p:h"<cr>', { noremap = true })
     vim.keymap.set("n", "<localleader>dd", ":NvimTreeToggle<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>df", ":NvimTreeFindFile<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>tt", ":tabnew<cr>", { noremap = true })
@@ -220,7 +225,7 @@ require("packer").startup(function(use)
             dotfiles = false,
             custom = {
                 ".DS_Store",
-                ".git",
+                "node_modules",
             },
         },
     })
@@ -242,10 +247,39 @@ require("packer").startup(function(use)
     })
     vim.treesitter.language.register("norg", "norg")
 
+    require("image").setup({
+        backend = "kitty",
+        integrations = {
+            markdown = {
+                enabled = true,
+                clear_in_insert_mode = false,
+                download_remote_images = true,
+                only_render_image_at_cursor = false,
+                filetypes = { "markdown", "vimwiki" }, -- markdown extensions (ie. quarto) can go here
+            },
+            neorg = {
+                enabled = true,
+                clear_in_insert_mode = false,
+                download_remote_images = true,
+                only_render_image_at_cursor = false,
+                filetypes = { "norg" },
+            },
+        },
+        max_width = nil,
+        max_height = nil,
+        max_width_window_percentage = nil,
+        max_height_window_percentage = 50,
+        window_overlap_clear_enabled = false, -- toggles images when windows are overlapped
+        window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
+        editor_only_render_when_focused = false, -- auto show/hide images when the editor gains/looses focus
+        tmux_show_only_in_active_window = false, -- auto show/hide images in the correct Tmux window (needs visual-activity off)
+        hijack_file_patterns = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp" }, -- render image files as images when opened
+    })
     require("neorg").setup({
         load = {
             ["core.defaults"] = {},
             ["core.integrations.treesitter"] = {},
+            ["core.integrations.image"] = {},
             ["core.concealer"] = {
                 config = {
                     folds = false,
@@ -364,15 +398,18 @@ require("packer").startup(function(use)
     local get_root_dir = function(fname)
         local util = require("lspconfig.util")
 
-        if string.find(cwd, "storyplay") then
-            return util.root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git")(fname)
-        end
+        return util.root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git")(fname)
+        --if string.find(cwd, "storyplay") then
+        --return util.root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git")(fname)
+        --end
 
-        return util.root_pattern(".git")(fname)
-            or util.root_pattern("pnpm-workspace.yaml", "pnpm-lock.yaml")(fname)
-            or util.root_pattern("package.json", "tsconfig.json")(fname)
+        --return util.root_pattern(".git")(fname)
+        --or util.root_pattern("pnpm-workspace.yaml", "pnpm-lock.yaml")(fname)
+        --or util.root_pattern("package.json", "tsconfig.json")(fname)
     end
 
+    lspconfig.tailwindcss.setup({})
+    lspconfig.jsonls.setup({})
     lspconfig.prismals.setup({})
     lspconfig.tsserver.setup({
         filetypes = {
