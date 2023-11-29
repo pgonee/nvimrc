@@ -244,6 +244,9 @@ require("packer").startup(function(use)
             enable = true,
             additional_vim_regex_highlighting = false,
         },
+        indent = {
+            enable = true,
+        },
     })
     vim.treesitter.language.register("norg", "norg")
 
@@ -308,8 +311,13 @@ require("packer").startup(function(use)
                     default_workspace = "areas",
                 },
             },
-            ["core.export"] = {},
             ["core.ui"] = {},
+            ["core.completion"] = {
+                config = {
+                    engine = "nvim-cmp",
+                },
+            },
+            ["core.export"] = {},
             ["core.export.markdown"] = {},
             ["core.manoeuvre"] = {},
             ["core.summary"] = {},
@@ -398,6 +406,11 @@ require("packer").startup(function(use)
     local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
     local lspconfig = require("lspconfig")
+    local util = require("lspconfig.util")
+    lspconfig.bufls.setup({
+        root_dir = util.root_pattern("buf.work.yaml", "buf.gen.yaml", ".git"),
+    })
+    lspconfig.terraformls.setup({})
     lspconfig.pyright.setup({
         capabilities = capabilities,
     })
@@ -441,6 +454,7 @@ require("packer").startup(function(use)
                 diagnostics = {
                     globals = { "vim" },
                 },
+                telemetry = { enable = false },
                 workspace = {
                     library = vim.api.nvim_get_runtime_file("", true),
                     checkThirdParty = false,
@@ -494,6 +508,15 @@ require("packer").startup(function(use)
             javascriptreact = prettierd("formatter.filetypes.javascriptreact"),
             typescript = prettierd("formatter.filetypes.typescript"),
             typescriptreact = prettierd("formatter.filetypes.typescriptreact"),
+            ["proto"] = function()
+                return {
+                    exe = "buf format",
+                    args = {
+                        "-w",
+                    },
+                    stdin = false,
+                }
+            end,
             lua = {
                 function()
                     return {
