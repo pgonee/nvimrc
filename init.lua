@@ -44,6 +44,9 @@ require("packer").startup(function(use)
     })
     use({
         "folke/trouble.nvim",
+        requires = {
+            "nvim-tree/nvim-web-devicons",
+        },
     })
     use("dense-analysis/ale")
     use("jremmen/vim-ripgrep")
@@ -145,6 +148,7 @@ require("packer").startup(function(use)
                 i = {
                     ["<C-Down>"] = require("telescope.actions").cycle_history_next,
                     ["<C-Up>"] = require("telescope.actions").cycle_history_prev,
+                    ["<C-x>"] = require("trouble.providers.telescope").open_with_trouble,
                 },
             },
             file_ignore_patterns = {
@@ -247,6 +251,7 @@ require("packer").startup(function(use)
             },
         },
     })
+
     vim.keymap.set("n", "<leader>xx", function()
         require("trouble").toggle("workspace_diagnostics")
     end)
@@ -435,16 +440,14 @@ require("packer").startup(function(use)
         capabilities = capabilities,
     })
     local get_root_dir = function(fname)
-        local util = require("lspconfig.util")
-
-        return util.root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git")(fname)
+        --local util = require("lspconfig.util")
+        --return util.root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git")(fname)
         --if string.find(cwd, "storyplay") then
         --return util.root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git")(fname)
         --end
-
-        --return util.root_pattern(".git")(fname)
-        --or util.root_pattern("pnpm-workspace.yaml", "pnpm-lock.yaml")(fname)
-        --or util.root_pattern("package.json", "tsconfig.json")(fname)
+        return util.root_pattern(".git")(fname)
+            or util.root_pattern("pnpm-workspace.yaml", "pnpm-lock.yaml")(fname)
+            or util.root_pattern("package.json", "tsconfig.json")(fname)
     end
 
     lspconfig.tailwindcss.setup({})
