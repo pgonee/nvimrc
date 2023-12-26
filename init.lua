@@ -72,6 +72,14 @@ require("packer").startup(function(use)
         requires = { "nvim-neorg/neorg" },
     })
     use({ "nvim-treesitter/playground", requires = { "nvim-treesitter/nvim-treesitter" } })
+    use("rcarriga/nvim-notify")
+    use({
+        "ThePrimeagen/refactoring.nvim",
+        requires = {
+            { "nvim-lua/plenary.nvim" },
+            { "nvim-treesitter/nvim-treesitter" },
+        },
+    })
 
     use("folke/zen-mode.nvim")
 
@@ -126,6 +134,9 @@ require("packer").startup(function(use)
     vim.keymap.set("v", "<2-MiddleMouse>", "<Nop>", { noremap = true })
     vim.keymap.set("v", "<3-MiddleMouse>", "<Nop>", { noremap = true })
     vim.keymap.set("v", "<4-MiddleMouse>", "<Nop>", { noremap = true })
+    vim.keymap.set("i", "<c-s>", "<c-o>:lua vim.lsp.buf.signature_help()<cr>", { noremap = true })
+
+    vim.notify = require("notify")
 
     local telescope = require("telescope")
     telescope.setup({
@@ -146,12 +157,14 @@ require("packer").startup(function(use)
                 fuzzy = true, -- false will only do exact matching
                 override_generic_sorter = true, -- override the generic sorter
                 override_file_sorter = true, -- override the file sorter
-                case_mode = "smart_case", -- or "ignore_case" or "respect_case"
+                case_mode = "ignore_case", -- or "ignore_case" or "respect_case"
                 -- the default case_mode is "smart_case"
             },
         },
     })
     telescope.load_extension("fzf")
+    telescope.load_extension("notify")
+    telescope.load_extension("refactoring")
 
     local telescope_builtin = require("telescope.builtin")
     vim.keymap.set("n", "<localleader>ff", "<cmd>lua require('telescope.builtin').find_files({ hidden = 1})<cr>", {})
@@ -159,6 +172,9 @@ require("packer").startup(function(use)
     vim.keymap.set("n", "<localleader>fb", telescope_builtin.buffers, {})
     vim.keymap.set("n", "<localleader>fh", telescope_builtin.help_tags, {})
     vim.keymap.set("n", "<localleader>fr", telescope_builtin.resume, {})
+    vim.keymap.set("n", "<localleader>rr", function()
+        require("telescope").extensions.refactoring.refactors()
+    end)
 
     vim.keymap.set("n", "<esc>", "<c-c>", {})
 
@@ -195,9 +211,11 @@ require("packer").startup(function(use)
     vim.api.nvim_command("syntax enable")
     vim.o.colorcolumn = "120"
 
-    require("tokyonight").setup()
-    vim.o.background = "dark"
-    vim.api.nvim_command("colorscheme tokyonight-storm")
+    require("tokyonight").setup({ style = "day", light_style = "day", day_brightness = 0.2 })
+    --vim.o.background = "dark"
+    --vim.api.nvim_command("colorscheme tokyonight-storm")
+    vim.o.background = "light"
+    vim.api.nvim_command("colorscheme tokyonight-day")
 
     vim.g.loaded_netrw = 1
     vim.g.loaded_netrwPlugin = 1
@@ -230,7 +248,7 @@ require("packer").startup(function(use)
         },
     })
     vim.keymap.set("n", "<leader>xx", function()
-        require("trouble").toggle()
+        require("trouble").toggle("workspace_diagnostics")
     end)
 
     require("nvim-treesitter").setup()
@@ -249,6 +267,8 @@ require("packer").startup(function(use)
         },
     })
     vim.treesitter.language.register("norg", "norg")
+
+    require("refactoring").setup({})
 
     require("image").setup({
         backend = "kitty",
@@ -498,6 +518,7 @@ require("packer").startup(function(use)
     require("formatter").setup({
         logging = true,
         filetype = {
+            prisma = require("formatter.defaults").prettierd,
             markdown = require("formatter.filetypes.markdown").prettierd,
             yaml = require("formatter.filetypes.yaml").prettierd,
             css = require("formatter.filetypes.css").prettierd,
