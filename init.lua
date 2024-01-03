@@ -83,6 +83,7 @@ require("packer").startup(function(use)
             { "nvim-treesitter/nvim-treesitter" },
         },
     })
+    use({ "iamcco/markdown-preview.nvim" })
 
     use("folke/zen-mode.nvim")
 
@@ -105,6 +106,8 @@ require("packer").startup(function(use)
     vim.keymap.set("n", "<localleader>nwp", ":Neorg workspace projects<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>nwr", ":Neorg workspace resources<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>nwn", ":Neorg workspace notes<cr>", { noremap = true })
+
+    vim.keymap.set("n", "<localleader>z", ":ZenMode<cr>", { noremap = true })
 
     vim.keymap.set("t", "<a-h>", "<c-\\><c-n><c-w>h", { noremap = true })
     vim.keymap.set("t", "<a-j>", "<c-\\><c-n><c-w>j", { noremap = true })
@@ -179,6 +182,7 @@ require("packer").startup(function(use)
     vim.keymap.set("n", "<localleader>rr", function()
         require("telescope").extensions.refactoring.refactors()
     end)
+    vim.keymap.set("n", "<localleader>rn", vim.lsp.buf.rename, {})
 
     vim.keymap.set("n", "<esc>", "<c-c>", {})
 
@@ -295,8 +299,8 @@ require("packer").startup(function(use)
         },
         max_width = nil,
         max_height = nil,
-        max_width_window_percentage = 50,
-        max_height_window_percentage = 50,
+        max_width_window_percentage = 30,
+        max_height_window_percentage = 30,
         window_overlap_clear_enabled = true, -- toggles images when windows are overlapped
         window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
         editor_only_render_when_focused = false, -- auto show/hide images when the editor gains/looses focus
