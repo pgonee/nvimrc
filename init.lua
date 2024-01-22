@@ -60,19 +60,12 @@ require("packer").startup(function(use)
     })
     use("nvim-tree/nvim-web-devicons")
     use("nvim-lua/plenary.nvim")
-    use("3rd/image.nvim")
-    use({
-        "nvim-neorg/neorg",
-        requires = { "nvim-lua/plenary.nvim" },
-        tag = "v6.2.0",
-    })
     use({
         "nvim-treesitter/nvim-treesitter",
         run = function()
             local ts_update = require("nvim-treesitter.install").update({ with_sync = false })
             ts_update()
         end,
-        requires = { "nvim-neorg/neorg" },
     })
     use({ "nvim-treesitter/playground", requires = { "nvim-treesitter/nvim-treesitter" } })
     use("rcarriga/nvim-notify")
@@ -83,9 +76,17 @@ require("packer").startup(function(use)
             { "nvim-treesitter/nvim-treesitter" },
         },
     })
-    use({ "iamcco/markdown-preview.nvim" })
+    use({
+        "iamcco/markdown-preview.nvim",
+        run = "cd app && npm install",
+        setup = function()
+            vim.g.mkdp_filetypes = { "markdown" }
+        end,
+        ft = { "markdown" },
+    })
 
     use("folke/zen-mode.nvim")
+    use("sindrets/diffview.nvim")
 
     vim.keymap.set("n", "<localleader>q", ":q<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>o", ':!open "%:p:h"<cr>', { noremap = true })
@@ -95,17 +96,6 @@ require("packer").startup(function(use)
     vim.keymap.set("n", "<localleader>tw", ":tabnext<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>tp", ":tabprev<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>tq", ":tabclose<cr>", { noremap = true })
-
-    vim.keymap.set("n", "<localleader>ni", ":Neorg index<cr>", { noremap = true })
-    vim.keymap.set("n", "<localleader>nt", ":Neorg toc qflist<cr>", { noremap = true })
-    vim.keymap.set("n", "<localleader>nj", ":Neorg journal<cr>", { noremap = true })
-    vim.keymap.set("n", "<localleader>ng", ":Neorg generate-workspace-summary<cr>", { noremap = true })
-    vim.keymap.set("n", "<localleader>nm", ":Neorg inject-metadata<cr>", { noremap = true })
-    vim.keymap.set("n", "<localleader>ne", ":Neorg<cr>", { noremap = true })
-    vim.keymap.set("n", "<localleader>nwa", ":Neorg workspace areas<cr>", { noremap = true })
-    vim.keymap.set("n", "<localleader>nwp", ":Neorg workspace projects<cr>", { noremap = true })
-    vim.keymap.set("n", "<localleader>nwr", ":Neorg workspace resources<cr>", { noremap = true })
-    vim.keymap.set("n", "<localleader>nwn", ":Neorg workspace notes<cr>", { noremap = true })
 
     vim.keymap.set("n", "<localleader>z", ":ZenMode<cr>", { noremap = true })
 
@@ -142,7 +132,56 @@ require("packer").startup(function(use)
     vim.keymap.set("v", "<4-MiddleMouse>", "<Nop>", { noremap = true })
     vim.keymap.set("i", "<c-s>", "<c-o>:lua vim.lsp.buf.signature_help()<cr>", { noremap = true })
 
+    vim.cmd([[
+    filetype plugin indent on
+    ]])
+    vim.o.number = true
+    vim.o.ruler = true
+    vim.o.ts = 4
+    vim.o.sw = 4
+    vim.o.sts = 4
+    vim.o.expandtab = true
+    vim.o.smarttab = true
+    vim.o.autoindent = true
+    vim.o.smartindent = true
+
+    vim.o.splitbelow = true
+    vim.o.splitright = true
+
+    vim.o.encoding = "utf-8"
+    vim.o.nobackup = true
+    vim.o.nowritebackup = true
+    vim.o.cmdheight = 1
+    vim.o.updatetime = 300
+    vim.o.signcolumn = "yes"
+    vim.o.scrolloff = 3
+    vim.o.conceallevel = 1
+    vim.o.foldenable = false
+    vim.o.ignorecase = true
+    vim.o.smartcase = true
+
+    vim.api.nvim_set_option("clipboard", "unnamed")
+    vim.api.nvim_command("set shortmess+=c")
+    vim.api.nvim_command("set mouse=")
+    vim.api.nvim_command("syntax on")
+    vim.api.nvim_command("syntax enable")
+    vim.o.colorcolumn = "120"
+
+    require("tokyonight").setup({ style = "day", light_style = "day", day_brightness = 0.2 })
+    --vim.o.background = "dark"
+    --vim.api.nvim_command("colorscheme tokyonight-storm")
+    vim.o.background = "light"
+    vim.api.nvim_command("colorscheme tokyonight-day")
+
+    vim.g.loaded_netrw = 1
+    vim.g.loaded_netrwPlugin = 1
+    vim.opt.termguicolors = true
+
     vim.notify = require("notify")
+    vim.notify.setup({
+        fps = 60,
+        timeout = 2500,
+    })
 
     local telescope = require("telescope")
     telescope.setup({
@@ -186,48 +225,6 @@ require("packer").startup(function(use)
 
     vim.keymap.set("n", "<esc>", "<c-c>", {})
 
-    vim.cmd([[
-    filetype plugin indent on
-    ]])
-    vim.o.number = true
-    vim.o.ruler = true
-    vim.o.ts = 4
-    vim.o.sw = 4
-    vim.o.sts = 4
-    vim.o.expandtab = true
-    vim.o.smarttab = true
-    vim.o.autoindent = true
-    vim.o.smartindent = true
-
-    vim.o.splitbelow = true
-    vim.o.splitright = true
-
-    vim.o.encoding = "utf-8"
-    vim.o.nobackup = true
-    vim.o.nowritebackup = true
-    vim.o.cmdheight = 1
-    vim.o.updatetime = 300
-    vim.o.signcolumn = "yes"
-    vim.o.scrolloff = 3
-    vim.o.conceallevel = 1
-    vim.o.foldenable = false
-
-    vim.api.nvim_set_option("clipboard", "unnamed")
-    vim.api.nvim_command("set shortmess+=c")
-    vim.api.nvim_command("set mouse=")
-    vim.api.nvim_command("syntax on")
-    vim.api.nvim_command("syntax enable")
-    vim.o.colorcolumn = "120"
-
-    require("tokyonight").setup({ style = "day", light_style = "day", day_brightness = 0.2 })
-    --vim.o.background = "dark"
-    --vim.api.nvim_command("colorscheme tokyonight-storm")
-    vim.o.background = "light"
-    vim.api.nvim_command("colorscheme tokyonight-day")
-
-    vim.g.loaded_netrw = 1
-    vim.g.loaded_netrwPlugin = 1
-    vim.opt.termguicolors = true
     require("nvim-tree").setup({
         view = {
             float = {
@@ -278,88 +275,6 @@ require("packer").startup(function(use)
     vim.treesitter.language.register("norg", "norg")
 
     require("refactoring").setup({})
-
-    require("image").setup({
-        backend = "kitty",
-        integrations = {
-            markdown = {
-                enabled = true,
-                clear_in_insert_mode = false,
-                download_remote_images = true,
-                only_render_image_at_cursor = false,
-                filetypes = { "markdown", "vimwiki" }, -- markdown extensions (ie. quarto) can go here
-            },
-            neorg = {
-                enabled = true,
-                clear_in_insert_mode = false,
-                download_remote_images = true,
-                only_render_image_at_cursor = false,
-                filetypes = { "norg" },
-            },
-        },
-        max_width = nil,
-        max_height = nil,
-        max_width_window_percentage = 30,
-        max_height_window_percentage = 30,
-        window_overlap_clear_enabled = true, -- toggles images when windows are overlapped
-        window_overlap_clear_ft_ignore = { "cmp_menu", "cmp_docs", "" },
-        editor_only_render_when_focused = false, -- auto show/hide images when the editor gains/looses focus
-        tmux_show_only_in_active_window = false, -- auto show/hide images in the correct Tmux window (needs visual-activity off)
-        hijack_file_patterns = { "*.png", "*.jpg", "*.jpeg", "*.gif", "*.webp" }, -- render image files as images when opened
-    })
-    require("neorg").setup({
-        load = {
-            ["core.defaults"] = {},
-            ["core.integrations.treesitter"] = {},
-            ["core.integrations.image"] = {},
-            ["core.qol.todo_items"] = {
-                config = {
-                    create_todo_items = false,
-                    create_todo_parents = false,
-                },
-            },
-            ["core.concealer"] = {
-                config = {
-                    folds = false,
-                    icons = {
-                        ordered = {
-                            icons = { "1", "A", "a", "⑴", "Ⓐ", "ⓐ" } or nil,
-                        },
-                    },
-                },
-            },
-            ["core.dirman"] = {
-                config = {
-                    workspaces = {
-                        projects = "~/Documents/Notes/projects",
-                        areas = "~/Documents/Notes/areas",
-                        resources = "~/Documents/Notes/resources",
-                        archives = "~/Documents/Notes/archives",
-                        notes = "~/Documents/Notes/notes",
-                    },
-                    default_workspace = "areas",
-                },
-            },
-            ["core.ui"] = {},
-            ["core.completion"] = {
-                config = {
-                    engine = "nvim-cmp",
-                },
-            },
-            ["core.export"] = {},
-            ["core.export.markdown"] = {},
-            ["core.manoeuvre"] = {},
-            ["core.summary"] = {},
-            ["core.presenter"] = {
-                config = {
-                    zen_mode = "zen-mode",
-                },
-            },
-            ["core.journal"] = {
-                config = { journal_folder = "daily", workspace = "areas" },
-            },
-        },
-    })
 
     local cmp = require("cmp")
     cmp.setup.cmdline("/", {
