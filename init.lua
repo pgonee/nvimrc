@@ -40,7 +40,7 @@ require("packer").startup(function(use)
     })
     use({
         "nvim-telescope/telescope-fzf-native.nvim",
-        run = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build",
+        run = "make",
     })
     use({
         "folke/trouble.nvim",
@@ -68,7 +68,6 @@ require("packer").startup(function(use)
         end,
     })
     use({ "nvim-treesitter/playground", requires = { "nvim-treesitter/nvim-treesitter" } })
-    use("rcarriga/nvim-notify")
     use({
         "ThePrimeagen/refactoring.nvim",
         requires = {
@@ -177,12 +176,6 @@ require("packer").startup(function(use)
     vim.g.loaded_netrwPlugin = 1
     vim.opt.termguicolors = true
 
-    vim.notify = require("notify")
-    vim.notify.setup({
-        fps = 60,
-        timeout = 2500,
-    })
-
     local telescope = require("telescope")
     telescope.setup({
         defaults = {
@@ -196,24 +189,42 @@ require("packer").startup(function(use)
             file_ignore_patterns = {
                 "node_modules",
                 ".git",
+                ".next",
+                "dist",
+                "build",
+                ".idea",
+                ".DS_Store",
+                ".turbo",
+                ".vercel",
+                ".vscode",
             },
         },
         extensions = {
             fzf = {
                 fuzzy = true, -- false will only do exact matching
-                override_generic_sorter = true, -- override the generic sorter
-                override_file_sorter = true, -- override the file sorter
-                case_mode = "ignore_case", -- or "ignore_case" or "respect_case"
+                --override_generic_sorter = true, -- override the generic sorter
+                --override_file_sorter = true, -- override the file sorter
+                case_mode = "smart_case", -- or "ignore_case" or "respect_case"
                 -- the default case_mode is "smart_case"
             },
         },
     })
     telescope.load_extension("fzf")
-    telescope.load_extension("notify")
     telescope.load_extension("refactoring")
 
     local telescope_builtin = require("telescope.builtin")
-    vim.keymap.set("n", "<localleader>ff", "<cmd>lua require('telescope.builtin').find_files({ hidden = 1})<cr>", {})
+    vim.keymap.set(
+        "n",
+        "<localleader>ff",
+        "<cmd>lua require('telescope.builtin').find_files({ hidden = true, previewer = true })<cr>",
+        {}
+    )
+    vim.keymap.set(
+        "n",
+        "<localleader>fa",
+        "<cmd>lua require('telescope.builtin').find_files({ hidden = true, no_ignore = true, previewer = false })<cr>",
+        {}
+    )
     vim.keymap.set("n", "<localleader>fg", telescope_builtin.live_grep, {})
     vim.keymap.set("n", "<localleader>fb", telescope_builtin.buffers, {})
     vim.keymap.set("n", "<localleader>fh", telescope_builtin.help_tags, {})
