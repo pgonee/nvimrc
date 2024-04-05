@@ -19,7 +19,7 @@ require("packer").startup(function(use)
     use("hrsh7th/cmp-path")
     use("hrsh7th/cmp-cmdline")
     use("hrsh7th/cmp-nvim-lsp-signature-help")
-    use("L3MON4D3/LuaSnip")
+    use({ "L3MON4D3/LuaSnip", dependencies = { "rafamadriz/friendly-snippets" } })
     use("saadparwaiz1/cmp_luasnip")
     use("rafamadriz/friendly-snippets")
     use({
@@ -75,6 +75,7 @@ require("packer").startup(function(use)
             { "nvim-treesitter/nvim-treesitter" },
         },
     })
+    use({ "windwp/nvim-ts-autotag" })
     use({
         "iamcco/markdown-preview.nvim",
         run = "cd app && npm install",
@@ -86,6 +87,57 @@ require("packer").startup(function(use)
 
     use("folke/zen-mode.nvim")
     use("sindrets/diffview.nvim")
+    use("andymass/vim-matchup")
+    use({
+        "zbirenbaum/copilot.lua",
+        cmd = "Copilot",
+        event = "InsertEnter",
+        config = function()
+            require("copilot").setup({
+                panel = {
+                    enabled = true,
+                    auto_refresh = false,
+                    keymap = {
+                        jump_prev = "[[",
+                        jump_next = "]]",
+                        accept = "<CR>",
+                        refresh = "gr",
+                        open = "<M-CR>",
+                    },
+                    layout = {
+                        position = "bottom", -- | top | left | right
+                        ratio = 0.4,
+                    },
+                },
+                suggestion = {
+                    enabled = true,
+                    auto_trigger = false,
+                    debounce = 75,
+                    keymap = {
+                        accept = "<C-[>",
+                        accept_word = false,
+                        accept_line = false,
+                        next = "<M-]>",
+                        prev = "<M-[>",
+                        dismiss = "<C-]>",
+                    },
+                },
+                filetypes = {
+                    yaml = false,
+                    markdown = false,
+                    help = false,
+                    gitcommit = false,
+                    gitrebase = false,
+                    hgcommit = false,
+                    svn = false,
+                    cvs = false,
+                    ["."] = false,
+                },
+                copilot_node_command = "node",
+                server_opts_overrides = {},
+            })
+        end,
+    })
 
     vim.keymap.set("n", "<localleader>q", ":q<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>o", ':!open "%:p:h"<cr>', { noremap = true })
@@ -192,6 +244,7 @@ require("packer").startup(function(use)
                 ".next",
                 "dist",
                 "build",
+                "storybook-static",
                 ".idea",
                 ".DS_Store",
                 ".turbo",
@@ -216,13 +269,7 @@ require("packer").startup(function(use)
     vim.keymap.set(
         "n",
         "<localleader>ff",
-        "<cmd>lua require('telescope.builtin').find_files({ hidden = true, previewer = true })<cr>",
-        {}
-    )
-    vim.keymap.set(
-        "n",
-        "<localleader>fa",
-        "<cmd>lua require('telescope.builtin').find_files({ hidden = true, no_ignore = true, previewer = false })<cr>",
+        "<cmd>lua require('telescope.builtin').find_files({ hidden = true, no_ignore = false, previewer = true })<cr>",
         {}
     )
     vim.keymap.set("n", "<localleader>fg", telescope_builtin.live_grep, {})
@@ -270,7 +317,7 @@ require("packer").startup(function(use)
 
     require("nvim-treesitter").setup()
     require("nvim-treesitter.configs").setup({
-        modules = { "norg", "norg_meta" },
+        modules = {},
         ensure_installed = {},
         ignore_install = {},
         sync_install = false,
@@ -282,8 +329,13 @@ require("packer").startup(function(use)
         indent = {
             enable = true,
         },
+        autotag = {
+            enable = true,
+        },
+        matchup = {
+            enable = true,
+        },
     })
-    vim.treesitter.language.register("norg", "norg")
 
     require("refactoring").setup({})
 
@@ -370,11 +422,6 @@ require("packer").startup(function(use)
         capabilities = capabilities,
     })
     local get_root_dir = function(fname)
-        --local util = require("lspconfig.util")
-        --return util.root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git")(fname)
-        --if string.find(cwd, "storyplay") then
-        --return util.root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git")(fname)
-        --end
         return util.root_pattern(".git")(fname)
             or util.root_pattern("pnpm-workspace.yaml", "pnpm-lock.yaml")(fname)
             or util.root_pattern("package.json", "tsconfig.json")(fname)
@@ -433,19 +480,19 @@ require("packer").startup(function(use)
         end,
     })
 
-    local util = require("formatter.util")
+    local formatterUtil = require("formatter.util")
 
     local prettierd = function(value)
-        local cwd = util.get_cwd()
-        if string.find(cwd, "storyplay") then
-            return function()
-                return {
-                    exe = "/Users/pgonee/.nvm/versions/node/v21.1.0/bin/prettierd",
-                    args = { util.escape_path(util.get_current_buffer_file_path()) },
-                    stdin = true,
-                }
-            end
-        end
+        --local cwd = formatterUtil.get_cwd()
+        --if string.find(cwd, "SOMETHING") then
+        --return function()
+        --return {
+        --exe = "/Users/pgonee/.nvm/versions/node/v21.1.0/bin/prettierd",
+        --args = { formatterUtil.escape_path(formatterUtil.get_current_buffer_file_path()) },
+        --stdin = true,
+        --}
+        --end
+        --end
         return require(value).prettierd
     end
     require("formatter").setup({
@@ -479,7 +526,7 @@ require("packer").startup(function(use)
                             "--indent-type Spaces",
                             "--search-parent-directories",
                             "--stdin-filepath",
-                            util.escape_path(util.get_current_buffer_file_path()),
+                            formatterUtil.escape_path(formatterUtil.get_current_buffer_file_path()),
                             "--",
                             "-",
                         },
@@ -497,4 +544,6 @@ require("packer").startup(function(use)
         command = "FormatWrite",
         group = formatGroup,
     })
+
+    require("ibl").setup()
 end)
