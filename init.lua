@@ -19,7 +19,7 @@ require("packer").startup(function(use)
     use("hrsh7th/cmp-path")
     use("hrsh7th/cmp-cmdline")
     use("hrsh7th/cmp-nvim-lsp-signature-help")
-    use({ "L3MON4D3/LuaSnip", dependencies = { "rafamadriz/friendly-snippets" } })
+    use({ "L3MON4D3/LuaSnip", dependencies = { "rafamadriz/friendly-snippets" }, run = "make install_jsregexp" })
     use("saadparwaiz1/cmp_luasnip")
     use("rafamadriz/friendly-snippets")
     use({
@@ -114,12 +114,12 @@ require("packer").startup(function(use)
                     auto_trigger = false,
                     debounce = 75,
                     keymap = {
-                        accept = "<C-[>",
+                        accept = "<C-]>",
                         accept_word = false,
                         accept_line = false,
                         next = "<M-]>",
                         prev = "<M-[>",
-                        dismiss = "<C-]>",
+                        dismiss = "<C-[>",
                     },
                 },
                 filetypes = {
@@ -133,7 +133,7 @@ require("packer").startup(function(use)
                     cvs = false,
                     ["."] = false,
                 },
-                copilot_node_command = "node",
+                copilot_node_command = "node", -- Node.js version must be > 18.x
                 server_opts_overrides = {},
             })
         end,
@@ -272,6 +272,12 @@ require("packer").startup(function(use)
         "<cmd>lua require('telescope.builtin').find_files({ hidden = true, no_ignore = false, previewer = true })<cr>",
         {}
     )
+    vim.keymap.set(
+        "n",
+        "<localleader>fa",
+        "<cmd>lua require('telescope.builtin').find_files({ hidden = true, no_ignore = true, previewer = true })<cr>",
+        {}
+    )
     vim.keymap.set("n", "<localleader>fg", telescope_builtin.live_grep, {})
     vim.keymap.set("n", "<localleader>fb", telescope_builtin.buffers, {})
     vim.keymap.set("n", "<localleader>fh", telescope_builtin.help_tags, {})
@@ -312,7 +318,19 @@ require("packer").startup(function(use)
     })
 
     vim.keymap.set("n", "<leader>xx", function()
+        require("trouble").toggle()
+    end)
+    vim.keymap.set("n", "<leader>xw", function()
         require("trouble").toggle("workspace_diagnostics")
+    end)
+    vim.keymap.set("n", "<leader>xd", function()
+        require("trouble").toggle("document_diagnostics")
+    end)
+    vim.keymap.set("n", "<leader>xq", function()
+        require("trouble").toggle("quickfix")
+    end)
+    vim.keymap.set("n", "<leader>xl", function()
+        require("trouble").toggle("loclist")
     end)
 
     require("nvim-treesitter").setup()
@@ -447,6 +465,19 @@ require("packer").startup(function(use)
                 importModuleSpecifierPreference = "non-relative",
             },
         },
+        commands = {
+            OrganizeImports = {
+                function()
+                    local params = {
+                        command = "_typescript.organizeImports",
+                        arguments = { vim.api.nvim_buf_get_name(0) },
+                        title = "",
+                    }
+                    vim.lsp.buf.execute_command(params)
+                end,
+                description = "Organize Imports",
+            },
+        },
     })
     lspconfig.lua_ls.setup({
         settings = {
@@ -477,6 +508,22 @@ require("packer").startup(function(use)
             local opts = { buffer = ev.buf }
             vim.keymap.set("n", "<localleader>gD", vim.lsp.buf.declaration, opts)
             vim.keymap.set("n", "<localleader>gd", vim.lsp.buf.definition, opts)
+            vim.keymap.set("n", "<localleader>gi", vim.lsp.buf.implementation, opts)
+            vim.keymap.set("n", "<localleader>K", vim.lsp.buf.hover, opts)
+            --local bufopts = { noremap=true, silent=true, buffer=bufnr }
+            --vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+            --vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
+            --vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+            --vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
+            --vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
+            --vim.keymap.set('n', '<space>wl', function()
+            --print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+            --end, bufopts)
+            --vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
+            --vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
+            --vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
+            --vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
+            --vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufop
         end,
     })
 
