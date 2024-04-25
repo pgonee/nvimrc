@@ -49,8 +49,8 @@ local function save_profiles(threshold)
 end
 
 time([[Luarocks path setup]], true)
-local package_path_str = "/Users/pgonee/.cache/nvim/packer_hererocks/2.1.1710088188/share/lua/5.1/?.lua;/Users/pgonee/.cache/nvim/packer_hererocks/2.1.1710088188/share/lua/5.1/?/init.lua;/Users/pgonee/.cache/nvim/packer_hererocks/2.1.1710088188/lib/luarocks/rocks-5.1/?.lua;/Users/pgonee/.cache/nvim/packer_hererocks/2.1.1710088188/lib/luarocks/rocks-5.1/?/init.lua"
-local install_cpath_pattern = "/Users/pgonee/.cache/nvim/packer_hererocks/2.1.1710088188/lib/lua/5.1/?.so"
+local package_path_str = "/Users/pgonee/.cache/nvim/packer_hererocks/2.1.1713517273/share/lua/5.1/?.lua;/Users/pgonee/.cache/nvim/packer_hererocks/2.1.1713517273/share/lua/5.1/?/init.lua;/Users/pgonee/.cache/nvim/packer_hererocks/2.1.1713517273/lib/luarocks/rocks-5.1/?.lua;/Users/pgonee/.cache/nvim/packer_hererocks/2.1.1713517273/lib/luarocks/rocks-5.1/?/init.lua"
+local install_cpath_pattern = "/Users/pgonee/.cache/nvim/packer_hererocks/2.1.1713517273/lib/lua/5.1/?.so"
 if not string.find(package.path, package_path_str, 1, true) then
   package.path = package.path .. ';' .. package_path_str
 end
@@ -114,14 +114,10 @@ _G.packer_plugins = {
     path = "/Users/pgonee/.local/share/nvim/site/pack/packer/start/cmp_luasnip",
     url = "https://github.com/saadparwaiz1/cmp_luasnip"
   },
-  ["copilot.lua"] = {
-    commands = { "Copilot" },
-    config = { "\27LJ\2\nÑ\4\0\0\5\0\16\0\0216\0\0\0'\2\1\0B\0\2\0029\0\2\0005\2\b\0005\3\3\0005\4\4\0=\4\5\0035\4\6\0=\4\a\3=\3\t\0025\3\n\0005\4\v\0=\4\5\3=\3\f\0025\3\r\0=\3\14\0024\3\0\0=\3\15\2B\0\2\1K\0\1\0\26server_opts_overrides\14filetypes\1\0\t\rmarkdown\1\6.\1\bcvs\1\bsvn\1\rhgcommit\1\14gitrebase\1\14gitcommit\1\thelp\1\tyaml\1\15suggestion\1\0\6\tprev\n<M-[>\16accept_line\1\16accept_word\1\tnext\n<M-]>\fdismiss\n<C-[>\vaccept\n<C-]>\1\0\4\vkeymap\0\fenabled\2\17auto_trigger\1\rdebounce\3K\npanel\1\0\5\14filetypes\0\26server_opts_overrides\0\25copilot_node_command\tnode\npanel\0\15suggestion\0\vlayout\1\0\2\rposition\vbottom\nratio\4š³æÌ\t™³æþ\3\vkeymap\1\0\5\14jump_next\a]]\14jump_prev\a[[\topen\v<M-CR>\frefresh\agr\vaccept\t<CR>\1\0\4\17auto_refresh\1\fenabled\2\vkeymap\0\vlayout\0\nsetup\fcopilot\frequire\0" },
-    loaded = false,
-    needs_bufread = false,
-    only_cond = false,
-    path = "/Users/pgonee/.local/share/nvim/site/pack/packer/opt/copilot.lua",
-    url = "https://github.com/zbirenbaum/copilot.lua"
+  ["copilot.vim"] = {
+    loaded = true,
+    path = "/Users/pgonee/.local/share/nvim/site/pack/packer/start/copilot.vim",
+    url = "https://github.com/github/copilot.vim"
   },
   ["diffview.nvim"] = {
     loaded = true,
@@ -299,28 +295,12 @@ vim.cmd [[ packadd lspsaga.nvim ]]
 try_loadstring("\27LJ\2\n9\0\0\3\0\3\0\a6\0\0\0'\2\1\0B\0\2\0029\0\2\0004\2\0\0B\0\2\1K\0\1\0\nsetup\flspsaga\frequire\0", "config", "lspsaga.nvim")
 
 time([[Sequenced loading]], false)
-
--- Command lazy-loads
-time([[Defining lazy-load commands]], true)
-pcall(vim.api.nvim_create_user_command, 'Copilot', function(cmdargs)
-          require('packer.load')({'copilot.lua'}, { cmd = 'Copilot', l1 = cmdargs.line1, l2 = cmdargs.line2, bang = cmdargs.bang, args = cmdargs.args, mods = cmdargs.mods }, _G.packer_plugins)
-        end,
-        {nargs = '*', range = true, bang = true, complete = function()
-          require('packer.load')({'copilot.lua'}, {}, _G.packer_plugins)
-          return vim.fn.getcompletion('Copilot ', 'cmdline')
-      end})
-time([[Defining lazy-load commands]], false)
-
 vim.cmd [[augroup packer_load_aucmds]]
 vim.cmd [[au!]]
   -- Filetype lazy-loads
 time([[Defining lazy-load filetype autocommands]], true)
 vim.cmd [[au FileType markdown ++once lua require("packer.load")({'markdown-preview.nvim'}, { ft = "markdown" }, _G.packer_plugins)]]
 time([[Defining lazy-load filetype autocommands]], false)
-  -- Event lazy-loads
-time([[Defining lazy-load event autocommands]], true)
-vim.cmd [[au InsertEnter * ++once lua require("packer.load")({'copilot.lua'}, { event = "InsertEnter *" }, _G.packer_plugins)]]
-time([[Defining lazy-load event autocommands]], false)
 vim.cmd("augroup END")
 
 _G._packer.inside_compile = false

@@ -16,9 +16,9 @@
     "prefix": "pg-story",
     "body": [
       "import { Meta, StoryObj } from \"@storybook/react\"\n",
-      "type Story = StoryObj<typeof ${1:$TM_FILENAME_BASE}>\n",
-      "const meta: Meta<typeof ${1:$TM_FILENAME_BASE}> = {",
-      "  component: ${1:$TM_FILENAME_BASE},",
+      "type Story = StoryObj<typeof ${1:${TM_FILENAME_BASE/(.*)\\.stories/$1/}}>\n",
+      "const meta: Meta<typeof ${1:${TM_FILENAME_BASE/(.*)\\.stories/$1/}}> = {",
+      "  component: ${1:${TM_FILENAME_BASE/(.*)\\.stories/$1/}},",
       "  args: {},",
       "}\n",
       "export default meta\n",

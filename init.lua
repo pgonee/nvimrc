@@ -88,56 +88,7 @@ require("packer").startup(function(use)
     use("folke/zen-mode.nvim")
     use("sindrets/diffview.nvim")
     use("andymass/vim-matchup")
-    use({
-        "zbirenbaum/copilot.lua",
-        cmd = "Copilot",
-        event = "InsertEnter",
-        config = function()
-            require("copilot").setup({
-                panel = {
-                    enabled = true,
-                    auto_refresh = false,
-                    keymap = {
-                        jump_prev = "[[",
-                        jump_next = "]]",
-                        accept = "<CR>",
-                        refresh = "gr",
-                        open = "<M-CR>",
-                    },
-                    layout = {
-                        position = "bottom", -- | top | left | right
-                        ratio = 0.4,
-                    },
-                },
-                suggestion = {
-                    enabled = true,
-                    auto_trigger = false,
-                    debounce = 75,
-                    keymap = {
-                        accept = "<C-]>",
-                        accept_word = false,
-                        accept_line = false,
-                        next = "<M-]>",
-                        prev = "<M-[>",
-                        dismiss = "<C-[>",
-                    },
-                },
-                filetypes = {
-                    yaml = false,
-                    markdown = false,
-                    help = false,
-                    gitcommit = false,
-                    gitrebase = false,
-                    hgcommit = false,
-                    svn = false,
-                    cvs = false,
-                    ["."] = false,
-                },
-                copilot_node_command = "node", -- Node.js version must be > 18.x
-                server_opts_overrides = {},
-            })
-        end,
-    })
+    use("github/copilot.vim")
 
     vim.keymap.set("n", "<localleader>q", ":q<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>o", ':!open "%:p:h"<cr>', { noremap = true })
@@ -206,7 +157,7 @@ require("packer").startup(function(use)
     vim.o.updatetime = 300
     vim.o.signcolumn = "yes"
     vim.o.scrolloff = 3
-    vim.o.conceallevel = 1
+    vim.o.conceallevel = 0
     vim.o.foldenable = false
     vim.o.ignorecase = true
     vim.o.smartcase = true
@@ -448,6 +399,8 @@ require("packer").startup(function(use)
     lspconfig.tailwindcss.setup({})
     lspconfig.jsonls.setup({})
     lspconfig.prismals.setup({})
+    lspconfig.intelephense.setup({})
+    lspconfig.dockerls.setup({})
     lspconfig.tsserver.setup({
         filetypes = {
             "javascript",
@@ -510,6 +463,7 @@ require("packer").startup(function(use)
             vim.keymap.set("n", "<localleader>gd", vim.lsp.buf.definition, opts)
             vim.keymap.set("n", "<localleader>gi", vim.lsp.buf.implementation, opts)
             vim.keymap.set("n", "<localleader>K", vim.lsp.buf.hover, opts)
+            vim.keymap.set("n", "<localleader>fw", vim.lsp.buf.format, opts)
             --local bufopts = { noremap=true, silent=true, buffer=bufnr }
             --vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
             --vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
@@ -542,8 +496,10 @@ require("packer").startup(function(use)
         --end
         return require(value).prettierd
     end
-    require("formatter").setup({
-        logging = true,
+
+    local formatter = require("formatter")
+    formatter.setup({
+        logging = false,
         filetype = {
             prisma = require("formatter.defaults").prettierd,
             markdown = require("formatter.filetypes.markdown").prettierd,
@@ -588,7 +544,11 @@ require("packer").startup(function(use)
     local formatGroup = vim.api.nvim_create_augroup("Format", { clear = true })
     vim.api.nvim_create_autocmd("BufWritePost", {
         pattern = "*",
-        command = "FormatWrite",
+        callback = function()
+            if vim.bo.filetype ~= "php" then
+                vim.cmd(":FormatWrite")
+            end
+        end,
         group = formatGroup,
     })
 
