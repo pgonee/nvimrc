@@ -151,8 +151,6 @@ require("packer").startup(function(use)
     vim.o.splitright = true
 
     vim.o.encoding = "utf-8"
-    vim.o.nobackup = true
-    vim.o.nowritebackup = true
     vim.o.cmdheight = 1
     vim.o.updatetime = 300
     vim.o.signcolumn = "yes"
@@ -545,7 +543,7 @@ require("packer").startup(function(use)
     vim.api.nvim_create_autocmd("BufWritePost", {
         pattern = "*",
         callback = function()
-            if vim.bo.filetype ~= "php" then
+            if vim.bo.filetype ~= "php" and vim.bo.filetype ~= "json" then
                 vim.cmd(":FormatWrite")
             end
         end,

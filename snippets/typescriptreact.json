@@ -3,10 +3,9 @@
     "prefix": "pg-rc",
     "body": [
       "import { HTMLAttributes } from \"react\"",
-      "import { twMerge } from \"tailwind-merge\"\n",
-      "interface ${1:$TM_FILENAME_BASE}Props extends HTMLAttributes<HTMLDivElement> {",
+      "interface ${1:$TM_FILENAME_BASE}Props {",
       "}\n",
-      "export default function ${1:$TM_FILENAME_BASE}({ className, ...props }: ${1:$TM_FILENAME_BASE}Props) {",
+      "export default function ${1:$TM_FILENAME_BASE}({ className, ...props }: HTMLAttributes<HTMLDivElement> & ${1:$TM_FILENAME_BASE}Props) {",
       "  return (<div className={twMerge(\"\", className)} {...props}></div>)",
       "}"
     ],
