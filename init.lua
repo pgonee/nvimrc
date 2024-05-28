@@ -481,35 +481,25 @@ require("packer").startup(function(use)
 
     local formatterUtil = require("formatter.util")
 
-    local prettierd = function(value)
-        --local cwd = formatterUtil.get_cwd()
-        --if string.find(cwd, "SOMETHING") then
-        --return function()
-        --return {
-        --exe = "/Users/pgonee/.nvm/versions/node/v21.1.0/bin/prettierd",
-        --args = { formatterUtil.escape_path(formatterUtil.get_current_buffer_file_path()) },
-        --stdin = true,
-        --}
-        --end
-        --end
-        return require(value).prettierd
+    local prettier = function(value)
+        return require(value).prettier
     end
 
     local formatter = require("formatter")
     formatter.setup({
         logging = false,
         filetype = {
-            prisma = require("formatter.defaults").prettierd,
-            markdown = require("formatter.filetypes.markdown").prettierd,
-            yaml = require("formatter.filetypes.yaml").prettierd,
-            css = require("formatter.filetypes.css").prettierd,
-            html = require("formatter.filetypes.html").prettierd,
-            graphql = require("formatter.filetypes.graphql").prettierd,
-            json = require("formatter.filetypes.typescript").prettierd,
-            javascript = prettierd("formatter.filetypes.javascript"),
-            javascriptreact = prettierd("formatter.filetypes.javascriptreact"),
-            typescript = prettierd("formatter.filetypes.typescript"),
-            typescriptreact = prettierd("formatter.filetypes.typescriptreact"),
+            prisma = require("formatter.defaults").prettier,
+            markdown = require("formatter.filetypes.markdown").prettier,
+            yaml = require("formatter.filetypes.yaml").prettier,
+            css = require("formatter.filetypes.css").prettier,
+            html = require("formatter.filetypes.html").prettier,
+            graphql = require("formatter.filetypes.graphql").prettier,
+            json = require("formatter.filetypes.typescript").prettier,
+            javascript = prettier("formatter.filetypes.javascript"),
+            javascriptreact = prettier("formatter.filetypes.javascriptreact"),
+            typescript = prettier("formatter.filetypes.typescript"),
+            typescriptreact = prettier("formatter.filetypes.typescriptreact"),
             ["proto"] = function()
                 return {
                     exe = "buf format",
@@ -548,6 +538,10 @@ require("packer").startup(function(use)
             end
         end,
         group = formatGroup,
+    })
+    vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+        pattern = "Dockerfile*",
+        command = "set filetype=dockerfile",
     })
 
     require("ibl").setup()
