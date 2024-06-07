@@ -184,7 +184,7 @@ require("packer").startup(function(use)
                 i = {
                     ["<C-Down>"] = require("telescope.actions").cycle_history_next,
                     ["<C-Up>"] = require("telescope.actions").cycle_history_prev,
-                    ["<C-x>"] = require("trouble.providers.telescope").open_with_trouble,
+                    ["<C-x>"] = require("trouble.sources.telescope").open,
                 },
             },
             file_ignore_patterns = {
