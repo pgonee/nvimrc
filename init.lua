@@ -471,6 +471,7 @@ require("packer").startup(function(use)
             preferences = {
                 importModuleSpecifierPreference = "non-relative",
             },
+            maxTsServerMemory = "10240",
         },
         commands = {
             OrganizeImports = {
