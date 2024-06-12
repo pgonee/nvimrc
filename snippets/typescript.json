@@ -21,7 +21,7 @@
       "",
       "@Controller()",
       "@UseGuards()",
-      "export default class $1 {",
+      "export default class ${1:${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}} {",
       "  constructor() {}",
       "}"
     ],
