@@ -36,7 +36,7 @@
       "    props: {},",
       "  }",
       "}\n",
-      "const $1Page: NextPage = () => {",
+      "const ${1:${RELATIVE_FILEPATH/(pages\\/)?(.*).ts[x?]/${2:/pascalcase}/}}Page: NextPage = () => {",
       "  return <div></div>",
       "}\n",
       "export default $1Page"
