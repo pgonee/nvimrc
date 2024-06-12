@@ -26,5 +26,18 @@
       "}"
     ],
     "description": ""
+  },
+
+  "[pgonee] nest service": {
+    "prefix": "pg-nestservice",
+    "body": [
+      "import { Injectable } from \"@nestjs/common\"",
+      "",
+      "@Injectable()",
+      "export default class ${1:${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}} {",
+      "  constructor() {}",
+      "}"
+    ],
+    "description": ""
   }
 }
