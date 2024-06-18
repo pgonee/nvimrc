@@ -101,6 +101,8 @@ require("packer").startup(function(use)
     vim.keymap.set("n", "<localleader>tw", ":tabnext<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>tp", ":tabprev<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>tq", ":tabclose<cr>", { noremap = true })
+    vim.keymap.set("n", "<localleader>pd", ":Lspsaga peek_definition<cr>", { noremap = true })
+    vim.keymap.set("n", "<localleader>ol", ":Lspsaga outline<cr>", { noremap = true })
 
     vim.keymap.set("n", "<localleader>z", ":ZenMode<cr>", { noremap = true })
 
