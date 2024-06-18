@@ -39,5 +39,31 @@
       "}"
     ],
     "description": ""
+  },
+
+  "[pgonee] define class": {
+    "prefix": "pg-class",
+    "body": [
+      "export default class ${1:${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}} {",
+      "  constructor() {}",
+      "}"
+    ],
+    "description": ""
+  },
+
+  "[pgonee] nest module": {
+    "prefix": "pg-nestmodule",
+    "body": [
+      "import { Module } from \"@nestjs/common\"",
+      "",
+      "@Module({",
+      "  imports: [],",
+      "  controllers: [],",
+      "  providers: [],",
+      "  exports: []",
+      "})",
+      "export default class ${1:${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}} {}"
+    ],
+    "description": ""
   }
 }
