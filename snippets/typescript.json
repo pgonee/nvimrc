@@ -51,6 +51,16 @@
     "description": ""
   },
 
+  "[pgonee] define class no default": {
+    "prefix": "pg-class-nodefault",
+    "body": [
+      "export class ${1:${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}} {",
+      "  constructor() {}",
+      "}"
+    ],
+    "description": ""
+  },
+
   "[pgonee] nest module": {
     "prefix": "pg-nestmodule",
     "body": [

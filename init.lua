@@ -23,6 +23,10 @@ require("packer").startup(function(use)
     use("hrsh7th/cmp-cmdline")
     use("hrsh7th/cmp-nvim-lsp-signature-help")
     use({ "L3MON4D3/LuaSnip", dependencies = { "rafamadriz/friendly-snippets" }, run = "make install_jsregexp" })
+    use({
+        "CopilotC-Nvim/CopilotChat.nvim",
+        dependencies = { "github/copilot.lua", "nvim-lua/plenary.nvim" },
+    })
     use("saadparwaiz1/cmp_luasnip")
     use("rafamadriz/friendly-snippets")
     use({
@@ -70,7 +74,6 @@ require("packer").startup(function(use)
             ts_update()
         end,
     })
-    use({ "nvim-treesitter/playground", requires = { "nvim-treesitter/nvim-treesitter" } })
     use({
         "ThePrimeagen/refactoring.nvim",
         requires = {
@@ -93,8 +96,13 @@ require("packer").startup(function(use)
     use("andymass/vim-matchup")
     use("github/copilot.vim")
 
+    vim.api.nvim_create_user_command("Rfinder", function()
+        local path = vim.api.nvim_buf_get_name(0)
+        os.execute("open -R " .. path)
+    end, {})
+
     vim.keymap.set("n", "<localleader>q", ":q<cr>", { noremap = true })
-    vim.keymap.set("n", "<localleader>o", ':!open "%:p:h"<cr>', { noremap = true })
+    vim.keymap.set("n", "<localleader>o", ":Rfinder<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>dd", ":NvimTreeToggle<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>df", ":NvimTreeFindFile<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>tt", ":tabnew<cr>", { noremap = true })
@@ -103,6 +111,7 @@ require("packer").startup(function(use)
     vim.keymap.set("n", "<localleader>tq", ":tabclose<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>pd", ":Lspsaga peek_definition<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>ol", ":Lspsaga outline<cr>", { noremap = true })
+    vim.keymap.set("n", "<localleader>fu", ":Lspsaga finder<cr>", { noremap = true })
 
     vim.keymap.set("n", "<localleader>z", ":ZenMode<cr>", { noremap = true })
 
@@ -172,10 +181,14 @@ require("packer").startup(function(use)
     vim.api.nvim_command("syntax enable")
     vim.o.colorcolumn = "120"
 
-    require("tokyonight").setup({ style = "day", light_style = "day", day_brightness = 0.2 })
-    --vim.o.background = "dark"
-    --vim.api.nvim_command("colorscheme tokyonight-storm")
     vim.o.background = "light"
+    require("tokyonight").setup({
+        style = "day",
+        light_style = "day",
+        transparent = true,
+        terminal_colors = true,
+        day_brightness = 0.3,
+    })
     vim.api.nvim_command("colorscheme tokyonight-day")
 
     vim.g.loaded_netrw = 1
@@ -608,4 +621,8 @@ require("packer").startup(function(use)
     })
 
     require("ibl").setup()
+
+    require("CopilotChat").setup({
+        debug = false,
+    })
 end)
