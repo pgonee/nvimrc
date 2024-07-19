@@ -112,7 +112,15 @@ require("packer").startup(function(use)
     vim.keymap.set("n", "<localleader>pd", ":Lspsaga peek_definition<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>ol", ":Lspsaga outline<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>fu", ":Lspsaga finder<cr>", { noremap = true })
-    vim.keymap.set("n", "<localleader>co", ":CopilotChatToggle<cr>", { noremap = true })
+    vim.keymap.set("n", "<localleader>coco", ":CopilotChatToggle<cr>", { noremap = true })
+    vim.keymap.set("n", "<localleader>cocc", ":CopilotChatCommit<cr>", { noremap = true })
+    vim.keymap.set("n", "<localleader>coccs", ":CopilotChatCommitStaged<cr>", { noremap = true })
+    vim.keymap.set("v", "<localleader>coce", ":CopilotChatExplain<cr>", { noremap = true })
+    vim.keymap.set("v", "<localleader>cocr", ":CopilotChatReview<cr>", { noremap = true })
+    vim.keymap.set("v", "<localleader>cocf", ":CopilotChatFix<cr>", { noremap = true })
+    vim.keymap.set("v", "<localleader>coco", ":CopilotChatOptimize<cr>", { noremap = true })
+    vim.keymap.set("v", "<localleader>cocd", ":CopilotChatDocs<cr>", { noremap = true })
+    vim.keymap.set("v", "<localleader>coct", ":CopilotChatTests<cr>", { noremap = true })
 
     vim.keymap.set("n", "<localleader>z", ":ZenMode<cr>", { noremap = true })
 
@@ -625,5 +633,13 @@ require("packer").startup(function(use)
 
     require("CopilotChat").setup({
         debug = false,
+        prompts = {
+            Commit = {
+                prompt = "Write short commit message in korean for the change with commitizen convention. No translate to english. Make sure the title has maximum 50 characters and message is wrapped at 72 characters. Wrap the whole message in code block with language gitcommit.",
+            },
+            CommitStaged = {
+                prompt = "Write short commit message in korean for the change with commitizen convention. No translate to english. Make sure the title has maximum 50 characters and message is wrapped at 72 characters. Wrap the whole message in code block with language gitcommit.",
+            },
+        },
     })
 end)
