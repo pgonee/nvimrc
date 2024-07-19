@@ -112,6 +112,7 @@ require("packer").startup(function(use)
     vim.keymap.set("n", "<localleader>pd", ":Lspsaga peek_definition<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>ol", ":Lspsaga outline<cr>", { noremap = true })
     vim.keymap.set("n", "<localleader>fu", ":Lspsaga finder<cr>", { noremap = true })
+    vim.keymap.set("n", "<localleader>co", ":CopilotChatToggle<cr>", { noremap = true })
 
     vim.keymap.set("n", "<localleader>z", ":ZenMode<cr>", { noremap = true })
 
