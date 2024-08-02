@@ -352,8 +352,13 @@ require("packer").startup(function(use)
         },
     })
 
-    vim.keymap.set("n", "<leader>xx", function()
+    vim.keymap.set("n", "<leader>xX", function()
         require("trouble").toggle("diagnostics")
+    end)
+    vim.keymap.set("n", "<leader>xx", function()
+        require("trouble").toggle("diagnostics", {
+            buf = 0,
+        })
     end)
     vim.keymap.set("n", "<leader>xq", function()
         require("trouble").toggle("quickfix")
@@ -546,7 +551,7 @@ require("packer").startup(function(use)
             vim.keymap.set("n", "<localleader>gd", vim.lsp.buf.definition, opts)
             vim.keymap.set("n", "<localleader>gi", vim.lsp.buf.implementation, opts)
             vim.keymap.set("n", "<localleader>K", vim.lsp.buf.hover, opts)
-            vim.keymap.set("n", "<localleader>fw", vim.lsp.buf.format, opts)
+            vim.keymap.set("n", "<localleader>fw", ":FormatWrite<cr>", opts)
             --local bufopts = { noremap=true, silent=true, buffer=bufnr }
             --vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
             --vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
@@ -618,7 +623,12 @@ require("packer").startup(function(use)
     vim.api.nvim_create_autocmd("BufWritePost", {
         pattern = "*",
         callback = function()
-            if vim.bo.filetype ~= "php" and vim.bo.filetype ~= "json" then
+            local file_path = vim.fn.expand("%:p")
+            if
+                vim.bo.filetype ~= "php"
+                and vim.bo.filetype ~= "json"
+                and not file_path:find("workspaces/orangefield/store.orangefield.co.kr")
+            then
                 vim.cmd(":FormatWrite")
             end
         end,
@@ -639,6 +649,12 @@ require("packer").startup(function(use)
             },
             CommitStaged = {
                 prompt = "Write short commit message in korean for the change with commitizen convention. No translate to english. Make sure the title has maximum 50 characters and message is wrapped at 72 characters. Wrap the whole message in code block with language gitcommit.",
+            },
+        },
+        mappings = {
+            close = {
+                normal = "q",
+                insert = "",
             },
         },
     })
