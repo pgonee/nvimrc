@@ -183,7 +183,7 @@ require("packer").startup(function(use)
     vim.o.ignorecase = true
     vim.o.smartcase = true
 
-    vim.api.nvim_set_option("clipboard", "unnamed")
+    vim.api.nvim_set_option("clipboard", "unnamedplus")
     vim.api.nvim_command("set shortmess+=c")
     vim.api.nvim_command("set mouse=")
     vim.api.nvim_command("syntax on")
