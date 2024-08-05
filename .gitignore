@@ -4,3 +4,4 @@ autoload/plug.vim
 /plugin/eclim.vim
 /.netrwhist
 /.luarc.json
+/plugin/packer_compiled.lua
