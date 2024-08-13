@@ -488,6 +488,7 @@ require("packer").startup(function(use)
     lspconfig.prismals.setup({})
     lspconfig.intelephense.setup({})
     lspconfig.dockerls.setup({})
+    lspconfig.bashls.setup({})
     lspconfig.tsserver.setup({
         filetypes = {
             "javascript",
@@ -585,7 +586,8 @@ require("packer").startup(function(use)
             css = require("formatter.filetypes.css").prettier,
             html = require("formatter.filetypes.html").prettier,
             graphql = require("formatter.filetypes.graphql").prettier,
-            json = require("formatter.filetypes.typescript").prettier,
+            json = require("formatter.filetypes.json").prettier,
+            jsonc = require("formatter.filetypes.json").prettier,
             javascript = prettier("formatter.filetypes.javascript"),
             javascriptreact = prettier("formatter.filetypes.javascriptreact"),
             typescript = prettier("formatter.filetypes.typescript"),
@@ -626,7 +628,6 @@ require("packer").startup(function(use)
             local file_path = vim.fn.expand("%:p")
             if
                 vim.bo.filetype ~= "php"
-                and vim.bo.filetype ~= "json"
                 and not file_path:find("workspaces/orangefield/store.orangefield.co.kr")
             then
                 vim.cmd(":FormatWrite")
