@@ -190,15 +190,14 @@ require("packer").startup(function(use)
     vim.api.nvim_command("syntax enable")
     vim.o.colorcolumn = "120"
 
-    vim.o.background = "light"
+    vim.o.background = "dark"
     require("tokyonight").setup({
-        style = "day",
-        light_style = "day",
+        style = "storm",
+        light_style = "storm",
         transparent = true,
         terminal_colors = true,
-        day_brightness = 0.3,
     })
-    vim.api.nvim_command("colorscheme tokyonight-day")
+    vim.api.nvim_command("colorscheme tokyonight-storm")
 
     vim.g.loaded_netrw = 1
     vim.g.loaded_netrwPlugin = 1
