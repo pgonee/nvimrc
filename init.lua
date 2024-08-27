@@ -76,7 +76,7 @@ require("lazy").setup({
         },
         {
             "nvim-telescope/telescope-fzf-native.nvim",
-            build = "make",
+            build = "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
         },
         {
             "folke/trouble.nvim",
@@ -108,12 +108,6 @@ require("lazy").setup({
         "andymass/vim-matchup",
         "github/copilot.vim",
     },
-    -- Configure any other settings here. See the documentation for more details.
-    -- colorscheme that will be used when installing plugins.
-    install = { colorscheme = { "habamax" } },
-
-    -- automatically check for plugin updates
-    checker = { enabled = true },
 })
 
 vim.api.nvim_create_user_command("Rfinder", function()
