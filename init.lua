@@ -26,7 +26,7 @@ require("lazy").setup({
     spec = {
         {
             "nvim-lualine/lualine.nvim",
-            dependencies = { "nvim-tree/nvim-web-devicons", lazy = true },
+            dependencies = { "nvim-tree/nvim-web-devicons" },
         },
         "wbthomason/packer.nvim",
         "neovim/nvim-lspconfig",
@@ -34,7 +34,12 @@ require("lazy").setup({
         "airblade/vim-gitgutter",
         "tpope/vim-fugitive",
         "tpope/vim-surround",
-        "folke/tokyonight.nvim",
+        {
+            "folke/tokyonight.nvim",
+            lazy = false,
+            priority = 10000,
+            opts = {},
+        },
         "lukas-reineke/indent-blankline.nvim",
         "hrsh7th/nvim-cmp",
         "hrsh7th/cmp-nvim-lsp",
@@ -71,8 +76,8 @@ require("lazy").setup({
         },
         {
             "nvim-telescope/telescope.nvim",
-            tag = "0.1.4",
-            dependencies = { { "nvim-lua/plenary.nvim" } },
+            tag = "0.1.8",
+            dependencies = { "nvim-lua/plenary.nvim" },
         },
         {
             "nvim-telescope/telescope-fzf-native.nvim",
@@ -100,7 +105,13 @@ require("lazy").setup({
         },
         {
             "ThePrimeagen/refactoring.nvim",
-            dependencies = { "nvim-lua/plenary.nvim", "nvim-treesitter/nvim-treesitter" },
+            dependencies = {
+                "nvim-lua/plenary.nvim",
+                "nvim-treesitter/nvim-treesitter",
+            },
+            config = function()
+                require("refactoring").setup()
+            end,
         },
         "windwp/nvim-ts-autotag",
         "folke/zen-mode.nvim",
@@ -203,19 +214,10 @@ vim.api.nvim_command("set mouse=")
 vim.api.nvim_command("syntax on")
 vim.api.nvim_command("syntax enable")
 vim.o.colorcolumn = "120"
-
 vim.o.background = "dark"
-require("tokyonight").setup({
-    style = "storm",
-    light_style = "storm",
-    transparent = true,
-    terminal_colors = true,
-})
-vim.api.nvim_command("colorscheme tokyonight-storm")
 
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
-vim.opt.termguicolors = true
 
 require("lualine").setup({
     options = {
@@ -405,8 +407,6 @@ require("nvim-ts-autotag").setup({
         enable_close_on_slash = true,
     },
 })
-
-require("refactoring").setup({})
 
 local cmp = require("cmp")
 cmp.setup.cmdline("/", {
@@ -669,3 +669,12 @@ require("CopilotChat").setup({
         },
     },
 })
+
+require("tokyonight").setup({
+    style = "storm",
+    light_style = "storm",
+    transparent = true,
+    terminal_colors = true,
+})
+vim.api.nvim_command("colorscheme tokyonight-storm")
+vim.opt.termguicolors = true
