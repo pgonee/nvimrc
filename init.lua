@@ -30,7 +30,10 @@ require("lazy").setup({
         },
         "wbthomason/packer.nvim",
         "neovim/nvim-lspconfig",
-        "preservim/nerdcommenter",
+        {
+            "numToStr/Comment.nvim",
+            opts = {},
+        },
         "airblade/vim-gitgutter",
         "tpope/vim-fugitive",
         "tpope/vim-surround",
@@ -215,9 +218,17 @@ vim.api.nvim_command("syntax on")
 vim.api.nvim_command("syntax enable")
 vim.o.colorcolumn = "120"
 vim.o.background = "dark"
-
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+
+require("tokyonight").setup({
+    style = "storm",
+    light_style = "storm",
+    transparent = true,
+    terminal_colors = true,
+})
+vim.api.nvim_command("colorscheme tokyonight-storm")
+vim.opt.termguicolors = true
 
 require("lualine").setup({
     options = {
@@ -670,11 +681,13 @@ require("CopilotChat").setup({
     },
 })
 
-require("tokyonight").setup({
-    style = "storm",
-    light_style = "storm",
-    transparent = true,
-    terminal_colors = true,
+require("Comment").setup({
+    toggler = {
+        line = "<localleader>cc",
+        block = "<localleader>bc",
+    },
+    opleader = {
+        line = "<localleader>cc",
+        block = "<localleader>bc",
+    },
 })
-vim.api.nvim_command("colorscheme tokyonight-storm")
-vim.opt.termguicolors = true
