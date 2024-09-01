@@ -119,7 +119,6 @@ require("lazy").setup({
         "windwp/nvim-ts-autotag",
         "folke/zen-mode.nvim",
         "sindrets/diffview.nvim",
-        "andymass/vim-matchup",
         "github/copilot.vim",
     },
 })
@@ -405,9 +404,6 @@ require("nvim-treesitter.configs").setup({
         additional_vim_regex_highlighting = false,
     },
     indent = {
-        enable = true,
-    },
-    matchup = {
         enable = true,
     },
 })
