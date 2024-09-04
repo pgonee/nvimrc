@@ -91,7 +91,6 @@ require("lazy").setup({
             dependencies = { "nvim-tree/nvim-web-devicons" },
         },
         "dense-analysis/ale",
-        "jremmen/vim-ripgrep",
         "mhartington/formatter.nvim",
         "ryanoasis/vim-devicons",
         {
@@ -312,6 +311,13 @@ telescope.setup({
             ".vscode",
         },
     },
+    pickers = {
+        live_grep = {
+            additional_args = function(opts)
+                return { "--hidden" }
+            end,
+        },
+    },
     extensions = {
         fzf = {
             fuzzy = true, -- false will only do exact matching
@@ -377,20 +383,20 @@ require("nvim-tree").setup({
     },
 })
 
-vim.keymap.set("n", "<leader>xX", function()
+vim.keymap.set("n", "<localleader>xX", function()
     require("trouble").toggle("diagnostics")
-end)
-vim.keymap.set("n", "<leader>xx", function()
+end, { noremap = true })
+vim.keymap.set("n", "<localleader>xx", function()
     require("trouble").toggle("diagnostics", {
         buf = 0,
     })
-end)
-vim.keymap.set("n", "<leader>xq", function()
+end, { noremap = true })
+vim.keymap.set("n", "<localleader>xq", function()
     require("trouble").toggle("quickfix")
-end)
-vim.keymap.set("n", "<leader>xl", function()
+end, { noremap = true })
+vim.keymap.set("n", "<localleader>xl", function()
     require("trouble").toggle("loclist")
-end)
+end, { noremap = true })
 
 require("nvim-treesitter").setup()
 require("nvim-treesitter.configs").setup({
@@ -655,6 +661,11 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
     pattern = "Dockerfile*",
     command = "set filetype=dockerfile",
+})
+
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+    pattern = ".swcrc",
+    command = "set filetype=json",
 })
 
 require("ibl").setup()
