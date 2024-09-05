@@ -608,6 +608,7 @@ formatter.setup({
     filetype = {
         prisma = require("formatter.defaults").prettier,
         markdown = require("formatter.filetypes.markdown").prettier,
+        php = require("formatter.filetypes.php").php_cs_fixer,
         yaml = require("formatter.filetypes.yaml").prettier,
         css = require("formatter.filetypes.css").prettier,
         html = require("formatter.filetypes.html").prettier,
