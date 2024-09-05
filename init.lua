@@ -615,6 +615,7 @@ formatter.setup({
         graphql = require("formatter.filetypes.graphql").prettier,
         json = require("formatter.filetypes.json").prettier,
         jsonc = require("formatter.filetypes.json").prettier,
+        python = require("formatter.filetypes.python").black,
         javascript = prettier("formatter.filetypes.javascript"),
         javascriptreact = prettier("formatter.filetypes.javascriptreact"),
         typescript = prettier("formatter.filetypes.typescript"),
