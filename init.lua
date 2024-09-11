@@ -115,7 +115,6 @@ require("lazy").setup({
                 require("refactoring").setup()
             end,
         },
-        "windwp/nvim-ts-autotag",
         "folke/zen-mode.nvim",
         "sindrets/diffview.nvim",
         "github/copilot.vim",
@@ -413,13 +412,6 @@ require("nvim-treesitter.configs").setup({
         enable = true,
     },
 })
-require("nvim-ts-autotag").setup({
-    opts = {
-        enable_close = true,
-        enable_rename = true,
-        enable_close_on_slash = true,
-    },
-})
 
 local cmp = require("cmp")
 cmp.setup.cmdline("/", {
@@ -515,7 +507,7 @@ lspconfig.prismals.setup({})
 lspconfig.intelephense.setup({})
 lspconfig.dockerls.setup({})
 lspconfig.bashls.setup({})
-lspconfig.tsserver.setup({
+lspconfig.ts_ls.setup({
     filetypes = {
         "javascript",
         "javascriptreact",
