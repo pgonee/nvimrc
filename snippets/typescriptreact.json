@@ -3,9 +3,21 @@
     "prefix": "pg-rc",
     "body": [
       "import { HTMLAttributes } from \"react\"",
-      "interface ${1:$TM_FILENAME_BASE}Props {",
+      "export interface ${1:$TM_FILENAME_BASE}Props {",
       "}\n",
       "export default function ${1:$TM_FILENAME_BASE}({ className, ...props }: HTMLAttributes<HTMLDivElement> & ${1:$TM_FILENAME_BASE}Props) {",
+      "  return (<div className={twMerge(\"\", className)} {...props}></div>)",
+      "}"
+    ],
+    "description": ""
+  },
+  "[pgonee] new react component without default": {
+    "prefix": "pg-rc-nodefault",
+    "body": [
+      "import { HTMLAttributes } from \"react\"",
+      "export interface ${1:$TM_FILENAME_BASE}Props {",
+      "}\n",
+      "export function ${1:$TM_FILENAME_BASE}({ className, ...props }: HTMLAttributes<HTMLDivElement> & ${1:$TM_FILENAME_BASE}Props) {",
       "  return (<div className={twMerge(\"\", className)} {...props}></div>)",
       "}"
     ],
@@ -19,6 +31,11 @@
       "const meta: Meta<typeof ${1:${TM_FILENAME_BASE/(.*)\\.stories/$1/}}> = {",
       "  component: ${1:${TM_FILENAME_BASE/(.*)\\.stories/$1/}},",
       "  args: {},",
+      "  parameters: {",
+      "    backgrounds: {",
+      "      default: \"white\"",
+      "    }",
+      "  },",
       "}\n",
       "export default meta\n",
       "export const Default: Story = {",
