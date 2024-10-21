@@ -226,6 +226,7 @@ require("tokyonight").setup({
 })
 vim.api.nvim_command("colorscheme tokyonight-storm")
 vim.opt.termguicolors = true
+vim.opt.swapfile = false
 
 require("lualine").setup({
     options = {
