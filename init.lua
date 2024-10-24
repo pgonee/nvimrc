@@ -21,8 +21,8 @@ vim.opt.rtp:prepend(lazypath)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 vim.g.tabby_trigger_mode = "manual"
-vim.g.tabby_keybinding_accept = '<Tab>'
-vim.g.tabby_keybinding_trigger_or_dismiss = '<C-]>'
+vim.g.tabby_keybinding_accept = "<Tab>"
+vim.g.tabby_keybinding_trigger_or_dismiss = "<C-]>"
 
 -- Setup lazy.nvim
 require("lazy").setup({
@@ -112,8 +112,8 @@ require("lazy").setup({
         "folke/zen-mode.nvim",
         "sindrets/diffview.nvim",
         {
-            'TabbyML/vim-tabby',
-            version = "1.4.0"
+            "TabbyML/vim-tabby",
+            version = "1.4.0",
         },
     },
 })
@@ -476,34 +476,6 @@ require("mason-lspconfig").setup()
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
 local lspconfig = require("lspconfig")
-vim.lsp.get_clients = function(opts)
-    opts = opts or {}
-    local clients = vim.lsp.get_active_clients()
-    if not opts.bufnr and not opts.id and not opts.name then
-        return clients
-    end
-
-    local filtered_clients = {}
-
-    for _, client in ipairs(clients) do
-        if opts.bufnr then
-            local bufnr = vim.api.nvim_get_current_buf()
-            if not vim.lsp.buf_is_attached(bufnr, client.id) then
-                goto continue
-            end
-        end
-        if opts.id and client.id ~= opts.id then
-            goto continue
-        end
-        if opts.name and client.name ~= opts.name then
-            goto continue
-        end
-        table.insert(filtered_clients, client)
-        ::continue::
-    end
-
-    return filtered_clients
-end
 
 local util = require("lspconfig.util")
 lspconfig.bufls.setup({
