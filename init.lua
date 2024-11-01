@@ -492,6 +492,7 @@ local get_root_dir = function(fname)
 end
 
 lspconfig.tailwindcss.setup({})
+lspconfig.sqlls.setup({})
 lspconfig.jsonls.setup({})
 lspconfig.prismals.setup({})
 lspconfig.intelephense.setup({})
