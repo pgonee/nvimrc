@@ -13,6 +13,7 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
         os.exit(1)
     end
 end
+vim.opt.clipboard:append("unnamedplus")
 vim.opt.rtp:prepend(lazypath)
 
 -- Make sure to setup `mapleader` and `maplocalleader` before
@@ -20,9 +21,6 @@ vim.opt.rtp:prepend(lazypath)
 -- This is also a good place to setup other settings (vim.opt)
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
-vim.g.tabby_trigger_mode = "manual"
-vim.g.tabby_keybinding_accept = "<Tab>"
-vim.g.tabby_keybinding_trigger_or_dismiss = "<C-]>"
 
 -- Setup lazy.nvim
 require("lazy").setup({
@@ -112,8 +110,17 @@ require("lazy").setup({
         "folke/zen-mode.nvim",
         "sindrets/diffview.nvim",
         {
-            "TabbyML/vim-tabby",
-            version = "1.4.0",
+            "Exafunction/codeium.vim",
+            event = "BufEnter",
+        },
+        {
+            "iamcco/markdown-preview.nvim",
+            cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+            build = "cd app && yarn install",
+            init = function()
+                vim.g.mkdp_filetypes = { "markdown" }
+            end,
+            ft = { "markdown" },
         },
     },
 })
@@ -136,6 +143,7 @@ vim.keymap.set("n", "<localleader>ol", ":Lspsaga outline<cr>", { noremap = true 
 vim.keymap.set("n", "<localleader>fu", ":Lspsaga finder<cr>", { noremap = true })
 
 vim.keymap.set("n", "<localleader>z", ":ZenMode<cr>", { noremap = true })
+vim.keymap.set("n", "<localleader>T", ":terminal<cr>", { noremap = true })
 
 vim.keymap.set("t", "<a-h>", "<c-\\><c-n><c-w>h", { noremap = true })
 vim.keymap.set("t", "<a-j>", "<c-\\><c-n><c-w>j", { noremap = true })
@@ -196,23 +204,22 @@ vim.o.foldenable = false
 vim.o.ignorecase = true
 vim.o.smartcase = true
 
-vim.api.nvim_set_option("clipboard", "unnamedplus")
 vim.api.nvim_command("set shortmess+=c")
 vim.api.nvim_command("set mouse=")
 vim.api.nvim_command("syntax on")
 vim.api.nvim_command("syntax enable")
 vim.o.colorcolumn = "120"
-vim.o.background = "dark"
+vim.o.background = "light"
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
 require("tokyonight").setup({
-    style = "storm",
-    light_style = "storm",
-    transparent = true,
+    style = "day",
+    light_style = "day",
+    transparent = false,
     terminal_colors = true,
 })
-vim.api.nvim_command("colorscheme tokyonight-storm")
+vim.api.nvim_command("colorscheme tokyonight-day")
 vim.opt.termguicolors = true
 vim.opt.swapfile = false
 
