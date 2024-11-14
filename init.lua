@@ -110,10 +110,6 @@ require("lazy").setup({
         "folke/zen-mode.nvim",
         "sindrets/diffview.nvim",
         {
-            "Exafunction/codeium.vim",
-            event = "BufEnter",
-        },
-        {
             "iamcco/markdown-preview.nvim",
             cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
             build = "cd app && yarn install",
@@ -485,7 +481,7 @@ local capabilities = require("cmp_nvim_lsp").default_capabilities()
 local lspconfig = require("lspconfig")
 
 local util = require("lspconfig.util")
-lspconfig.bufls.setup({
+lspconfig.buf_ls.setup({
     root_dir = util.root_pattern("buf.work.yaml", "buf.gen.yaml", ".git"),
 })
 lspconfig.terraformls.setup({})
