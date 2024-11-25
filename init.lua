@@ -120,6 +120,46 @@ require("lazy").setup({
             end,
             ft = { "markdown" },
         },
+        {
+            "Exafunction/codeium.nvim",
+            dependencies = {
+                "nvim-lua/plenary.nvim",
+                "hrsh7th/nvim-cmp",
+            },
+            config = function()
+                require("codeium").setup({
+                    enable_cmp_source = true,
+                    virtual_text = {
+                        enabled = true,
+                        manual = false,
+                        filetypes = {
+                            lua = true,
+                            typescript = true,
+                            javascript = true,
+                            javascriptreact = true,
+                            typescriptreact = true,
+                            html = true,
+                            css = true,
+                            python = true,
+                            markdown = true,
+                        },
+                        default_filetype_enabled = false,
+                        idle_delay = 75,
+                        virtual_text_priority = 65535,
+                        map_keys = true,
+                        accept_fallback = nil,
+                        key_bindings = {
+                            accept = "<Tab>",
+                            accept_word = false,
+                            accept_line = false,
+                            clear = false,
+                            next = "<C-]>",
+                            prev = "<C-[>",
+                        },
+                    },
+                })
+            end,
+        },
     },
 })
 
@@ -142,6 +182,7 @@ vim.keymap.set("n", "<localleader>fu", ":Lspsaga finder<cr>", { noremap = true }
 
 vim.keymap.set("n", "<localleader>z", ":ZenMode<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>T", ":terminal<cr>", { noremap = true })
+vim.keymap.set("n", "<localleader>coc", ":Codeium Chat<cr>", { noremap = true })
 
 vim.keymap.set("t", "<a-h>", "<c-\\><c-n><c-w>h", { noremap = true })
 vim.keymap.set("t", "<a-j>", "<c-\\><c-n><c-w>j", { noremap = true })
@@ -216,6 +257,7 @@ require("tokyonight").setup({
     light_style = "day",
     transparent = false,
     terminal_colors = true,
+    day_brightness = 0.2,
 })
 vim.api.nvim_command("colorscheme tokyonight-day")
 vim.opt.termguicolors = true
@@ -444,14 +486,11 @@ cmp.setup({
         }),
     }),
     sources = cmp.config.sources({
-        { name = "nvim_lsp", keyword_length = 3 },
-    }, {
-        { name = "buffer", keyword_length = 3 },
-    }, {
+        { name = "codeium" },
+        { name = "nvim_lsp", keyword_length = 2 },
+        { name = "buffer", keyword_length = 2 },
         { name = "path" },
-    }, {
         { name = "luasnip" },
-    }, {
         { name = "nvim_lsp_signature_help" },
     }),
 })
@@ -668,5 +707,14 @@ require("Comment").setup({
     opleader = {
         line = "<localleader>cc",
         block = "<localleader>bc",
+    },
+})
+
+vim.filetype.add({
+    filename = {
+        [".env"] = "sh",
+    },
+    pattern = {
+        [".env.*"] = "sh",
     },
 })
