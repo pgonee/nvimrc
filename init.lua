@@ -128,6 +128,13 @@ require("lazy").setup({
             },
             config = function()
                 require("codeium").setup({
+                    workspace_root = {
+                        use_lsp = true,
+                        find_root = nil,
+                        paths = {
+                            ".git",
+                        },
+                    },
                     enable_cmp_source = true,
                     virtual_text = {
                         enabled = true,
