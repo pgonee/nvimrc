@@ -74,7 +74,13 @@ require("lazy").setup({
         {
             "nvim-telescope/telescope.nvim",
             tag = "0.1.8",
-            dependencies = { "nvim-lua/plenary.nvim" },
+            dependencies = {
+                "nvim-lua/plenary.nvim",
+                {
+                    "nvim-telescope/telescope-live-grep-args.nvim",
+                    version = "^1.1.0",
+                },
+            },
         },
         {
             "nvim-telescope/telescope-fzf-native.nvim",
@@ -372,6 +378,7 @@ telescope.setup({
 })
 telescope.load_extension("fzf")
 telescope.load_extension("refactoring")
+telescope.load_extension("live_grep_args")
 
 local telescope_builtin = require("telescope.builtin")
 vim.keymap.set(
@@ -386,7 +393,7 @@ vim.keymap.set(
     "<cmd>lua require('telescope.builtin').find_files({ hidden = true, no_ignore = true, previewer = true })<cr>",
     {}
 )
-vim.keymap.set("n", "<localleader>fg", telescope_builtin.live_grep, {})
+vim.keymap.set("n", "<localleader>fg", ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", {})
 vim.keymap.set("n", "<localleader>fb", telescope_builtin.buffers, {})
 vim.keymap.set("n", "<localleader>fh", telescope_builtin.help_tags, {})
 vim.keymap.set("n", "<localleader>fr", telescope_builtin.resume, {})
