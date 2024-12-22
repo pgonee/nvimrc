@@ -2,10 +2,18 @@
   "[pgonee] new react component": {
     "prefix": "pg-rc",
     "body": [
-      "import { HTMLAttributes } from \"react\"",
-      "export interface ${1:$TM_FILENAME_BASE}Props {",
-      "}\n",
-      "export default function ${1:$TM_FILENAME_BASE}({ className, ...props }: HTMLAttributes<HTMLDivElement> & ${1:$TM_FILENAME_BASE}Props) {",
+      "import type { HTMLAttributes } from \"react\"",
+      "import { cva, type VariantProps } from \"class-variance-authority\"",
+      "",
+      "const ${1:$TM_FILENAME_BASE}Variant = cva([], {",
+      "  variants: {},",
+      "  compoundVariants: [],",
+      "  defaultVariants: {},",
+      "})",
+      "",
+      "export type ${1:$TM_FILENAME_BASE}Props = object",
+      "",
+      "export default function ${1:$TM_FILENAME_BASE}({ className, ...props }: HTMLAttributes<HTMLDivElement> & ${1:$TM_FILENAME_BASE}Props & VariantProps<typeof ${1:$TM_FILENAME_BASE}Variant>) {",
       "  return (<div className={twMerge(\"\", className)} {...props}></div>)",
       "}"
     ],
@@ -15,8 +23,9 @@
     "prefix": "pg-rc-nodefault",
     "body": [
       "import { HTMLAttributes } from \"react\"",
-      "export interface ${1:$TM_FILENAME_BASE}Props {",
-      "}\n",
+      "",
+      "export type ${1:$TM_FILENAME_BASE}Props = object",
+      "",
       "export function ${1:$TM_FILENAME_BASE}({ className, ...props }: HTMLAttributes<HTMLDivElement> & ${1:$TM_FILENAME_BASE}Props) {",
       "  return (<div className={twMerge(\"\", className)} {...props}></div>)",
       "}"
@@ -26,8 +35,10 @@
   "[pgonee] new storybook story": {
     "prefix": "pg-story",
     "body": [
-      "import { Meta, StoryObj } from \"@storybook/react\"\n",
-      "type Story = StoryObj<typeof ${1:${TM_FILENAME_BASE/(.*)\\.stories/$1/}}>\n",
+      "import type { Meta, StoryObj } from \"@storybook/react\"",
+      "",
+      "type Story = StoryObj<typeof ${1:${TM_FILENAME_BASE/(.*)\\.stories/$1/}}>",
+      "",
       "const meta: Meta<typeof ${1:${TM_FILENAME_BASE/(.*)\\.stories/$1/}}> = {",
       "  component: ${1:${TM_FILENAME_BASE/(.*)\\.stories/$1/}},",
       "  args: {},",
@@ -36,8 +47,10 @@
       "      default: \"white\"",
       "    }",
       "  },",
-      "}\n",
-      "export default meta\n",
+      "}",
+      "",
+      "export default meta",
+      "",
       "export const Default: Story = {",
       "  args: {},",
       "}"

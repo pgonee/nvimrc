@@ -433,18 +433,18 @@ require("nvim-tree").setup({
 })
 
 vim.keymap.set("n", "<localleader>xX", function()
-    require("trouble").toggle("diagnostics")
+    trouble.toggle("diagnostics")
 end, { noremap = true })
 vim.keymap.set("n", "<localleader>xx", function()
-    require("trouble").toggle("diagnostics", {
+    trouble.toggle("diagnostics", {
         buf = 0,
     })
 end, { noremap = true })
 vim.keymap.set("n", "<localleader>xq", function()
-    require("trouble").toggle("quickfix")
+    trouble.toggle("quickfix")
 end, { noremap = true })
 vim.keymap.set("n", "<localleader>xl", function()
-    require("trouble").toggle("loclist")
+    trouble.toggle("loclist")
 end, { noremap = true })
 
 require("nvim-treesitter").setup()
@@ -500,8 +500,8 @@ cmp.setup({
         }),
     }),
     sources = cmp.config.sources({
-        { name = "codeium" },
         { name = "nvim_lsp", keyword_length = 2 },
+        { name = "codeium" },
         { name = "buffer", keyword_length = 2 },
         { name = "path" },
         { name = "luasnip" },
