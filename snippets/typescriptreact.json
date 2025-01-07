@@ -19,16 +19,26 @@
     ],
     "description": ""
   },
-  "[pgonee] new react component without default": {
-    "prefix": "pg-rc-nodefault",
+  "[pgonee] new mobx react component": {
+    "prefix": "pg-mobxrc",
     "body": [
-      "import { HTMLAttributes } from \"react\"",
+      "import { cva, type VariantProps } from \"class-variance-authority\"",
+      "import { observer } from \"mobx-react-lite\"",
+      "import type { HTMLAttributes } from \"react\"",
+      "",
+      "const ${1:$TM_FILENAME_BASE}Variant = cva([], {",
+      "  variants: {},",
+      "  compoundVariants: [],",
+      "  defaultVariants: {},",
+      "})",
       "",
       "export type ${1:$TM_FILENAME_BASE}Props = object",
       "",
-      "export function ${1:$TM_FILENAME_BASE}({ className, ...props }: HTMLAttributes<HTMLDivElement> & ${1:$TM_FILENAME_BASE}Props) {",
+      "const ${1:$TM_FILENAME_BASE} = observer<HTMLAttributes<HTMLDivElement> & ${1:$TM_FILENAME_BASE}Props & VariantProps<typeof ${1:$TM_FILENAME_BASE}Variant>>(({ className, ...props }) => {",
       "  return (<div className={twMerge(\"\", className)} {...props}></div>)",
-      "}"
+      "})",
+      "",
+      "export default ${1:$TM_FILENAME_BASE}"
     ],
     "description": ""
   },

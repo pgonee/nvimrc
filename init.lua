@@ -556,6 +556,10 @@ lspconfig.prismals.setup({})
 lspconfig.intelephense.setup({})
 lspconfig.dockerls.setup({})
 lspconfig.bashls.setup({})
+lspconfig.taplo.setup({})
+lspconfig.denols.setup({
+    root_dir = lspconfig.util.root_pattern("deno.json", "deno.jsonc"),
+})
 lspconfig.ts_ls.setup({
     filetypes = {
         "javascript",
