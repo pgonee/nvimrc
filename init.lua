@@ -127,51 +127,13 @@ require("lazy").setup({
             ft = { "markdown" },
         },
         {
-            "Exafunction/codeium.nvim",
+            "CopilotC-Nvim/CopilotChat.nvim",
             dependencies = {
-                "nvim-lua/plenary.nvim",
-                "hrsh7th/nvim-cmp",
+                { "github/copilot.vim" },
+                { "nvim-lua/plenary.nvim", branch = "master" },
             },
-            config = function()
-                require("codeium").setup({
-                    workspace_root = {
-                        use_lsp = true,
-                        find_root = nil,
-                        paths = {
-                            ".git",
-                        },
-                    },
-                    enable_cmp_source = true,
-                    virtual_text = {
-                        enabled = true,
-                        manual = false,
-                        filetypes = {
-                            lua = true,
-                            typescript = true,
-                            javascript = true,
-                            javascriptreact = true,
-                            typescriptreact = true,
-                            html = true,
-                            css = true,
-                            python = true,
-                            markdown = true,
-                        },
-                        default_filetype_enabled = false,
-                        idle_delay = 75,
-                        virtual_text_priority = 65535,
-                        map_keys = true,
-                        accept_fallback = nil,
-                        key_bindings = {
-                            accept = "<Tab>",
-                            accept_word = false,
-                            accept_line = false,
-                            clear = false,
-                            next = "<C-]>",
-                            prev = "<C-[>",
-                        },
-                    },
-                })
-            end,
+            build = "make tiktoken",
+            opts = {},
         },
     },
 })
@@ -192,10 +154,10 @@ vim.keymap.set("n", "<localleader>tq", ":tabclose<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>pd", ":Lspsaga peek_definition<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>ol", ":Lspsaga outline<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>fu", ":Lspsaga finder<cr>", { noremap = true })
+vim.keymap.set("n", "<localleader>coc", ":CopilotChat<cr>", { noremap = true })
 
 vim.keymap.set("n", "<localleader>z", ":ZenMode<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>T", ":terminal<cr>", { noremap = true })
-vim.keymap.set("n", "<localleader>coc", ":Codeium Chat<cr>", { noremap = true })
 
 vim.keymap.set("t", "<a-h>", "<c-\\><c-n><c-w>h", { noremap = true })
 vim.keymap.set("t", "<a-j>", "<c-\\><c-n><c-w>j", { noremap = true })
@@ -463,6 +425,22 @@ require("nvim-treesitter.configs").setup({
     },
 })
 
+require("CopilotChat").setup({
+    mappings = {
+        complete = {
+            insert = "<Tab>",
+        },
+        close = {
+            normal = "",
+            insert = "",
+        },
+        submit_prompt = {
+            normal = "<CR>",
+            insert = "<C-s>",
+        },
+    },
+})
+
 local cmp = require("cmp")
 cmp.setup.cmdline("/", {
     mapping = cmp.mapping.preset.cmdline(),
@@ -501,7 +479,6 @@ cmp.setup({
     }),
     sources = cmp.config.sources({
         { name = "nvim_lsp", keyword_length = 2 },
-        { name = "codeium" },
         { name = "buffer", keyword_length = 2 },
         { name = "path" },
         { name = "luasnip" },
