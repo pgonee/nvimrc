@@ -115,17 +115,7 @@ require("lazy").setup({
                 require("refactoring").setup()
             end,
         },
-        "folke/zen-mode.nvim",
         "sindrets/diffview.nvim",
-        {
-            "iamcco/markdown-preview.nvim",
-            cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-            build = "cd app && yarn install",
-            init = function()
-                vim.g.mkdp_filetypes = { "markdown" }
-            end,
-            ft = { "markdown" },
-        },
         {
             "CopilotC-Nvim/CopilotChat.nvim",
             dependencies = {
@@ -322,6 +312,36 @@ telescope.setup({
         },
     },
     pickers = {
+        find_files = {
+            find_command = {
+                "rg",
+                "--files",
+                "--hidden",
+                "--no-ignore",
+                "--glob",
+                "!**/.git/*",
+                "--glob",
+                "!**/node_modules/*",
+                "--glob",
+                "!**/.idea/*",
+                "--glob",
+                "!**/.DS_Store/*",
+                "--glob",
+                "!**/.turbo/*",
+                "--glob",
+                "!**/.vercel/*",
+                "--glob",
+                "!**/.vscode/*",
+                "--glob",
+                "!**/.next/*",
+                "--glob",
+                "!**/dist/*",
+                "--glob",
+                "!**/storybook-static/*",
+                "--glob",
+                "!**/build/*",
+            },
+        },
         live_grep = {
             additional_args = function(opts)
                 return { "--hidden" }
@@ -343,18 +363,7 @@ telescope.load_extension("refactoring")
 telescope.load_extension("live_grep_args")
 
 local telescope_builtin = require("telescope.builtin")
-vim.keymap.set(
-    "n",
-    "<localleader>ff",
-    "<cmd>lua require('telescope.builtin').find_files({ hidden = true, no_ignore = false, previewer = true })<cr>",
-    {}
-)
-vim.keymap.set(
-    "n",
-    "<localleader>fa",
-    "<cmd>lua require('telescope.builtin').find_files({ hidden = true, no_ignore = true, previewer = true })<cr>",
-    {}
-)
+vim.keymap.set("n", "<localleader>ff", "<cmd>lua require('telescope.builtin').find_files({ previewer = true })<cr>", {})
 vim.keymap.set("n", "<localleader>fg", ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", {})
 vim.keymap.set("n", "<localleader>fb", telescope_builtin.buffers, {})
 vim.keymap.set("n", "<localleader>fh", telescope_builtin.help_tags, {})
