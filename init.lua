@@ -629,10 +629,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 local formatterUtil = require("formatter.util")
 
-local prettier = function(value)
-    return require(value).prettier
-end
-
 local formatter = require("formatter")
 formatter.setup({
     logging = false,
@@ -647,10 +643,10 @@ formatter.setup({
         json = require("formatter.filetypes.json").prettier,
         jsonc = require("formatter.filetypes.json").prettier,
         python = require("formatter.filetypes.python").black,
-        javascript = prettier("formatter.filetypes.javascript"),
-        javascriptreact = prettier("formatter.filetypes.javascriptreact"),
-        typescript = prettier("formatter.filetypes.typescript"),
-        typescriptreact = prettier("formatter.filetypes.typescriptreact"),
+        javascript = require("formatter.filetypes.javascript").prettier,
+        javascriptreact = require("formatter.filetypes.javascriptreact").prettier,
+        typescript = require("formatter.filetypes.typescript").prettier,
+        typescriptreact = require("formatter.filetypes.typescriptreact").prettier,
         ["proto"] = function()
             return {
                 exe = "buf format",
