@@ -116,15 +116,6 @@ require("lazy").setup({
             end,
         },
         "sindrets/diffview.nvim",
-        {
-            "CopilotC-Nvim/CopilotChat.nvim",
-            dependencies = {
-                { "github/copilot.vim" },
-                { "nvim-lua/plenary.nvim", branch = "master" },
-            },
-            build = "make tiktoken",
-            opts = {},
-        },
     },
 })
 
@@ -144,7 +135,6 @@ vim.keymap.set("n", "<localleader>tq", ":tabclose<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>pd", ":Lspsaga peek_definition<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>ol", ":Lspsaga outline<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>fu", ":Lspsaga finder<cr>", { noremap = true })
-vim.keymap.set("n", "<localleader>coc", ":CopilotChat<cr>", { noremap = true })
 
 vim.keymap.set("n", "<localleader>z", ":ZenMode<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>T", ":terminal<cr>", { noremap = true })
@@ -434,22 +424,6 @@ require("nvim-treesitter.configs").setup({
     },
 })
 
-require("CopilotChat").setup({
-    mappings = {
-        complete = {
-            insert = "<Tab>",
-        },
-        close = {
-            normal = "",
-            insert = "",
-        },
-        submit_prompt = {
-            normal = "<CR>",
-            insert = "<C-s>",
-        },
-    },
-})
-
 local cmp = require("cmp")
 cmp.setup.cmdline("/", {
     mapping = cmp.mapping.preset.cmdline(),
@@ -543,6 +517,7 @@ lspconfig.intelephense.setup({})
 lspconfig.dockerls.setup({})
 lspconfig.bashls.setup({})
 lspconfig.taplo.setup({})
+lspconfig.clangd.setup({})
 lspconfig.denols.setup({
     root_dir = lspconfig.util.root_pattern("deno.json", "deno.jsonc"),
 })
@@ -647,6 +622,8 @@ formatter.setup({
         javascriptreact = require("formatter.filetypes.javascriptreact").prettier,
         typescript = require("formatter.filetypes.typescript").prettier,
         typescriptreact = require("formatter.filetypes.typescriptreact").prettier,
+        c = require("formatter.filetypes.c").clangformat,
+        cpp = require("formatter.filetypes.cpp").clangformat,
         ["proto"] = function()
             return {
                 exe = "buf format",
