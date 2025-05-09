@@ -67,7 +67,6 @@ require("lazy").setup({
         },
         {
             "williamboman/mason.nvim",
-            dependencies = { "williamboman/mason-lspconfig.nvim" },
         },
         {
             "nvim-telescope/telescope.nvim",
@@ -487,7 +486,6 @@ vim.keymap.set({ "i", "s" }, "<c-e>", function()
 end, { silent = true })
 
 require("mason").setup()
-require("mason-lspconfig").setup()
 
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
