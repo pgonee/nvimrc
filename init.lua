@@ -30,7 +30,6 @@ require("lazy").setup({
             dependencies = { "nvim-tree/nvim-web-devicons" },
         },
         "wbthomason/packer.nvim",
-        "neovim/nvim-lspconfig",
         {
             "numToStr/Comment.nvim",
             opts = {},
@@ -67,6 +66,8 @@ require("lazy").setup({
         },
         {
             "williamboman/mason.nvim",
+            "mason-org/mason-lspconfig.nvim",
+            "neovim/nvim-lspconfig",
         },
         {
             "nvim-telescope/telescope.nvim",
@@ -486,6 +487,9 @@ vim.keymap.set({ "i", "s" }, "<c-e>", function()
 end, { silent = true })
 
 require("mason").setup()
+require("mason-lspconfig").setup({
+    automatic_enable = false,
+})
 
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
@@ -564,6 +568,7 @@ lspconfig.lua_ls.setup({
     },
     capabilities = capabilities,
 })
+lspconfig.harper_ls.setup({})
 
 vim.g.ale_fix_on_save = 0
 vim.g.ale_linters = {
