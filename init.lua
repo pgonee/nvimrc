@@ -574,7 +574,6 @@ lspconfig.lua_ls.setup({
     },
     capabilities = capabilities,
 })
-lspconfig.harper_ls.setup({})
 
 vim.g.ale_fix_on_save = 0
 vim.g.ale_linters = {
