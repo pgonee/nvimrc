@@ -114,6 +114,12 @@ require("lazy").setup({
             end,
         },
         "sindrets/diffview.nvim",
+        {
+            "luukvbaal/nnn.nvim",
+            config = function()
+                require("nnn").setup()
+            end,
+        },
     },
 })
 
@@ -125,7 +131,7 @@ end, {})
 vim.keymap.set("n", "<localleader>q", ":q<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>o", ":Rfinder<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>dd", ":NvimTreeToggle<cr>", { noremap = true })
-vim.keymap.set("n", "<localleader>df", ":NvimTreeFindFile<cr>", { noremap = true })
+vim.keymap.set("n", "<localleader>df", ":NnnExplorer<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>tt", ":tabnew<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>tw", ":tabnext<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>tp", ":tabprev<cr>", { noremap = true })
