@@ -120,6 +120,13 @@ require("lazy").setup({
                 require("nnn").setup()
             end,
         },
+        {
+            "NeogitOrg/neogit",
+            dependencies = {
+                "nvim-lua/plenary.nvim",
+                "sindrets/diffview.nvim",
+            },
+        },
     },
 })
 
