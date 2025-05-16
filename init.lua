@@ -219,7 +219,7 @@ vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
 require("tokyonight").setup({
-    style = "moon",
+    style = "storm",
     transparent = false,
     terminal_colors = true,
 })
