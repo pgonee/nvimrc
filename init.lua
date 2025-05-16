@@ -214,18 +214,16 @@ vim.api.nvim_command("set mouse=")
 vim.api.nvim_command("syntax on")
 vim.api.nvim_command("syntax enable")
 vim.o.colorcolumn = "120"
-vim.o.background = "light"
+vim.o.background = "dark"
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
 require("tokyonight").setup({
-    style = "day",
-    light_style = "day",
+    style = "moon",
     transparent = false,
     terminal_colors = true,
-    day_brightness = 0.2,
 })
-vim.api.nvim_command("colorscheme tokyonight-day")
+vim.api.nvim_command("colorscheme tokyonight")
 vim.opt.termguicolors = true
 vim.opt.swapfile = false
 
