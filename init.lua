@@ -115,17 +115,20 @@ require("lazy").setup({
         },
         "sindrets/diffview.nvim",
         {
-            "luukvbaal/nnn.nvim",
-            config = function()
-                require("nnn").setup()
-            end,
-        },
-        {
             "NeogitOrg/neogit",
             dependencies = {
                 "nvim-lua/plenary.nvim",
                 "sindrets/diffview.nvim",
             },
+        },
+        {
+            "CopilotC-Nvim/CopilotChat.nvim",
+            dependencies = {
+                { "github/copilot.vim" },
+                { "nvim-lua/plenary.nvim", branch = "master" },
+            },
+            build = "make tiktoken",
+            opts = {},
         },
     },
 })
@@ -139,7 +142,6 @@ vim.keymap.set("n", "<localleader>q", ":q<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>o", ":Rfinder<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>dd", ":NvimTreeToggle<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>df", ":NvimTreeFindFile<cr>", { noremap = true })
-vim.keymap.set("n", "<localleader>nn", ":NnnExplorer<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>tt", ":tabnew<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>tw", ":tabnext<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>tp", ":tabprev<cr>", { noremap = true })
