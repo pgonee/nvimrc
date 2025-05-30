@@ -101,10 +101,10 @@ require("lazy").setup({
                 input = { enabled = false },
                 picker = { enabled = true },
                 notifier = { enabled = true },
-                quickfile = { enabled = true },
+                quickfile = { enabled = false },
                 scope = { enabled = false },
                 scroll = { enabled = false },
-                statuscolumn = { enabled = true },
+                statuscolumn = { enabled = false },
                 words = { enabled = false },
             },
         },
@@ -302,6 +302,7 @@ vim.o.colorcolumn = "120"
 vim.o.background = "light"
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+vim.g.ftplugin_sql_omni_key = "<C-j>"
 
 require("tokyonight").setup({
     style = "day",
