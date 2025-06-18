@@ -355,24 +355,6 @@ require("lualine").setup({
     extensions = {},
 })
 
-local trouble = require("trouble")
-local symbols = trouble.statusline({
-    mode = "lsp_document_symbols",
-    groups = {},
-    title = false,
-    filter = { range = true },
-    format = "{kind_icon}{symbol.name:Normal}",
-    -- The following line is needed to fix the background color
-    -- Set it to the lualine section you want to use
-    hl_group = "lualine_c_normal",
-})
-
-local lualineConfigs = require("lualine").get_config()
-table.insert(lualineConfigs.sections.lualine_c, {
-    symbols.get,
-    cond = symbols.has,
-})
-
 local telescope = require("telescope")
 telescope.setup({
     defaults = {
@@ -489,6 +471,7 @@ require("nvim-tree").setup({
     },
 })
 
+local trouble = require("trouble")
 vim.keymap.set("n", "<localleader>xX", function()
     trouble.toggle("diagnostics")
 end, { noremap = true })
