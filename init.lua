@@ -551,12 +551,16 @@ lspconfig.ts_ls.setup({
     commands = {
         OrganizeImports = {
             function()
+                local bufnr = vim.api.nvim_get_current_buf()
                 local params = {
                     command = "_typescript.organizeImports",
                     arguments = { vim.api.nvim_buf_get_name(0) },
                     title = "",
                 }
-                vim.lsp.buf.execute_command(params)
+                local tsLs = vim.lsp.get_clients({ bufnr = bufnr, name = "ts_ls" })[1]
+                if tsLs then
+                    tsLs:exec_cmd(params)
+                end
             end,
             description = "Organize Imports",
         },
