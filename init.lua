@@ -141,76 +141,6 @@ require("lazy").setup({
                 "sindrets/diffview.nvim",
             },
         },
-        {
-            "CopilotC-Nvim/CopilotChat.nvim",
-            dependencies = {
-                { "github/copilot.vim" },
-                { "nvim-lua/plenary.nvim", branch = "master" },
-            },
-            build = "make tiktoken",
-            opts = {
-                model = "claude-opus-4",
-                agent = "copilot",
-                question_header = "# User ",
-                answer_header = "# Copilot ",
-                error_header = "# Error ",
-                separator = "───",
-
-                mappings = {
-                    complete = {
-                        insert = "<Tab>",
-                    },
-                    close = {
-                        normal = "",
-                        insert = "",
-                    },
-                    reset = {
-                        normal = "<C-l>",
-                        insert = "<C-l>",
-                    },
-                    submit_prompt = {
-                        normal = "<CR>",
-                        insert = "<C-s>",
-                    },
-                    toggle_sticky = {
-                        normal = "grr",
-                    },
-                    clear_stickies = {
-                        normal = "grx",
-                    },
-                    accept_diff = {
-                        normal = "<C-y>",
-                        insert = "<C-y>",
-                    },
-                    jump_to_diff = {
-                        normal = "gj",
-                    },
-                    quickfix_answers = {
-                        normal = "gqa",
-                    },
-                    quickfix_diffs = {
-                        normal = "gqd",
-                    },
-                    yank_diff = {
-                        normal = "gy",
-                        register = '"',
-                    },
-                    show_diff = {
-                        normal = "gd",
-                        full_diff = false,
-                    },
-                    show_info = {
-                        normal = "gi",
-                    },
-                    show_context = {
-                        normal = "gc",
-                    },
-                    show_help = {
-                        normal = "gh",
-                    },
-                },
-            },
-        },
     },
 })
 
@@ -230,7 +160,6 @@ vim.keymap.set("n", "<localleader>tq", ":tabclose<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>pd", ":Lspsaga peek_definition<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>ol", ":Lspsaga outline<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>fu", ":Lspsaga finder<cr>", { noremap = true })
-vim.keymap.set("n", "<localleader>C", ":CopilotChatToggle<cr>", { noremap = true })
 
 vim.keymap.set("n", "<localleader>z", ":ZenMode<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>T", ":terminal<cr>", { noremap = true })
