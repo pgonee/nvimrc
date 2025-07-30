@@ -100,12 +100,75 @@ require("lazy").setup({
                 indent = { enabled = false },
                 input = { enabled = false },
                 picker = { enabled = true },
-                notifier = { enabled = true },
+                notifier = {
+                    enabled = true,
+                    width = { min = 40, max = 0.999999 },
+                    height = { min = 1, max = 0.999999 },
+                },
                 quickfile = { enabled = false },
                 scope = { enabled = false },
                 scroll = { enabled = false },
                 statuscolumn = { enabled = false },
                 words = { enabled = false },
+            },
+            keys = {
+                {
+                    "<localleader>sz",
+                    function()
+                        Snacks.zen()
+                    end,
+                    desc = "Toggle Zen Mode",
+                },
+                {
+                    "<localleader>s.",
+                    function()
+                        Snacks.scratch()
+                    end,
+                    desc = "Toggle Scratch Buffer",
+                },
+                {
+                    "<localleader>s/",
+                    function()
+                        Snacks.scratch.select()
+                    end,
+                    desc = "Select Scratch Buffer",
+                },
+                {
+                    "<localleader>sn",
+                    function()
+                        Snacks.notifier.show_history()
+                    end,
+                    desc = "Notification History",
+                },
+                {
+                    "<localleader>sgB",
+                    function()
+                        Snacks.gitbrowse()
+                    end,
+                    desc = "Git Browse",
+                    mode = { "n", "v" },
+                },
+                {
+                    "<localleader>sgg",
+                    function()
+                        Snacks.lazygit()
+                    end,
+                    desc = "Lazygit",
+                },
+                {
+                    "<localleader>st",
+                    function()
+                        Snacks.terminal()
+                    end,
+                    desc = "Toggle Terminal",
+                },
+                {
+                    "<localleader>sT",
+                    function()
+                        Snacks.terminal()
+                    end,
+                    desc = "which_key_ignore",
+                },
             },
         },
         "dense-analysis/ale",
@@ -135,11 +198,51 @@ require("lazy").setup({
         },
         "sindrets/diffview.nvim",
         {
-            "NeogitOrg/neogit",
+            "olimorris/codecompanion.nvim",
+            opts = {},
             dependencies = {
                 "nvim-lua/plenary.nvim",
-                "sindrets/diffview.nvim",
+                "nvim-treesitter/nvim-treesitter",
             },
+        },
+        {
+            "milanglacier/minuet-ai.nvim",
+            config = function()
+                require("minuet").setup({
+                    virtualtext = {
+                        auto_trigger_ft = { "javascript", "typescript" },
+                        keymap = {
+                            -- accept whole completion
+                            accept = "<A-a>",
+                            -- accept one line
+                            accept_line = "<A-l>",
+                            -- accept n lines (prompts for number)
+                            -- e.g. "A-z 2 CR" will accept 2 lines
+                            accept_n_lines = "<A-z>",
+                            -- Cycle to prev completion item, or manually invoke completion
+                            prev = "<A-[>",
+                            -- Cycle to next completion item, or manually invoke completion
+                            next = "<A-]>",
+                            dismiss = "<A-e>",
+                        },
+                    },
+                    provider = "openai_fim_compatible",
+                    n_completions = 1,
+                    context_window = 512,
+                    provider_options = {
+                        openai_fim_compatible = {
+                            api_key = "TERM",
+                            name = "Ollama",
+                            end_point = "http://localhost:11434/v1/completions",
+                            model = "qwen2.5-coder:7b",
+                            optional = {
+                                max_tokens = 56,
+                                top_p = 0.9,
+                            },
+                        },
+                    },
+                })
+            end,
         },
     },
 })
@@ -160,9 +263,6 @@ vim.keymap.set("n", "<localleader>tq", ":tabclose<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>pd", ":Lspsaga peek_definition<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>ol", ":Lspsaga outline<cr>", { noremap = true })
 vim.keymap.set("n", "<localleader>fu", ":Lspsaga finder<cr>", { noremap = true })
-
-vim.keymap.set("n", "<localleader>z", ":ZenMode<cr>", { noremap = true })
-vim.keymap.set("n", "<localleader>T", ":terminal<cr>", { noremap = true })
 
 vim.keymap.set("t", "<a-h>", "<c-\\><c-n><c-w>h", { noremap = true })
 vim.keymap.set("t", "<a-j>", "<c-\\><c-n><c-w>j", { noremap = true })
@@ -467,14 +567,22 @@ cmp.setup({
             --behavior = cmp.ConfirmBehavior.Replace,
             select = true,
         }),
+        -- mapping = {
+        --     ["<A-y>"] = require("minuet").make_cmp_map(),
+        --     -- and your other keymappings
+        -- },
     }),
     sources = cmp.config.sources({
+        { name = "minuet" },
         { name = "nvim_lsp", keyword_length = 2 },
         { name = "buffer", keyword_length = 2 },
         { name = "path" },
         { name = "luasnip" },
         { name = "nvim_lsp_signature_help" },
     }),
+    performance = {
+        fetching_timeout = 2000,
+    },
 })
 local ls = require("luasnip")
 require("luasnip.loaders.from_vscode").lazy_load()
@@ -706,5 +814,53 @@ vim.filetype.add({
     },
     pattern = {
         [".env.*"] = "sh",
+    },
+})
+
+if vim.g.neovide then
+    vim.keymap.set("n", "<D-v>", '"+p')
+    vim.keymap.set("i", "<D-v>", "<C-r>+")
+    vim.keymap.set("c", "<D-v>", "<C-r>+")
+    vim.keymap.set("v", "<D-v>", '"+p')
+
+    vim.g.neovide_cursor_animation_length = 0.03
+    vim.g.neovide_scroll_animation_length = 0.1
+    vim.g.neovide_cursor_trail_length = 0
+    vim.g.neovide_cursor_antialiasing = false
+end
+
+require("codecompanion").setup({
+    strategies = {
+        chat = {
+            adapter = "ollama",
+        },
+        inline = {
+            adapter = "ollama",
+        },
+        cmd = {
+            adapter = "ollama",
+        },
+    },
+    adapters = {
+        ollama = function()
+            return require("codecompanion.adapters").extend("ollama", {
+                name = "ollama",
+                opts = {
+                    vision = false,
+                    stream = true,
+                },
+                schema = {
+                    model = {
+                        default = "qwen2.5-coder:7b",
+                    },
+                    think = {
+                        default = false,
+                    },
+                    keep_alive = {
+                        default = "5m",
+                    },
+                },
+            })
+        end,
     },
 })
