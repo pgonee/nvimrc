@@ -197,53 +197,6 @@ require("lazy").setup({
             end,
         },
         "sindrets/diffview.nvim",
-        {
-            "olimorris/codecompanion.nvim",
-            opts = {},
-            dependencies = {
-                "nvim-lua/plenary.nvim",
-                "nvim-treesitter/nvim-treesitter",
-            },
-        },
-        {
-            "milanglacier/minuet-ai.nvim",
-            config = function()
-                require("minuet").setup({
-                    virtualtext = {
-                        auto_trigger_ft = { "javascript", "typescript" },
-                        keymap = {
-                            -- accept whole completion
-                            accept = "<A-a>",
-                            -- accept one line
-                            accept_line = "<A-l>",
-                            -- accept n lines (prompts for number)
-                            -- e.g. "A-z 2 CR" will accept 2 lines
-                            accept_n_lines = "<A-z>",
-                            -- Cycle to prev completion item, or manually invoke completion
-                            prev = "<A-[>",
-                            -- Cycle to next completion item, or manually invoke completion
-                            next = "<A-]>",
-                            dismiss = "<A-e>",
-                        },
-                    },
-                    provider = "openai_fim_compatible",
-                    n_completions = 1,
-                    context_window = 512,
-                    provider_options = {
-                        openai_fim_compatible = {
-                            api_key = "TERM",
-                            name = "Ollama",
-                            end_point = "http://localhost:11434/v1/completions",
-                            model = "qwen2.5-coder:7b",
-                            optional = {
-                                max_tokens = 56,
-                                top_p = 0.9,
-                            },
-                        },
-                    },
-                })
-            end,
-        },
     },
 })
 
@@ -567,22 +520,14 @@ cmp.setup({
             --behavior = cmp.ConfirmBehavior.Replace,
             select = true,
         }),
-        -- mapping = {
-        --     ["<A-y>"] = require("minuet").make_cmp_map(),
-        --     -- and your other keymappings
-        -- },
     }),
     sources = cmp.config.sources({
-        { name = "minuet" },
         { name = "nvim_lsp", keyword_length = 2 },
         { name = "buffer", keyword_length = 2 },
         { name = "path" },
         { name = "luasnip" },
         { name = "nvim_lsp_signature_help" },
     }),
-    performance = {
-        fetching_timeout = 2000,
-    },
 })
 local ls = require("luasnip")
 require("luasnip.loaders.from_vscode").lazy_load()
@@ -828,39 +773,3 @@ if vim.g.neovide then
     vim.g.neovide_cursor_trail_length = 0
     vim.g.neovide_cursor_antialiasing = false
 end
-
-require("codecompanion").setup({
-    strategies = {
-        chat = {
-            adapter = "ollama",
-        },
-        inline = {
-            adapter = "ollama",
-        },
-        cmd = {
-            adapter = "ollama",
-        },
-    },
-    adapters = {
-        ollama = function()
-            return require("codecompanion.adapters").extend("ollama", {
-                name = "ollama",
-                opts = {
-                    vision = false,
-                    stream = true,
-                },
-                schema = {
-                    model = {
-                        default = "qwen2.5-coder:7b",
-                    },
-                    think = {
-                        default = false,
-                    },
-                    keep_alive = {
-                        default = "5m",
-                    },
-                },
-            })
-        end,
-    },
-})
