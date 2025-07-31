@@ -29,7 +29,6 @@ require("lazy").setup({
             "nvim-lualine/lualine.nvim",
             dependencies = { "nvim-tree/nvim-web-devicons" },
         },
-        "wbthomason/packer.nvim",
         {
             "numToStr/Comment.nvim",
             opts = {},
@@ -95,10 +94,10 @@ require("lazy").setup({
             opts = {
                 bigfile = { enabled = true },
                 dashboard = { enabled = true, example = "advanced" },
-                explorer = { enabled = true },
+                explorer = { enabled = false },
                 indent = { enabled = true },
                 input = { enabled = true },
-                picker = { enabled = true },
+                picker = { enabled = false },
                 notifier = {
                     enabled = true,
                     width = { min = 40, max = 0.999999 },
@@ -106,8 +105,9 @@ require("lazy").setup({
                 },
                 quickfile = { enabled = true },
                 scope = { enabled = true },
-                scroll = { enabled = true },
-                statuscolumn = { enabled = true },
+                animate = { enabled = false },
+                scroll = { enabled = false },
+                statuscolumn = { enabled = false },
                 words = { enabled = true },
             },
             keys = {
@@ -119,7 +119,7 @@ require("lazy").setup({
                     desc = "Notification History",
                 },
                 {
-                    "<localleader>sgg",
+                    "<localleader>gg",
                     function()
                         Snacks.lazygit()
                     end,
@@ -184,6 +184,15 @@ require("lazy").setup({
             end,
         },
         "onsails/lspkind.nvim",
+        {
+            "rachartier/tiny-inline-diagnostic.nvim",
+            event = "VeryLazy",
+            priority = 1000,
+            config = function()
+                require("tiny-inline-diagnostic").setup()
+                vim.diagnostic.config({ virtual_text = false })
+            end,
+        },
     },
 })
 
@@ -517,18 +526,15 @@ cmp.setup({
         { name = "luasnip" },
         { name = "nvim_lsp_signature_help" },
     }),
-    format = lspkind.cmp_format({
-        mode = "symbol",
-        maxwidth = {
-            menu = 50,
-            abbr = 50,
-        },
-        ellipsis_char = "...",
-        show_labelDetails = true,
-        before = function(entry, vim_item)
-            return vim_item
-        end,
-    }),
+    formatting = {
+        format = lspkind.cmp_format({
+            mode = "symbol_text",
+            show_labelDetails = true,
+            before = function(entry, vim_item)
+                return vim_item
+            end,
+        }),
+    },
 })
 local ls = require("luasnip")
 require("luasnip.loaders.from_vscode").lazy_load()
