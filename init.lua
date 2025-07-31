@@ -43,7 +43,6 @@ require("lazy").setup({
             priority = 10000,
             opts = {},
         },
-        "lukas-reineke/indent-blankline.nvim",
         "hrsh7th/nvim-cmp",
         "hrsh7th/cmp-nvim-lsp",
         "hrsh7th/cmp-buffer",
@@ -94,45 +93,24 @@ require("lazy").setup({
             lazy = false,
             ---@type snacks.Config
             opts = {
-                bigfile = { enabled = false },
-                dashboard = { enabled = false },
-                explorer = { enabled = false },
-                indent = { enabled = false },
-                input = { enabled = false },
+                bigfile = { enabled = true },
+                dashboard = { enabled = true, example = "advanced" },
+                explorer = { enabled = true },
+                indent = { enabled = true },
+                input = { enabled = true },
                 picker = { enabled = true },
                 notifier = {
                     enabled = true,
                     width = { min = 40, max = 0.999999 },
                     height = { min = 1, max = 0.999999 },
                 },
-                quickfile = { enabled = false },
-                scope = { enabled = false },
-                scroll = { enabled = false },
-                statuscolumn = { enabled = false },
-                words = { enabled = false },
+                quickfile = { enabled = true },
+                scope = { enabled = true },
+                scroll = { enabled = true },
+                statuscolumn = { enabled = true },
+                words = { enabled = true },
             },
             keys = {
-                {
-                    "<localleader>sz",
-                    function()
-                        Snacks.zen()
-                    end,
-                    desc = "Toggle Zen Mode",
-                },
-                {
-                    "<localleader>s.",
-                    function()
-                        Snacks.scratch()
-                    end,
-                    desc = "Toggle Scratch Buffer",
-                },
-                {
-                    "<localleader>s/",
-                    function()
-                        Snacks.scratch.select()
-                    end,
-                    desc = "Select Scratch Buffer",
-                },
                 {
                     "<localleader>sn",
                     function()
@@ -141,33 +119,11 @@ require("lazy").setup({
                     desc = "Notification History",
                 },
                 {
-                    "<localleader>sgB",
-                    function()
-                        Snacks.gitbrowse()
-                    end,
-                    desc = "Git Browse",
-                    mode = { "n", "v" },
-                },
-                {
                     "<localleader>sgg",
                     function()
                         Snacks.lazygit()
                     end,
                     desc = "Lazygit",
-                },
-                {
-                    "<localleader>st",
-                    function()
-                        Snacks.terminal()
-                    end,
-                    desc = "Toggle Terminal",
-                },
-                {
-                    "<localleader>sT",
-                    function()
-                        Snacks.terminal()
-                    end,
-                    desc = "which_key_ignore",
                 },
             },
         },
@@ -197,6 +153,37 @@ require("lazy").setup({
             end,
         },
         "sindrets/diffview.nvim",
+        {
+            "Exafunction/windsurf.nvim",
+            dependencies = {
+                "nvim-lua/plenary.nvim",
+                "hrsh7th/nvim-cmp",
+            },
+            config = function()
+                require("codeium").setup({
+                    enable_cmp_source = true,
+                    virtual_text = {
+                        enabled = true,
+                        manual = false,
+                        filetypes = {},
+                        default_filetype_enabled = true,
+                        idle_delay = 75,
+                        virtual_text_priority = 65535,
+                        map_keys = true,
+                        accept_fallback = nil,
+                        key_bindings = {
+                            accept = "<Tab>",
+                            accept_word = false,
+                            accept_line = false,
+                            clear = false,
+                            next = "<M-]>",
+                            prev = "<M-[>",
+                        },
+                    },
+                })
+            end,
+        },
+        "onsails/lspkind.nvim",
     },
 })
 
@@ -485,6 +472,7 @@ require("nvim-treesitter.configs").setup({
     },
 })
 
+local lspkind = require("lspkind")
 local cmp = require("cmp")
 cmp.setup.cmdline("/", {
     mapping = cmp.mapping.preset.cmdline(),
@@ -522,11 +510,24 @@ cmp.setup({
         }),
     }),
     sources = cmp.config.sources({
+        { name = "codeium" },
         { name = "nvim_lsp", keyword_length = 2 },
         { name = "buffer", keyword_length = 2 },
         { name = "path" },
         { name = "luasnip" },
         { name = "nvim_lsp_signature_help" },
+    }),
+    format = lspkind.cmp_format({
+        mode = "symbol",
+        maxwidth = {
+            menu = 50,
+            abbr = 50,
+        },
+        ellipsis_char = "...",
+        show_labelDetails = true,
+        before = function(entry, vim_item)
+            return vim_item
+        end,
     }),
 })
 local ls = require("luasnip")
@@ -739,8 +740,6 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
     pattern = ".swcrc",
     command = "set filetype=json",
 })
-
-require("ibl").setup()
 
 require("Comment").setup({
     toggler = {
