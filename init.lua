@@ -108,7 +108,7 @@ require("lazy").setup({
                 animate = { enabled = false },
                 scroll = { enabled = false },
                 statuscolumn = { enabled = false },
-                words = { enabled = true },
+                words = { enabled = false },
             },
             keys = {
                 {
@@ -193,6 +193,7 @@ require("lazy").setup({
                 vim.diagnostic.config({ virtual_text = false })
             end,
         },
+        "JoosepAlviste/nvim-ts-context-commentstring",
     },
 })
 
@@ -747,6 +748,10 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
     command = "set filetype=json",
 })
 
+require("ts_context_commentstring").setup({
+    enable_autocmd = false,
+})
+
 require("Comment").setup({
     toggler = {
         line = "<localleader>cc",
@@ -756,6 +761,7 @@ require("Comment").setup({
         line = "<localleader>cc",
         block = "<localleader>bc",
     },
+    pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
 })
 
 vim.filetype.add({
