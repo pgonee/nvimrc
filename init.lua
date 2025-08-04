@@ -34,7 +34,6 @@ require("lazy").setup({
             opts = {},
         },
         "airblade/vim-gitgutter",
-        "tpope/vim-fugitive",
         "tpope/vim-surround",
         {
             "folke/tokyonight.nvim",
