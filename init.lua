@@ -92,7 +92,7 @@ require("lazy").setup({
             ---@type snacks.Config
             opts = {
                 bigfile = { enabled = true },
-                dashboard = { enabled = true, example = "advanced" },
+                dashboard = { enabled = true, example = "compact_files" },
                 explorer = { enabled = false },
                 indent = { enabled = true },
                 input = { enabled = true },
