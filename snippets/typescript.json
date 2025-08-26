@@ -75,5 +75,46 @@
       "export default class ${1:${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}} {}"
     ],
     "description": ""
+  },
+  "[pgonee] zod model": {
+    "prefix": "pg-zodmodel",
+    "body": [
+      "import { z } from \"zod/v4\"",
+      "",
+      "export const ${1:${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}} = z.object({})",
+      "export type ${1:${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}} = z.infer<typeof ${1:${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}}>"
+    ],
+    "description": ""
+  },
+  "[pgonee] zod interface": {
+    "prefix": "pg-zodinterface",
+    "body": [
+      "import { z } from \"zod/v4\"",
+      "",
+      "export namespace ${1:${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}} {}",
+      "",
+      "export interface ${1:${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}} {}"
+    ],
+    "description": ""
+  },
+  "[pgonee] zod request/response": {
+    "prefix": "pg-zodrequestresponse",
+    "body": [
+      "export const $1Request = z.object({})",
+      "export type $1Request = z.infer<typeof $1Request>",
+      "",
+      "export const $1Result = z.object({})",
+      "export type $1Result = z.infer<typeof $1Result>"
+    ],
+    "description": ""
+  },
+  "[pgonee] zod interface method": {
+    "prefix": "pg-zodmethod",
+    "body": [
+      "$1(",
+      "  request: ${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}.${1/(.*)/${1:/pascalcase}/}Request,",
+      "): Promise<${TM_FILENAME_BASE/(.*)/${1:/pascalcase}/}.${1/(.*)/${1:/pascalcase}/}Result>"
+    ],
+    "description": ""
   }
 }

@@ -152,36 +152,6 @@ require("lazy").setup({
             end,
         },
         "sindrets/diffview.nvim",
-        {
-            "Exafunction/windsurf.nvim",
-            dependencies = {
-                "nvim-lua/plenary.nvim",
-                "hrsh7th/nvim-cmp",
-            },
-            config = function()
-                require("codeium").setup({
-                    enable_cmp_source = true,
-                    virtual_text = {
-                        enabled = true,
-                        manual = false,
-                        filetypes = {},
-                        default_filetype_enabled = true,
-                        idle_delay = 75,
-                        virtual_text_priority = 65535,
-                        map_keys = true,
-                        accept_fallback = nil,
-                        key_bindings = {
-                            accept = "<Tab>",
-                            accept_word = false,
-                            accept_line = false,
-                            clear = false,
-                            next = "<M-]>",
-                            prev = "<M-[>",
-                        },
-                    },
-                })
-            end,
-        },
         "onsails/lspkind.nvim",
         {
             "rachartier/tiny-inline-diagnostic.nvim",
@@ -519,7 +489,6 @@ cmp.setup({
         }),
     }),
     sources = cmp.config.sources({
-        { name = "codeium" },
         { name = "nvim_lsp", keyword_length = 2 },
         { name = "buffer", keyword_length = 2 },
         { name = "path" },
@@ -579,6 +548,7 @@ local get_root_dir = function(fname)
         or util.root_pattern("package.json", "tsconfig.json")(fname)
 end
 
+lspconfig.pyright.setup({})
 lspconfig.tailwindcss.setup({})
 lspconfig.sqlls.setup({})
 lspconfig.jsonls.setup({})
