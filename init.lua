@@ -530,16 +530,14 @@ require("mason-lspconfig").setup({
     automatic_enable = false,
 })
 
+local util = require("lspconfig.util")
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-local lspconfig = require("lspconfig")
-
-local util = require("lspconfig.util")
-lspconfig.buf_ls.setup({
+vim.lsp.enable('buf_ls',{
     root_dir = util.root_pattern("buf.work.yaml", "buf.gen.yaml", ".git"),
 })
-lspconfig.terraformls.setup({})
-lspconfig.pyright.setup({
+vim.lsp.enable('terraformls',{})
+vim.lsp.enable('pyright',{
     capabilities = capabilities,
 })
 local get_root_dir = function(fname)
@@ -547,20 +545,18 @@ local get_root_dir = function(fname)
         or util.root_pattern("pnpm-workspace.yaml", "pnpm-lock.yaml")(fname)
         or util.root_pattern("package.json", "tsconfig.json")(fname)
 end
-
-lspconfig.pyright.setup({})
-lspconfig.tailwindcss.setup({})
-lspconfig.sqlls.setup({})
-lspconfig.jsonls.setup({})
-lspconfig.prismals.setup({})
-lspconfig.dockerls.setup({})
-lspconfig.bashls.setup({})
-lspconfig.taplo.setup({})
-lspconfig.clangd.setup({})
-lspconfig.denols.setup({
-    root_dir = lspconfig.util.root_pattern("deno.json", "deno.jsonc"),
+vim.lsp.enable('tailwindcss',{})
+vim.lsp.enable('sqlls',{})
+vim.lsp.enable('jsonls',{})
+vim.lsp.enable('prismals',{})
+vim.lsp.enable('dockerls',{})
+vim.lsp.enable('bashls',{})
+vim.lsp.enable('taplo',{})
+vim.lsp.enable('clangd',{})
+vim.lsp.enable('denols',{
+    root_dir = util.root_pattern("deno.json", "deno.jsonc"),
 })
-lspconfig.ts_ls.setup({
+vim.lsp.enable('ts_ls',{
     filetypes = {
         "javascript",
         "javascriptreact",
@@ -596,7 +592,7 @@ lspconfig.ts_ls.setup({
         },
     },
 })
-lspconfig.lua_ls.setup({
+vim.lsp.enable('lua_ls',{
     settings = {
         Lua = {
             diagnostics = {
