@@ -53,18 +53,21 @@ require("lazy").setup({
             build = "make install_jsregexp",
         },
         "saadparwaiz1/cmp_luasnip",
+        "neovim/nvim-lspconfig",
         "rafamadriz/friendly-snippets",
         {
             "nvimdev/lspsaga.nvim",
-            dependencies = { "nvim-lspconfig" },
+            dependencies = { "neovim/nvim-lspconfig" },
             config = function()
                 require("lspsaga").setup({})
             end,
         },
         {
-            "williamboman/mason.nvim",
             "mason-org/mason-lspconfig.nvim",
-            "neovim/nvim-lspconfig",
+            config = false,
+            dependencies = {
+                { "mason-org/mason.nvim", config = false },
+            },
         },
         {
             "nvim-telescope/telescope.nvim",
@@ -505,6 +508,7 @@ cmp.setup({
         }),
     },
 })
+
 local ls = require("luasnip")
 require("luasnip.loaders.from_vscode").lazy_load()
 require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./snippets" } })
@@ -533,30 +537,25 @@ require("mason-lspconfig").setup({
 local util = require("lspconfig.util")
 local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-vim.lsp.enable('buf_ls',{
+vim.lsp.enable("buf_ls", {
     root_dir = util.root_pattern("buf.work.yaml", "buf.gen.yaml", ".git"),
 })
-vim.lsp.enable('terraformls',{})
-vim.lsp.enable('pyright',{
+vim.lsp.enable("terraformls", {})
+vim.lsp.config("pyright", {
     capabilities = capabilities,
 })
-local get_root_dir = function(fname)
-    return util.root_pattern(".git")(fname)
-        or util.root_pattern("pnpm-workspace.yaml", "pnpm-lock.yaml")(fname)
-        or util.root_pattern("package.json", "tsconfig.json")(fname)
-end
-vim.lsp.enable('tailwindcss',{})
-vim.lsp.enable('sqlls',{})
-vim.lsp.enable('jsonls',{})
-vim.lsp.enable('prismals',{})
-vim.lsp.enable('dockerls',{})
-vim.lsp.enable('bashls',{})
-vim.lsp.enable('taplo',{})
-vim.lsp.enable('clangd',{})
-vim.lsp.enable('denols',{
-    root_dir = util.root_pattern("deno.json", "deno.jsonc"),
-})
-vim.lsp.enable('ts_ls',{
+vim.lsp.enable("pyright")
+
+vim.lsp.enable("tailwindcss")
+vim.lsp.enable("sqlls")
+vim.lsp.enable("jsonls")
+vim.lsp.enable("prismals")
+vim.lsp.enable("dockerls")
+vim.lsp.enable("bashls")
+vim.lsp.enable("taplo")
+vim.lsp.enable("clangd")
+vim.lsp.config("ts_ls", {
+    capabilities = capabilities,
     filetypes = {
         "javascript",
         "javascriptreact",
@@ -565,34 +564,17 @@ vim.lsp.enable('ts_ls',{
         "typescriptreact",
         "typescript.tsx",
     },
-    capabilities = capabilities,
-    root_dir = get_root_dir,
     init_options = {
         hostInfo = "neovim",
         preferences = {
             importModuleSpecifierPreference = "non-relative",
         },
-        maxTsServerMemory = "10240",
-    },
-    commands = {
-        OrganizeImports = {
-            function()
-                local bufnr = vim.api.nvim_get_current_buf()
-                local params = {
-                    command = "_typescript.organizeImports",
-                    arguments = { vim.api.nvim_buf_get_name(0) },
-                    title = "",
-                }
-                local tsLs = vim.lsp.get_clients({ bufnr = bufnr, name = "ts_ls" })[1]
-                if tsLs then
-                    tsLs:exec_cmd(params)
-                end
-            end,
-            description = "Organize Imports",
-        },
+        maxTsServerMemory = 10240,
     },
 })
-vim.lsp.enable('lua_ls',{
+vim.lsp.enable("ts_ls")
+
+vim.lsp.config("emmylua_ls", {
     settings = {
         Lua = {
             diagnostics = {
@@ -607,6 +589,7 @@ vim.lsp.enable('lua_ls',{
     },
     capabilities = capabilities,
 })
+vim.lsp.enable("emmylua_ls")
 
 vim.g.ale_fix_on_save = 0
 vim.g.ale_linters = {
@@ -692,17 +675,6 @@ formatter.setup({
     },
 })
 
-local formatGroup = vim.api.nvim_create_augroup("Format", { clear = true })
-vim.api.nvim_create_autocmd("BufWritePost", {
-    pattern = "*",
-    callback = function()
-        local file_path = vim.fn.expand("%:p")
-        if vim.bo.filetype ~= "php" and not file_path:find("workspaces/orangefield/store.orangefield.co.kr") then
-            vim.cmd(":FormatWrite")
-        end
-    end,
-    group = formatGroup,
-})
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
     pattern = "Dockerfile*",
     command = "set filetype=dockerfile",
@@ -749,3 +721,19 @@ if vim.g.neovide then
     vim.g.neovide_cursor_trail_length = 0
     vim.g.neovide_cursor_antialiasing = false
 end
+
+vim.api.nvim_create_autocmd("LspAttach", {
+    callback = function(ev)
+        local client = vim.lsp.get_client_by_id(ev.data.client_id)
+        if client.name ~= "ts_ls" then
+            return
+        end
+
+        vim.api.nvim_buf_create_user_command(ev.buf, "OrganizeImports", function()
+            client:exec_cmd({
+                command = "_typescript.organizeImports",
+                arguments = { vim.api.nvim_buf_get_name(ev.buf) },
+            })
+        end, {})
+    end,
+})
