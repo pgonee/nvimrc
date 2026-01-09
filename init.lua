@@ -111,6 +111,12 @@ require("lazy").setup({
                 scroll = { enabled = false },
                 statuscolumn = { enabled = false },
                 words = { enabled = false },
+                lazygit = {
+                    win = {
+                        width = 9999,
+                        height = 0.96,
+                    },
+                },
             },
             keys = {
                 {
@@ -166,6 +172,20 @@ require("lazy").setup({
             end,
         },
         "JoosepAlviste/nvim-ts-context-commentstring",
+        {
+            "f-person/git-blame.nvim",
+            event = "VeryLazy",
+            opts = {
+                enabled = true,
+            },
+        },
+        {
+            "FabijanZulj/blame.nvim",
+            lazy = false,
+            config = function()
+                require("blame").setup({})
+            end,
+        },
     },
 })
 
@@ -337,6 +357,10 @@ telescope.setup({
                 "--files",
                 "--hidden",
                 "--no-ignore",
+                "--glob",
+                "!**/.serena/*",
+                "--glob",
+                "!**/.pnpm-store/*",
                 "--glob",
                 "!**/.git/*",
                 "--glob",
@@ -591,6 +615,14 @@ vim.lsp.config("emmylua_ls", {
 })
 vim.lsp.enable("emmylua_ls")
 
+vim.lsp.config("gdscript", {
+    cmd = vim.lsp.rpc.connect("127.0.0.1", 6005),
+    filetypes = { "gdscript" },
+    capabilities = capabilities,
+    root_markers = { "project.godot", ".git" },
+})
+vim.lsp.enable("gdscript")
+
 vim.g.ale_fix_on_save = 0
 vim.g.ale_linters = {
     javascript = { "eslint" },
@@ -667,6 +699,15 @@ formatter.setup({
                         "--",
                         "-",
                     },
+                    stdin = true,
+                }
+            end,
+        },
+        gdscript = {
+            function()
+                return {
+                    exe = "gdformat",
+                    args = { "-" },
                     stdin = true,
                 }
             end,
