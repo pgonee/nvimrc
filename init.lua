@@ -168,7 +168,7 @@ require("lazy").setup({
             priority = 1000,
             config = function()
                 require("tiny-inline-diagnostic").setup()
-                vim.diagnostic.config({ virtual_text = false })
+                vim.diagnostic.config({ virtual_text = true })
             end,
         },
         "JoosepAlviste/nvim-ts-context-commentstring",
@@ -185,6 +185,16 @@ require("lazy").setup({
             config = function()
                 require("blame").setup({})
             end,
+        },
+        {
+            "MeanderingProgrammer/render-markdown.nvim",
+            dependencies = {
+                "nvim-treesitter/nvim-treesitter",
+                "nvim-mini/mini.nvim",
+                "nvim-mini/mini.icons",
+                "nvim-tree/nvim-web-devicons",
+            },
+            opts = {},
         },
     },
 })
