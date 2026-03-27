@@ -144,6 +144,7 @@ require("lazy").setup({
         },
         "nvim-tree/nvim-web-devicons",
         "nvim-lua/plenary.nvim",
+        "nvim-lua/popup.nvim",
         {
             "nvim-treesitter/nvim-treesitter",
             build = function()
@@ -206,6 +207,7 @@ require("lazy").setup({
                 })
             end,
         },
+        "nvim-telekasten/calendar-vim",
     },
 })
 
