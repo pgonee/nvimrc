@@ -186,28 +186,7 @@ require("lazy").setup({
             config = function()
                 require("blame").setup({})
             end,
-        },
-        {
-            "MeanderingProgrammer/render-markdown.nvim",
-            dependencies = {
-                "nvim-treesitter/nvim-treesitter",
-                "nvim-mini/mini.nvim",
-                "nvim-mini/mini.icons",
-                "nvim-tree/nvim-web-devicons",
-            },
-            opts = {},
-        },
-        {
-            "renerocksai/telekasten.nvim",
-            dependencies = { "nvim-telescope/telescope.nvim" },
-            config = function()
-                require("telekasten").setup({
-                    home = vim.fn.expand("~/notes"),
-                    auto_set_filetype = false,
-                })
-            end,
-        },
-        "nvim-telekasten/calendar-vim",
+        }
     },
 })
 
@@ -805,11 +784,4 @@ vim.api.nvim_create_augroup("__formatter__", { clear = true })
 vim.api.nvim_create_autocmd("BufWritePost", {
     group = "__formatter__",
     command = ":FormatWrite",
-})
-
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = { "markdown", "telekasten", "norg" },
-    callback = function()
-        vim.opt_local.conceallevel = 2 -- 0: 모두 표시, 2: 마크업 기호 숨김
-    end,
 })
