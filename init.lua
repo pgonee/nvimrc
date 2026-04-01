@@ -136,7 +136,7 @@ require("lazy").setup({
             },
         },
         "dense-analysis/ale",
-        "mhartington/formatter.nvim",
+        -- "mhartington/formatter.nvim",
         "ryanoasis/vim-devicons",
         {
             "nvim-tree/nvim-tree.lua",
@@ -186,7 +186,74 @@ require("lazy").setup({
             config = function()
                 require("blame").setup({})
             end,
-        }
+        },
+        {
+            "stevearc/conform.nvim",
+            opts = {},
+            config = function()
+                require("conform").setup({
+                    formatters_by_ft = {
+                        lua = { "stylua" },
+                        prisma = { "prettier" },
+                        markdown = { "markdown_prettier" },
+                        yaml = { "prettier" },
+                        css = { "prettier" },
+                        html = { "prettier" },
+                        graphql = { "prettier" },
+                        json = { "prettier" },
+                        jsonc = { "prettier" },
+                        javascript = { "prettier" },
+                        javascriptreact = { "prettier" },
+                        typescript = { "prettier" },
+                        typescriptreact = { "prettier" },
+
+                        php = { "php_cs_fixer" },
+                        python = { "black" },
+                        c = { "clang-format" },
+                        cpp = { "clang-format" },
+                        proto = { "buf" },
+                        gdscript = { "gdformat" },
+
+                        ["*"] = {
+                            "trim_whitespace",
+                            "trim_newlines",
+                            "squeeze_blanks",
+                        },
+                    },
+                    formatters = {
+                        buf = {
+                            command = "buf",
+                            args = { "format", "-w", "--path", "$FILENAME" },
+                            stdin = false, -- 원본 설정이 stdin = false이므로 파일 직접 수정 방식
+                        },
+                        gdformat = {
+                            command = "gdformat",
+                            args = { "-" },
+                        },
+                        stylua = {
+                            args = {
+                                "--indent-type",
+                                "Spaces",
+                                "--search-parent-directories",
+                                "--stdin-filepath",
+                                "$FILENAME",
+                                "--",
+                                "-",
+                            },
+                        },
+                        markdown_prettier = {
+                            inherit = "prettier", -- 기본 prettier 설정을 그대로 가져옴
+                            args = { "--tab-width", "4", "--stdin-filepath", "$FILENAME" },
+                        },
+                    },
+                    format_on_save = {
+                        -- These options will be passed to conform.format()
+                        timeout_ms = 500,
+                        lsp_format = "fallback",
+                    },
+                })
+            end,
+        },
     },
 })
 
@@ -657,66 +724,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end,
 })
 
-local formatterUtil = require("formatter.util")
-
-local formatter = require("formatter")
-formatter.setup({
-    logging = false,
-    filetype = {
-        prisma = require("formatter.defaults").prettier,
-        markdown = require("formatter.filetypes.markdown").prettier,
-        php = require("formatter.filetypes.php").php_cs_fixer,
-        yaml = require("formatter.filetypes.yaml").prettier,
-        css = require("formatter.filetypes.css").prettier,
-        html = require("formatter.filetypes.html").prettier,
-        graphql = require("formatter.filetypes.graphql").prettier,
-        json = require("formatter.filetypes.json").prettier,
-        jsonc = require("formatter.filetypes.json").prettier,
-        python = require("formatter.filetypes.python").black,
-        javascript = require("formatter.filetypes.javascript").prettier,
-        javascriptreact = require("formatter.filetypes.javascriptreact").prettier,
-        typescript = require("formatter.filetypes.typescript").prettier,
-        typescriptreact = require("formatter.filetypes.typescriptreact").prettier,
-        c = require("formatter.filetypes.c").clangformat,
-        cpp = require("formatter.filetypes.cpp").clangformat,
-        ["proto"] = function()
-            return {
-                exe = "buf format",
-                args = {
-                    "-w",
-                },
-                stdin = false,
-            }
-        end,
-        lua = {
-            function()
-                return {
-                    exe = "stylua",
-                    args = {
-                        "--indent-type Spaces",
-                        "--search-parent-directories",
-                        "--stdin-filepath",
-                        formatterUtil.escape_path(formatterUtil.get_current_buffer_file_path()),
-                        "--",
-                        "-",
-                    },
-                    stdin = true,
-                }
-            end,
-        },
-        gdscript = {
-            function()
-                return {
-                    exe = "gdformat",
-                    args = { "-" },
-                    stdin = true,
-                }
-            end,
-        },
-        ["*"] = require("formatter.filetypes.any").remove_trailing_whitespace,
-    },
-})
-
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
     pattern = "Dockerfile*",
     command = "set filetype=dockerfile",
@@ -778,10 +785,4 @@ vim.api.nvim_create_autocmd("LspAttach", {
             })
         end, {})
     end,
-})
-
-vim.api.nvim_create_augroup("__formatter__", { clear = true })
-vim.api.nvim_create_autocmd("BufWritePost", {
-    group = "__formatter__",
-    command = ":FormatWrite",
 })
