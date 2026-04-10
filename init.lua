@@ -149,6 +149,22 @@ require("lazy").setup({
             build = function()
                 require("nvim-treesitter.install").update({ with_sync = false })
             end,
+            config = function()
+                require("nvim-treesitter").setup({
+                    modules = {},
+                    ensure_installed = {},
+                    ignore_install = {},
+                    sync_install = false,
+                    auto_install = false,
+                    highlight = {
+                        enable = true,
+                        additional_vim_regex_highlighting = false,
+                    },
+                    indent = {
+                        enable = true,
+                    },
+                })
+            end,
         },
         {
             "ThePrimeagen/refactoring.nvim",
@@ -641,22 +657,6 @@ end, { noremap = true })
 vim.keymap.set("n", "<localleader>xl", function()
     trouble.toggle("loclist")
 end, { noremap = true })
-
-require("nvim-treesitter").setup()
-require("nvim-treesitter.configs").setup({
-    modules = {},
-    ensure_installed = {},
-    ignore_install = {},
-    sync_install = false,
-    auto_install = false,
-    highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = false,
-    },
-    indent = {
-        enable = true,
-    },
-})
 
 local lspkind = require("lspkind")
 local cmp = require("cmp")
