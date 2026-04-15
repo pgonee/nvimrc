@@ -28,32 +28,247 @@ require("lazy").setup({
         {
             "nvim-lualine/lualine.nvim",
             dependencies = { "nvim-tree/nvim-web-devicons" },
+            config = function()
+                require("lualine").setup({
+                    options = {
+                        icons_enabled = true,
+                        theme = "auto",
+                        component_separators = { left = "", right = "" },
+                        section_separators = { left = "", right = "" },
+                        disabled_filetypes = {
+                            statusline = {},
+                            winbar = {},
+                        },
+                        ignore_focus = {},
+                        always_divide_middle = true,
+                        globalstatus = false,
+                        refresh = {
+                            statusline = 1000,
+                            tabline = 1000,
+                            winbar = 1000,
+                        },
+                    },
+                    sections = {
+                        lualine_a = { "mode" },
+                        lualine_b = { "branch", "diff", "diagnostics" },
+                        lualine_c = { "filename" },
+                        lualine_x = { "encoding", "fileformat", "filetype" },
+                        lualine_y = { "progress" },
+                        lualine_z = { "location" },
+                    },
+                    inactive_sections = {
+                        lualine_a = {},
+                        lualine_b = {},
+                        lualine_c = { "filename" },
+                        lualine_x = { "location" },
+                        lualine_y = {},
+                        lualine_z = {},
+                    },
+                    tabline = {},
+                    winbar = {},
+                    inactive_winbar = {},
+                    extensions = {},
+                })
+            end,
         },
         {
             "numToStr/Comment.nvim",
-            opts = {},
+            config = function()
+                require("Comment").setup({
+                    toggler = {
+                        line = "<localleader>cc",
+                        block = "<localleader>bc",
+                    },
+                    opleader = {
+                        line = "<localleader>cc",
+                        block = "<localleader>bc",
+                    },
+                    pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
+                })
+            end,
+            dependencies = {
+                "JoosepAlviste/nvim-ts-context-commentstring",
+            },
         },
         "tpope/vim-surround",
         {
             "folke/tokyonight.nvim",
             lazy = false,
-            priority = 10000,
-            opts = {},
+            priority = 1000,
+            config = function()
+                require("tokyonight").setup({
+                    style = "day",
+                    transparent = false,
+                    terminal_colors = true,
+                    day_brightness = 0.2,
+                })
+                vim.api.nvim_command("colorscheme tokyonight")
+            end,
         },
-        "hrsh7th/nvim-cmp",
-        "hrsh7th/cmp-nvim-lsp",
-        "hrsh7th/cmp-buffer",
-        "hrsh7th/cmp-path",
-        "hrsh7th/cmp-cmdline",
-        "hrsh7th/cmp-nvim-lsp-signature-help",
+        {
+            "hrsh7th/nvim-cmp",
+            dependencies = {
+                "onsails/lspkind.nvim",
+                "L3MON4D3/LuaSnip",
+                "hrsh7th/cmp-nvim-lsp",
+                "hrsh7th/cmp-buffer",
+                "hrsh7th/cmp-path",
+                "hrsh7th/cmp-cmdline",
+                "hrsh7th/cmp-nvim-lsp-signature-help",
+                "saadparwaiz1/cmp_luasnip",
+            },
+            config = function()
+                local lspkind = require("lspkind")
+                local cmp = require("cmp")
+                cmp.setup.cmdline("/", {
+                    mapping = cmp.mapping.preset.cmdline(),
+                    sources = {
+                        { name = "buffer" },
+                    },
+                })
+                cmp.setup.cmdline(":", {
+                    mapping = cmp.mapping.preset.cmdline(),
+                    sources = cmp.config.sources({
+                        { name = "path" },
+                    }, {
+                        {
+                            name = "cmdline",
+                            option = {
+                                ignore_cmds = { "Man", "!" },
+                            },
+                        },
+                    }),
+                })
+                cmp.setup({
+                    snippet = {
+                        expand = function(args)
+                            require("luasnip").lsp_expand(args.body)
+                        end,
+                    },
+                    mapping = cmp.mapping.preset.insert({
+                        ["<c-u>"] = cmp.mapping.scroll_docs(-4),
+                        ["<c-d>"] = cmp.mapping.scroll_docs(4),
+                        ["<c-space>"] = cmp.mapping.complete(),
+                        ["<c-e>"] = cmp.mapping.abort(),
+                        ["<cr>"] = cmp.mapping.confirm({
+                            --behavior = cmp.ConfirmBehavior.Replace,
+                            select = true,
+                        }),
+                    }),
+                    sources = cmp.config.sources({
+                        { name = "nvim_lsp", keyword_length = 2 },
+                        { name = "buffer", keyword_length = 2 },
+                        { name = "path" },
+                        { name = "luasnip" },
+                        { name = "nvim_lsp_signature_help" },
+                    }),
+                    formatting = {
+                        format = lspkind.cmp_format({
+                            mode = "symbol_text",
+                            show_labelDetails = true,
+                            before = function(entry, vim_item)
+                                return vim_item
+                            end,
+                        }),
+                    },
+                })
+            end,
+        },
         {
             "L3MON4D3/LuaSnip",
             dependencies = { "rafamadriz/friendly-snippets" },
             build = "make install_jsregexp",
+            config = function()
+                local ls = require("luasnip")
+                require("luasnip.loaders.from_vscode").lazy_load()
+                require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./snippets" } })
+
+                vim.keymap.set({ "i" }, "<c-k>", function()
+                    ls.expand()
+                end, { silent = true })
+                vim.keymap.set({ "i", "s" }, "<c-l>", function()
+                    ls.jump(1)
+                end, { silent = true })
+                vim.keymap.set({ "i", "s" }, "<c-j>", function()
+                    ls.jump(-1)
+                end, { silent = true })
+
+                vim.keymap.set({ "i", "s" }, "<c-e>", function()
+                    if ls.choice_active() then
+                        ls.change_choice(1)
+                    end
+                end, { silent = true })
+            end,
         },
-        "saadparwaiz1/cmp_luasnip",
-        "neovim/nvim-lspconfig",
-        "rafamadriz/friendly-snippets",
+        {
+            "neovim/nvim-lspconfig",
+            config = function()
+                local util = require("lspconfig.util")
+                local capabilities = require("cmp_nvim_lsp").default_capabilities()
+
+                vim.lsp.enable("buf_ls", {
+                    root_dir = util.root_pattern("buf.work.yaml", "buf.gen.yaml", ".git"),
+                })
+                vim.lsp.enable("terraformls", {})
+                vim.lsp.config("pyright", {
+                    capabilities = capabilities,
+                })
+                vim.lsp.enable("pyright")
+
+                vim.lsp.enable("tailwindcss")
+                vim.lsp.enable("sqlls")
+                vim.lsp.enable("jsonls")
+                vim.lsp.enable("prismals")
+                vim.lsp.enable("dockerls")
+                vim.lsp.enable("bashls")
+                vim.lsp.enable("taplo")
+                vim.lsp.enable("clangd")
+                vim.lsp.config("ts_ls", {
+                    capabilities = capabilities,
+                    filetypes = {
+                        "javascript",
+                        "javascriptreact",
+                        "javascript.jsx",
+                        "typescript",
+                        "typescriptreact",
+                        "typescript.tsx",
+                    },
+                    init_options = {
+                        hostInfo = "neovim",
+                        preferences = {
+                            importModuleSpecifierPreference = "non-relative",
+                        },
+                        maxTsServerMemory = 10240,
+                    },
+                })
+                vim.lsp.enable("ts_ls")
+
+                vim.lsp.config("emmylua_ls", {
+                    settings = {
+                        Lua = {
+                            diagnostics = {
+                                globals = { "vim" },
+                            },
+                            telemetry = { enable = false },
+                            workspace = {
+                                library = vim.api.nvim_get_runtime_file("", true),
+                                checkThirdParty = false,
+                            },
+                        },
+                    },
+                    capabilities = capabilities,
+                })
+                vim.lsp.enable("emmylua_ls")
+
+                vim.lsp.config("gdscript", {
+                    cmd = vim.lsp.rpc.connect("127.0.0.1", 6005),
+                    filetypes = { "gdscript" },
+                    capabilities = capabilities,
+                    root_markers = { "project.godot", ".git" },
+                })
+                vim.lsp.enable("gdscript")
+            end,
+        },
         {
             "nvimdev/lspsaga.nvim",
             dependencies = { "neovim/nvim-lspconfig" },
@@ -63,10 +278,20 @@ require("lazy").setup({
         },
         {
             "mason-org/mason-lspconfig.nvim",
-            config = false,
             dependencies = {
-                { "mason-org/mason.nvim", config = false },
+                "neovim/nvim-lspconfig",
+                {
+                    "mason-org/mason.nvim",
+                    config = function()
+                        require("mason").setup()
+                    end,
+                },
             },
+            config = function()
+                require("mason-lspconfig").setup({
+                    automatic_enable = false,
+                })
+            end,
         },
         {
             "nvim-telescope/telescope.nvim",
@@ -77,11 +302,108 @@ require("lazy").setup({
                     "nvim-telescope/telescope-live-grep-args.nvim",
                     version = "^1.1.0",
                 },
+                {
+                    "nvim-telescope/telescope-fzf-native.nvim",
+                    build = "cmake -S. -Bbuild -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
+                },
+                "folke/trouble.nvim",
             },
-        },
-        {
-            "nvim-telescope/telescope-fzf-native.nvim",
-            build = "cmake -S. -Bbuild -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
+            config = function()
+                local telescope = require("telescope")
+                telescope.setup({
+                    defaults = {
+                        mappings = {
+                            i = {
+                                ["<C-Down>"] = require("telescope.actions").cycle_history_next,
+                                ["<C-Up>"] = require("telescope.actions").cycle_history_prev,
+                                ["<C-x>"] = require("trouble.sources.telescope").open,
+                            },
+                        },
+                        file_ignore_patterns = {
+                            "node_modules/",
+                            "dist/",
+                            "build/",
+                            "storybook-static/",
+                            "%.git/",
+                            "%.next/",
+                            "%.idea/",
+                            "%.DS_Store/",
+                            "%.turbo/",
+                            "%.vercel/",
+                            "%.vscode/",
+                        },
+                    },
+                    pickers = {
+                        find_files = {
+                            find_command = {
+                                "rg",
+                                "--files",
+                                "--hidden",
+                                "--no-ignore",
+                                "--glob",
+                                "!**/.serena/*",
+                                "--glob",
+                                "!**/.pnpm-store/*",
+                                "--glob",
+                                "!**/.git/*",
+                                "--glob",
+                                "!**/node_modules/*",
+                                "--glob",
+                                "!**/.idea/*",
+                                "--glob",
+                                "!**/.DS_Store/*",
+                                "--glob",
+                                "!**/.turbo/*",
+                                "--glob",
+                                "!**/.vercel/*",
+                                "--glob",
+                                "!**/.vscode/*",
+                                "--glob",
+                                "!**/.next/*",
+                                "--glob",
+                                "!**/dist/*",
+                                "--glob",
+                                "!**/storybook-static/*",
+                                "--glob",
+                                "!**/build/*",
+                            },
+                        },
+                        live_grep = {
+                            additional_args = function(opts)
+                                return { "--hidden" }
+                            end,
+                        },
+                    },
+                    extensions = {
+                        fzf = {
+                            fuzzy = true, -- false will only do exact matching
+                            --override_generic_sorter = true, -- override the generic sorter
+                            --override_file_sorter = true, -- override the file sorter
+                            case_mode = "smart_case", -- or "ignore_case" or "respect_case"
+                            -- the default case_mode is "smart_case"
+                        },
+                    },
+                })
+                telescope.load_extension("fzf")
+                telescope.load_extension("live_grep_args")
+
+                local telescope_builtin = require("telescope.builtin")
+                vim.keymap.set(
+                    "n",
+                    "<localleader>ff",
+                    "<cmd>lua require('telescope.builtin').find_files({ previewer = true })<cr>",
+                    {}
+                )
+                vim.keymap.set(
+                    "n",
+                    "<localleader>fg",
+                    ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>",
+                    {}
+                )
+                vim.keymap.set("n", "<localleader>fb", telescope_builtin.buffers, {})
+                vim.keymap.set("n", "<localleader>fh", telescope_builtin.help_tags, {})
+                vim.keymap.set("n", "<localleader>fr", telescope_builtin.resume, {})
+            end,
         },
         {
             "folke/trouble.nvim",
@@ -134,8 +456,17 @@ require("lazy").setup({
                 },
             },
         },
-        "dense-analysis/ale",
-        -- "mhartington/formatter.nvim",
+        {
+            "dense-analysis/ale",
+            config = function()
+                vim.g.ale_fix_on_save = 0
+                vim.g.ale_linters = {
+                    javascript = { "eslint" },
+                    typescript = { "eslint" },
+                    typescriptreact = { "eslint" },
+                }
+            end,
+        },
         "ryanoasis/vim-devicons",
         {
             "nvim-tree/nvim-tree.lua",
@@ -144,40 +475,13 @@ require("lazy").setup({
         "nvim-tree/nvim-web-devicons",
         "nvim-lua/plenary.nvim",
         "nvim-lua/popup.nvim",
-        {
-            "nvim-treesitter/nvim-treesitter",
-            build = function()
-                require("nvim-treesitter.install").update({ with_sync = false })
-            end,
-            config = function()
-                require("nvim-treesitter").setup({
-                    modules = {},
-                    ensure_installed = {},
-                    ignore_install = {},
-                    sync_install = false,
-                    auto_install = false,
-                    highlight = {
-                        enable = true,
-                        additional_vim_regex_highlighting = false,
-                    },
-                    indent = {
-                        enable = true,
-                    },
-                })
-            end,
-        },
-        {
-            "ThePrimeagen/refactoring.nvim",
-            dependencies = {
-                "nvim-lua/plenary.nvim",
-                "nvim-treesitter/nvim-treesitter",
-            },
-            config = function()
-                require("refactoring").setup()
-            end,
-        },
         "sindrets/diffview.nvim",
-        "onsails/lspkind.nvim",
+        {
+            "onsails/lspkind.nvim",
+            config = function()
+                require("lspkind")
+            end,
+        },
         {
             "rachartier/tiny-inline-diagnostic.nvim",
             event = "VeryLazy",
@@ -187,7 +491,14 @@ require("lazy").setup({
                 vim.diagnostic.config({ virtual_text = true })
             end,
         },
-        "JoosepAlviste/nvim-ts-context-commentstring",
+        {
+            "JoosepAlviste/nvim-ts-context-commentstring",
+            config = function()
+                require("ts_context_commentstring").setup({
+                    enable_autocmd = false,
+                })
+            end,
+        },
         {
             "FabijanZulj/blame.nvim",
             lazy = false,
@@ -263,17 +574,6 @@ require("lazy").setup({
             end,
         },
         {
-            "NeogitOrg/neogit",
-            lazy = true,
-            dependencies = {
-                "nvim-lua/plenary.nvim", -- required
-                "sindrets/diffview.nvim", -- optional
-                "m00qek/baleia.nvim", -- optional
-                "nvim-telescope/telescope.nvim", -- optional
-            },
-            cmd = "Neogit",
-        },
-        {
             "lewis6991/gitsigns.nvim",
             config = function()
                 require("gitsigns").setup({
@@ -325,7 +625,6 @@ require("lazy").setup({
                         col = 1,
                     },
                     on_attach = function(bufnr)
-                        print("eunjo")
                         local gitsigns = require("gitsigns")
                         local function map(mode, l, r, opts)
                             opts = opts or {}
@@ -339,48 +638,6 @@ require("lazy").setup({
                     end,
                 })
             end,
-        },
-        {
-            "pwntester/octo.nvim",
-            cmd = "Octo",
-            opts = {
-                picker = "telescope",
-                enable_builtin = true,
-            },
-            keys = {
-                {
-                    "<localleader>oi",
-                    "<CMD>Octo issue list<CR>",
-                    desc = "List GitHub Issues",
-                },
-                {
-                    "<localleader>op",
-                    "<CMD>Octo pr list<CR>",
-                    desc = "List GitHub PullRequests",
-                },
-                {
-                    "<localleader>od",
-                    "<CMD>Octo discussion list<CR>",
-                    desc = "List GitHub Discussions",
-                },
-                {
-                    "<localleader>on",
-                    "<CMD>Octo notification list<CR>",
-                    desc = "List GitHub Notifications",
-                },
-                {
-                    "<localleader>os",
-                    function()
-                        require("octo.utils").create_base_search_command({ include_current_repo = true })
-                    end,
-                    desc = "Search GitHub",
-                },
-            },
-            dependencies = {
-                "nvim-lua/plenary.nvim",
-                "nvim-telescope/telescope.nvim",
-                "nvim-tree/nvim-web-devicons",
-            },
         },
     },
 })
@@ -471,145 +728,9 @@ vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 vim.g.ftplugin_sql_omni_key = "<C-j>"
 
-require("tokyonight").setup({
-    style = "day",
-    transparent = false,
-    terminal_colors = true,
-    day_brightness = 0.2,
-})
-vim.api.nvim_command("colorscheme tokyonight")
 vim.opt.termguicolors = true
 vim.opt.swapfile = false
 
-require("lualine").setup({
-    options = {
-        icons_enabled = true,
-        theme = "auto",
-        component_separators = { left = "", right = "" },
-        section_separators = { left = "", right = "" },
-        disabled_filetypes = {
-            statusline = {},
-            winbar = {},
-        },
-        ignore_focus = {},
-        always_divide_middle = true,
-        globalstatus = false,
-        refresh = {
-            statusline = 1000,
-            tabline = 1000,
-            winbar = 1000,
-        },
-    },
-    sections = {
-        lualine_a = { "mode" },
-        lualine_b = { "branch", "diff", "diagnostics" },
-        lualine_c = { "filename" },
-        lualine_x = { "encoding", "fileformat", "filetype" },
-        lualine_y = { "progress" },
-        lualine_z = { "location" },
-    },
-    inactive_sections = {
-        lualine_a = {},
-        lualine_b = {},
-        lualine_c = { "filename" },
-        lualine_x = { "location" },
-        lualine_y = {},
-        lualine_z = {},
-    },
-    tabline = {},
-    winbar = {},
-    inactive_winbar = {},
-    extensions = {},
-})
-
-local telescope = require("telescope")
-telescope.setup({
-    defaults = {
-        mappings = {
-            i = {
-                ["<C-Down>"] = require("telescope.actions").cycle_history_next,
-                ["<C-Up>"] = require("telescope.actions").cycle_history_prev,
-                ["<C-x>"] = require("trouble.sources.telescope").open,
-            },
-        },
-        file_ignore_patterns = {
-            "node_modules/",
-            "dist/",
-            "build/",
-            "storybook-static/",
-            "%.git/",
-            "%.next/",
-            "%.idea/",
-            "%.DS_Store/",
-            "%.turbo/",
-            "%.vercel/",
-            "%.vscode/",
-        },
-    },
-    pickers = {
-        find_files = {
-            find_command = {
-                "rg",
-                "--files",
-                "--hidden",
-                "--no-ignore",
-                "--glob",
-                "!**/.serena/*",
-                "--glob",
-                "!**/.pnpm-store/*",
-                "--glob",
-                "!**/.git/*",
-                "--glob",
-                "!**/node_modules/*",
-                "--glob",
-                "!**/.idea/*",
-                "--glob",
-                "!**/.DS_Store/*",
-                "--glob",
-                "!**/.turbo/*",
-                "--glob",
-                "!**/.vercel/*",
-                "--glob",
-                "!**/.vscode/*",
-                "--glob",
-                "!**/.next/*",
-                "--glob",
-                "!**/dist/*",
-                "--glob",
-                "!**/storybook-static/*",
-                "--glob",
-                "!**/build/*",
-            },
-        },
-        live_grep = {
-            additional_args = function(opts)
-                return { "--hidden" }
-            end,
-        },
-    },
-    extensions = {
-        fzf = {
-            fuzzy = true, -- false will only do exact matching
-            --override_generic_sorter = true, -- override the generic sorter
-            --override_file_sorter = true, -- override the file sorter
-            case_mode = "smart_case", -- or "ignore_case" or "respect_case"
-            -- the default case_mode is "smart_case"
-        },
-    },
-})
-telescope.load_extension("fzf")
-telescope.load_extension("refactoring")
-telescope.load_extension("live_grep_args")
-
-local telescope_builtin = require("telescope.builtin")
-vim.keymap.set("n", "<localleader>ff", "<cmd>lua require('telescope.builtin').find_files({ previewer = true })<cr>", {})
-vim.keymap.set("n", "<localleader>fg", ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", {})
-vim.keymap.set("n", "<localleader>fb", telescope_builtin.buffers, {})
-vim.keymap.set("n", "<localleader>fh", telescope_builtin.help_tags, {})
-vim.keymap.set("n", "<localleader>fr", telescope_builtin.resume, {})
-vim.keymap.set("n", "<localleader>rr", function()
-    require("telescope").extensions.refactoring.refactors()
-end)
 vim.keymap.set("n", "<localleader>rn", vim.lsp.buf.rename, {})
 
 vim.keymap.set("n", "<esc>", "<c-c>", {})
@@ -658,158 +779,6 @@ vim.keymap.set("n", "<localleader>xl", function()
     trouble.toggle("loclist")
 end, { noremap = true })
 
-local lspkind = require("lspkind")
-local cmp = require("cmp")
-cmp.setup.cmdline("/", {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = {
-        { name = "buffer" },
-    },
-})
-cmp.setup.cmdline(":", {
-    mapping = cmp.mapping.preset.cmdline(),
-    sources = cmp.config.sources({
-        { name = "path" },
-    }, {
-        {
-            name = "cmdline",
-            option = {
-                ignore_cmds = { "Man", "!" },
-            },
-        },
-    }),
-})
-cmp.setup({
-    snippet = {
-        expand = function(args)
-            require("luasnip").lsp_expand(args.body)
-        end,
-    },
-    mapping = cmp.mapping.preset.insert({
-        ["<c-u>"] = cmp.mapping.scroll_docs(-4),
-        ["<c-d>"] = cmp.mapping.scroll_docs(4),
-        ["<c-space>"] = cmp.mapping.complete(),
-        ["<c-e>"] = cmp.mapping.abort(),
-        ["<cr>"] = cmp.mapping.confirm({
-            --behavior = cmp.ConfirmBehavior.Replace,
-            select = true,
-        }),
-    }),
-    sources = cmp.config.sources({
-        { name = "nvim_lsp", keyword_length = 2 },
-        { name = "buffer", keyword_length = 2 },
-        { name = "path" },
-        { name = "luasnip" },
-        { name = "nvim_lsp_signature_help" },
-    }),
-    formatting = {
-        format = lspkind.cmp_format({
-            mode = "symbol_text",
-            show_labelDetails = true,
-            before = function(entry, vim_item)
-                return vim_item
-            end,
-        }),
-    },
-})
-
-local ls = require("luasnip")
-require("luasnip.loaders.from_vscode").lazy_load()
-require("luasnip.loaders.from_vscode").lazy_load({ paths = { "./snippets" } })
-
-vim.keymap.set({ "i" }, "<c-k>", function()
-    ls.expand()
-end, { silent = true })
-vim.keymap.set({ "i", "s" }, "<c-l>", function()
-    ls.jump(1)
-end, { silent = true })
-vim.keymap.set({ "i", "s" }, "<c-j>", function()
-    ls.jump(-1)
-end, { silent = true })
-
-vim.keymap.set({ "i", "s" }, "<c-e>", function()
-    if ls.choice_active() then
-        ls.change_choice(1)
-    end
-end, { silent = true })
-
-require("mason").setup()
-require("mason-lspconfig").setup({
-    automatic_enable = false,
-})
-
-local util = require("lspconfig.util")
-local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
-vim.lsp.enable("buf_ls", {
-    root_dir = util.root_pattern("buf.work.yaml", "buf.gen.yaml", ".git"),
-})
-vim.lsp.enable("terraformls", {})
-vim.lsp.config("pyright", {
-    capabilities = capabilities,
-})
-vim.lsp.enable("pyright")
-
-vim.lsp.enable("tailwindcss")
-vim.lsp.enable("sqlls")
-vim.lsp.enable("jsonls")
-vim.lsp.enable("prismals")
-vim.lsp.enable("dockerls")
-vim.lsp.enable("bashls")
-vim.lsp.enable("taplo")
-vim.lsp.enable("clangd")
-vim.lsp.config("ts_ls", {
-    capabilities = capabilities,
-    filetypes = {
-        "javascript",
-        "javascriptreact",
-        "javascript.jsx",
-        "typescript",
-        "typescriptreact",
-        "typescript.tsx",
-    },
-    init_options = {
-        hostInfo = "neovim",
-        preferences = {
-            importModuleSpecifierPreference = "non-relative",
-        },
-        maxTsServerMemory = 10240,
-    },
-})
-vim.lsp.enable("ts_ls")
-
-vim.lsp.config("emmylua_ls", {
-    settings = {
-        Lua = {
-            diagnostics = {
-                globals = { "vim" },
-            },
-            telemetry = { enable = false },
-            workspace = {
-                library = vim.api.nvim_get_runtime_file("", true),
-                checkThirdParty = false,
-            },
-        },
-    },
-    capabilities = capabilities,
-})
-vim.lsp.enable("emmylua_ls")
-
-vim.lsp.config("gdscript", {
-    cmd = vim.lsp.rpc.connect("127.0.0.1", 6005),
-    filetypes = { "gdscript" },
-    capabilities = capabilities,
-    root_markers = { "project.godot", ".git" },
-})
-vim.lsp.enable("gdscript")
-
-vim.g.ale_fix_on_save = 0
-vim.g.ale_linters = {
-    javascript = { "eslint" },
-    typescript = { "eslint" },
-    typescriptreact = { "eslint" },
-}
-
 vim.api.nvim_create_autocmd("LspAttach", {
     group = vim.api.nvim_create_augroup("UserLspConfig", {}),
     callback = function(ev)
@@ -819,20 +788,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
         vim.keymap.set("n", "<localleader>gi", vim.lsp.buf.implementation, opts)
         vim.keymap.set("n", "<localleader>K", vim.lsp.buf.hover, opts)
         vim.keymap.set("n", "<localleader>fw", ":FormatWrite<cr>", opts)
-        --local bufopts = { noremap=true, silent=true, buffer=bufnr }
-        --vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
-        --vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-        --vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
-        --vim.keymap.set('n', '<space>wa', vim.lsp.buf.add_workspace_folder, bufopts)
-        --vim.keymap.set('n', '<space>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
-        --vim.keymap.set('n', '<space>wl', function()
-        --print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-        --end, bufopts)
-        --vim.keymap.set('n', '<space>D', vim.lsp.buf.type_definition, bufopts)
-        --vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, bufopts)
-        --vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, bufopts)
-        --vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
-        --vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufop
     end,
 })
 
@@ -844,22 +799,6 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
     pattern = ".swcrc",
     command = "set filetype=json",
-})
-
-require("ts_context_commentstring").setup({
-    enable_autocmd = false,
-})
-
-require("Comment").setup({
-    toggler = {
-        line = "<localleader>cc",
-        block = "<localleader>bc",
-    },
-    opleader = {
-        line = "<localleader>cc",
-        block = "<localleader>bc",
-    },
-    pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
 })
 
 vim.filetype.add({
