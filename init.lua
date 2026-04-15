@@ -13,7 +13,6 @@ if not (vim.uv or vim.loop).fs_stat(lazypath) then
         os.exit(1)
     end
 end
-vim.opt.clipboard:append("unnamedplus")
 vim.opt.rtp:prepend(lazypath)
 
 -- Make sure to setup `mapleader` and `maplocalleader` before
@@ -41,7 +40,7 @@ require("lazy").setup({
                         },
                         ignore_focus = {},
                         always_divide_middle = true,
-                        globalstatus = false,
+                        globalstatus = true,
                         refresh = {
                             statusline = 1000,
                             tabline = 1000,
@@ -87,7 +86,14 @@ require("lazy").setup({
                 })
             end,
             dependencies = {
-                "JoosepAlviste/nvim-ts-context-commentstring",
+                {
+                    "JoosepAlviste/nvim-ts-context-commentstring",
+                    config = function()
+                        require("ts_context_commentstring").setup({
+                            enable_autocmd = false,
+                        })
+                    end,
+                },
             },
         },
         "tpope/vim-surround",
@@ -102,7 +108,7 @@ require("lazy").setup({
                     terminal_colors = true,
                     day_brightness = 0.2,
                 })
-                vim.api.nvim_command("colorscheme tokyonight")
+                vim.cmd("colorscheme tokyonight")
             end,
         },
         {
@@ -186,14 +192,14 @@ require("lazy").setup({
                 vim.keymap.set({ "i" }, "<c-k>", function()
                     ls.expand()
                 end, { silent = true })
-                vim.keymap.set({ "i", "s" }, "<c-l>", function()
+                vim.keymap.set({ "i", "s" }, "<c-f>", function()
                     ls.jump(1)
                 end, { silent = true })
-                vim.keymap.set({ "i", "s" }, "<c-j>", function()
+                vim.keymap.set({ "i", "s" }, "<c-b>", function()
                     ls.jump(-1)
                 end, { silent = true })
 
-                vim.keymap.set({ "i", "s" }, "<c-e>", function()
+                vim.keymap.set({ "i", "s" }, "<c-y>", function()
                     if ls.choice_active() then
                         ls.change_choice(1)
                     end
@@ -272,6 +278,8 @@ require("lazy").setup({
         {
             "nvimdev/lspsaga.nvim",
             dependencies = { "neovim/nvim-lspconfig" },
+            cmd = "Lspsaga",
+            event = "LspAttach",
             config = function()
                 require("lspsaga").setup({})
             end,
@@ -467,13 +475,11 @@ require("lazy").setup({
                 }
             end,
         },
-        "ryanoasis/vim-devicons",
         {
             "nvim-tree/nvim-tree.lua",
             dependencies = { "nvim-tree/nvim-web-devicons" },
+            cmd = { "NvimTreeToggle", "NvimTreeFindFile" },
         },
-        "nvim-tree/nvim-web-devicons",
-        "nvim-lua/plenary.nvim",
         "nvim-lua/popup.nvim",
         "sindrets/diffview.nvim",
         {
@@ -488,15 +494,7 @@ require("lazy").setup({
             priority = 1000,
             config = function()
                 require("tiny-inline-diagnostic").setup()
-                vim.diagnostic.config({ virtual_text = true })
-            end,
-        },
-        {
-            "JoosepAlviste/nvim-ts-context-commentstring",
-            config = function()
-                require("ts_context_commentstring").setup({
-                    enable_autocmd = false,
-                })
+                vim.diagnostic.config({ virtual_text = false })
             end,
         },
         {
@@ -508,7 +506,6 @@ require("lazy").setup({
         },
         {
             "stevearc/conform.nvim",
-            opts = {},
             config = function()
                 require("conform").setup({
                     formatters_by_ft = {
@@ -644,7 +641,7 @@ require("lazy").setup({
 
 vim.api.nvim_create_user_command("Rfinder", function()
     local path = vim.api.nvim_buf_get_name(0)
-    os.execute("open -R " .. path)
+    os.execute("open -R " .. vim.fn.shellescape(path))
 end, {})
 
 vim.keymap.set("n", "<localleader>q", ":q<cr>", { noremap = true })
@@ -718,10 +715,11 @@ vim.o.foldenable = false
 vim.o.ignorecase = true
 vim.o.smartcase = true
 
-vim.api.nvim_command("set shortmess+=c")
-vim.api.nvim_command("set mouse=")
-vim.api.nvim_command("syntax on")
-vim.api.nvim_command("syntax enable")
+vim.opt.clipboard:append("unnamedplus")
+vim.cmd("set shortmess+=c")
+vim.cmd("set mouse=")
+vim.cmd("syntax on")
+vim.cmd("syntax enable")
 vim.o.colorcolumn = "120"
 vim.o.background = "light"
 vim.g.loaded_netrw = 1
@@ -763,20 +761,19 @@ require("nvim-tree").setup({
     },
 })
 
-local trouble = require("trouble")
 vim.keymap.set("n", "<localleader>xX", function()
-    trouble.toggle("diagnostics")
+    require("trouble").toggle("diagnostics")
 end, { noremap = true })
 vim.keymap.set("n", "<localleader>xx", function()
-    trouble.toggle("diagnostics", {
+    require("trouble").toggle("diagnostics", {
         buf = 0,
     })
 end, { noremap = true })
 vim.keymap.set("n", "<localleader>xq", function()
-    trouble.toggle("quickfix")
+    require("trouble").toggle("quickfix")
 end, { noremap = true })
 vim.keymap.set("n", "<localleader>xl", function()
-    trouble.toggle("loclist")
+    require("trouble").toggle("loclist")
 end, { noremap = true })
 
 vim.api.nvim_create_autocmd("LspAttach", {
@@ -825,7 +822,7 @@ end
 vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(ev)
         local client = vim.lsp.get_client_by_id(ev.data.client_id)
-        if client.name ~= "ts_ls" then
+        if not client or client.name ~= "ts_ls" then
             return
         end
 
