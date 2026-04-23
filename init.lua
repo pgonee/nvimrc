@@ -723,11 +723,6 @@ require("lazy").setup({
                 })
             end,
         },
-        {
-            "MeanderingProgrammer/render-markdown.nvim",
-            dependencies = { "nvim-tree/nvim-web-devicons" },
-            opts = {},
-        },
     },
 })
 
