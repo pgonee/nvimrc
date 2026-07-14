@@ -540,9 +540,9 @@ require("lazy").setup({
                         gdscript = { "gdformat" },
 
                         ["*"] = {
-                            "trim_whitespace",
-                            "trim_newlines",
-                            "squeeze_blanks",
+                            -- "trim_whitespace",
+                            -- "trim_newlines",
+                            -- "squeeze_blanks",
                         },
                     },
                     formatters = {
