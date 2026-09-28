@@ -670,10 +670,107 @@ require("lazy").setup({
             end,
         },
         {
-  'nvim-treesitter/nvim-treesitter',
-  lazy = false,
-  build = ':TSUpdate'
-}
+            "nvim-treesitter/nvim-treesitter",
+            branch = "main",
+            lazy = false,
+            build = ":TSUpdate",
+            config = function()
+                local ts = require("nvim-treesitter")
+                ts.install({
+                    "bash",
+                    "c",
+                    "cmake",
+                    "css",
+                    "csv",
+                    "dot",
+                    "fish",
+                    "gdscript",
+                    "gdshader",
+                    "git_config",
+                    "git_rebase",
+                    "gitattributes",
+                    "gitcommit",
+                    "gitignore",
+                    "go",
+                    "goctl",
+                    "godot_resource",
+                    "gomod",
+                    "gosum",
+                    "gotmpl",
+                    "gowork",
+                    "gpg",
+                    "graphql",
+                    "html",
+                    "html_tags",
+                    "htmldjango",
+                    "http",
+                    "java",
+                    "javadoc",
+                    "javascript",
+                    "jinja",
+                    "jinja_inline",
+                    "jq",
+                    "jsdoc",
+                    "json",
+                    "json5",
+                    "jsx",
+                    "llvm",
+                    "lua",
+                    "luadoc",
+                    "make",
+                    "markdown",
+                    "markdown_inline",
+                    "matlab",
+                    "mermaid",
+                    "nginx",
+                    "ninja",
+                    "passwd",
+                    "pem",
+                    "pod",
+                    "prisma",
+                    "proto",
+                    "python",
+                    "query",
+                    "readline",
+                    "regex",
+                    "robot",
+                    "robots_txt",
+                    "rust",
+                    "scala",
+                    "scss",
+                    "sql",
+                    "ssh_config",
+                    "swift",
+                    "tsv",
+                    "tsx",
+                    "typescript",
+                    "vim",
+                    "vimdoc",
+                    "vue",
+                    "xml",
+                    "yaml",
+                    "zig",
+                    "zsh",
+                    "cpp",
+                    "kotlin",
+                    "ruby",
+                })
+
+                vim.api.nvim_create_autocmd("FileType", {
+                    group = vim.api.nvim_create_augroup("UserTreesitter", { clear = true }),
+                    callback = function(ev)
+                        local lang = vim.treesitter.language.get_lang(ev.match)
+                        if not lang or not pcall(vim.treesitter.start, ev.buf, lang) then
+                            return
+                        end
+                        -- indents query가 있는 언어만 treesitter indentation 사용
+                        if vim.treesitter.query.get(lang, "indents") then
+                            vim.bo[ev.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+                        end
+                    end,
+                })
+            end,
+        },
     },
 })
 
@@ -770,8 +867,6 @@ vim.opt.swapfile = false
 vim.keymap.set("n", "<localleader>rn", vim.lsp.buf.rename, {})
 
 vim.keymap.set("n", "<esc>", "<c-c>", {})
-
-require('nvim-treesitter').install { 'rust', 'javascript', 'lua', 'typescript', 'zig' }
 
 require("nvim-tree").setup({
     view = {
