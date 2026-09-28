@@ -669,6 +669,11 @@ require("lazy").setup({
                 vim.api.nvim_create_user_command("PeekClose", require("peek").close, {})
             end,
         },
+        {
+  'nvim-treesitter/nvim-treesitter',
+  lazy = false,
+  build = ':TSUpdate'
+}
     },
 })
 
@@ -765,6 +770,8 @@ vim.opt.swapfile = false
 vim.keymap.set("n", "<localleader>rn", vim.lsp.buf.rename, {})
 
 vim.keymap.set("n", "<esc>", "<c-c>", {})
+
+require('nvim-treesitter').install { 'rust', 'javascript', 'lua', 'typescript', 'zig' }
 
 require("nvim-tree").setup({
     view = {
